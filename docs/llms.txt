@@ -59,4 +59,4 @@ License: Text under Creative Commons Attribution 4.0 International, excluding ma
 ## Optional
 
 - [Verify the seal](https://datalicensingstandard.org/verify/): the SHA-256 values and the RFC 3161 tokens
-- [The venue](https://github.com/AndrewDelaurierWeeks/data-licensing-standard): the same sealed files, commit b1fc9519da44f08e82a0f5727b213a084cecf46f
+- [The venue](https://github.com/AndrewDelaurierWeeks/data-licensing-standard): the same sealed files, commit de671fb7d37a0aff6b5c247635004bf6b41facec

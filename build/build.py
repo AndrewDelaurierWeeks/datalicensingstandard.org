@@ -3,7 +3,7 @@
 
     python3 build/build.py --venue PATH_TO_VENUE_CHECKOUT --out docs
 
-The venue is https://github.com/AndrewDelaurierWeeks/data-licensing-standard at commit b1fc951. Every sealed
+The venue is https://github.com/AndrewDelaurierWeeks/data-licensing-standard at commit de671fb. Every sealed
 file is copied byte for byte and checked against the SHA-256 pinned below; the build stops on any difference.
 Each Part, Requirement and Annex gets a page at https://datalicensingstandard.org/v0.1/<id>/ whose sealed block
 is that section's text, and a Markdown copy at /v0.1/<id>.md that is the section's bytes. The build checks that
@@ -14,7 +14,7 @@ from pathlib import Path
 
 SITE = "https://datalicensingstandard.org"
 VENUE = "https://github.com/AndrewDelaurierWeeks/data-licensing-standard"
-VENUE_COMMIT = "b1fc9519da44f08e82a0f5727b213a084cecf46f"
+VENUE_COMMIT = "de671fb7d37a0aff6b5c247635004bf6b41facec"
 V = "v0.1"
 SRC = "TDLS-AI-v0.1.md"
 SCHEMA_DIR = "schema/0.3.0"                                  # the path in the schema's $id

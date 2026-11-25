@@ -6,7 +6,7 @@ The sealed files are published at https://github.com/AndrewDelaurierWeeks/data-l
 
 ## Build
 
-From a checkout of the venue at commit b1fc951:
+From a checkout of the venue at commit de671fb:
 
 ```
 python3 build/build.py --venue PATH_TO_VENUE --out docs
