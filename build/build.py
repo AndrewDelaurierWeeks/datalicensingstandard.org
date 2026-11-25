@@ -163,12 +163,90 @@ def mark_svg(h, color="#000"):
             f'<rect x="0" y="0" width="{size}" height="{size}" fill="none" stroke="{color}" stroke-width="0.3"/>'
             f'<g fill="{color}">{cells}</g></svg>')
 
+# ------------------------------------------------------------------ descriptions and structured data
+BUILD_DATE = "2026-11-25"           # the date these pages were last built; the sealed files keep 2026-11-24
+INDEXNOW_KEY = "6e8660927ac2f49e537b7f06d15d8c5d"   # public by design: it proves to search engines that a change notice comes from this site
+
+def first_sentence(text, limit=260):
+    """The section's first sentence of prose, its own words, for the page's description (a leading label such as
+    'Requirement.' is skipped)."""
+    paras = [re.sub(r"\s+", " ", p).strip() for p in pandoc(text, "plain").split("\n\n")]
+    for p in paras[1:]:
+        if not p or p[0] in "|-+*>" or re.match(r"^\d+\.\s", p) or p.isupper(): continue
+        p = re.sub(r"^[A-Z][\w-]*(?: [\w-]+){0,2}\. (?=\S)", "", p)
+        m = re.match(r"(.+?[.?!])(?:\s+(?=[A-Z(\"])|$)", p)
+        out = m.group(1) if m else p
+        if len(out.split()) < 6: continue
+        if len(out) > limit:
+            cut = out[:limit]
+            at = max(cut.rfind("; "), cut.rfind(": "))
+            out = (cut[:at] if at > limit // 2 else cut.rsplit(" ", 1)[0]) + " …"
+        return out
+    return ""
+
+def ld_person(fm, full=False):
+    n = {"@type": "Person", "@id": PERSON_ID, "name": fm["author"], "url": PERSON_ID}
+    if full: n.update({"description": fm["credentials_full"] + " " + fm["capacity"], "sameAs": ["https://github.com/AndrewDelaurierWeeks"]})
+    return n
+
+def ld_standard(fm, full=False, parts=None, h=None):
+    n = {"@type": "CreativeWork", "@id": STD_ID, "name": fm["title_display"], "alternateName": [fm["short_name"], f"{fm['short_name']} {V}"],
+         "url": SITE + "/", "version": V.lstrip("v"), "datePublished": fm["date"], "author": {"@id": PERSON_ID}}
+    if full:
+        n.update({"headline": f"{fm['title_display']}: {fm['subtitle']}", "description": f"{fm['subtitle']}. {fm['scope_line']}",
+                  "genre": "procurement standard", "identifier": fm["serial"], "inLanguage": "en", "creator": {"@id": PERSON_ID},
+                  "license": PART7, "isAccessibleForFree": True, "keywords": ", ".join(KEYWORDS),
+                  "image": {"@type": "ImageObject", "url": OG, "width": 1200, "height": 630}, "disambiguatingDescription": ONE_AUTHOR,
+                  "encoding": [{"@type": "MediaObject", "name": "TDLS-AI-v0.1.pdf", "contentUrl": f"{SITE}/TDLS-AI-v0.1.pdf", "encodingFormat": "application/pdf", "sha256": SEALED["TDLS-AI-v0.1.pdf"]},
+                               {"@type": "MediaObject", "name": SRC, "contentUrl": f"{SITE}/{SRC}", "encodingFormat": "text/markdown", "sha256": h}],
+                  "hasPart": parts or []})
+    return n
+
+def ld_page(url, name, desc, typ="WebPage", about=None, crumbs=None):
+    about = about or STD_ID
+    g = [{"@type": typ, "@id": url + "#webpage", "url": url, "name": name, "description": desc, "inLanguage": "en",
+          "isPartOf": {"@id": SITE_ID}, "about": {"@id": about}, "thumbnailUrl": OG, "dateModified": BUILD_DATE},
+         {"@type": "WebSite", "@id": SITE_ID, "url": SITE + "/", "name": SITE_NAME[0], "alternateName": SITE_NAME[1],
+          "inLanguage": "en", "publisher": {"@id": PERSON_ID}}]
+    if crumbs:
+        g[0]["breadcrumb"] = {"@id": url + "#breadcrumb"}
+        g.append({"@type": "BreadcrumbList", "@id": url + "#breadcrumb",
+                  "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
+    return g
+
+def glossary(text):
+    """Annex C's entries, as sealed: '**Term.** Definition.'"""
+    return [(m.group(1), re.sub(r"[*`]", "", m.group(2)).strip()) for m in re.finditer(r"(?m)^\*\*(.+?)\.\*\* (.+)$", text)]
+
 # ------------------------------------------------------------------ the page frame
 NAV = [(f"/{V}/", "Contents"), (f"/{V}/part-4/", "Questions"), (f"/{V}/part-5/", "Scoring"),
        ("/schema/", "Schema"), ("/verify/", "Verify"), ("/TDLS-AI-v0.1.pdf", "PDF")]
-HERO_SCRIPT = '<script src="/assets/hero.js" defer></script>'      # the home page's one script, served from this site
+HERO_SCRIPT = ""          # set in main(): the home page's one script, served from this site, with its integrity hash
+CSS_LINK = ""             # set in main(): the stylesheet, with its integrity hash
+# The page's own security policy, as a meta tag, since GitHub Pages lets a site set no headers: everything from this
+# site, nothing inline but the structured data, which is not run. Only the home page runs a script or fetches data.
+def csp(home):
+    run = "'self'" if home else "'none'"
+    return (f"default-src 'none'; script-src {run}; style-src 'self'; img-src 'self'; font-src 'self'; connect-src {run}; "
+            "base-uri 'none'; form-action 'none'; object-src 'none'; "
+            "require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests")
+# Search and AI terms, each one the sealed text's own words (checked against the source at build time).
+KEYWORDS = ["TDLS-AI", "AI training data", "training data", "data licensing", "vendor questionnaire", "scoring sheet", "procurement",
+            "request for proposal", "diligence", "provenance", "chain of custody", "consent basis", "de-identification",
+            "synthetic data", "human data", "sensor records", "evaluation data", "contamination", "RL environment",
+            "reinforcement learning", "deletion", "evidence package", "attestation", "health data", "financial and payment data",
+            "brokers", "marketplaces", "JSON Schema", "vendor declaration", "RFC 3161"]
+PART7 = f"{SITE}/{V}/part-7/"        # the license, with its exclusions (quoted material, outside specifications' names)
+OG = f"{SITE}/assets/og.png"
+PERSON_ID = f"{SITE}/colophon/#about-the-author"
+STD_ID = f"{SITE}/#standard"
+SITE_ID = f"{SITE}/#website"
+FONTS_PRELOAD = ("inter-latin-400-normal", "ibm-plex-mono-latin-500-normal", "eb-garamond-latin-500-normal")
 
-def page(*, title, desc, path, body, current=None, wide=False, home=False, fm):
+def jsonld(graph):
+    return '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c") + "</script>"
+
+def page(*, title, desc, path, body, current=None, wide=False, home=False, fm, ld=None, md=None, robots="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"):
     nav = "".join(f'<a href="{u}"{" class=\"pdf\"" if t == "PDF" else ""}{" aria-current=\"page\"" if u == current else ""}>{t}</a>' for u, t in NAV)
     canon = f"{SITE}{path}"
     cls = ' class="home"' if home else (' class="wide"' if wide else "")
@@ -177,17 +255,34 @@ def page(*, title, desc, path, body, current=None, wide=False, home=False, fm):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{csp(home)}">
+<meta name="referrer" content="no-referrer">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{canon}">
-<link rel="stylesheet" href="/assets/site.css">
+<meta name="robots" content="{robots}">
+<meta name="author" content="{e(fm["author"])}">
+<meta name="keywords" content="{e(", ".join(KEYWORDS))}">
+{f'<link rel="canonical" href="{canon}">{chr(10)}' if path != "/404.html" else ""}<link rel="license" href="/{V}/part-7/">
+<meta name="format-detection" content="telephone=no">
+{"".join(f'<link rel="preload" href="/assets/fonts/{f}.woff2" as="font" type="font/woff2" crossorigin>{chr(10)}' for f in FONTS_PRELOAD)}{'<link rel="preload" href="/assets/device/plate.webp" as="image" fetchpriority="high">' + chr(10) if home else ""}{CSS_LINK}
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="alternate" type="text/markdown" href="/{SRC}" title="The sealed source text">
+{f'<link rel="alternate" type="text/markdown" href="{md}" title="This section as sealed">{chr(10)}' if md else ""}<meta property="og:site_name" content="{e(fm["title_display"])} ({e(fm["short_name"])})">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
-<meta property="og:url" content="{canon}">
-<meta property="og:type" content="website">
-{HERO_SCRIPT + chr(10) if home else ""}</head>
+{f'<meta property="og:url" content="{canon}">{chr(10)}' if path != "/404.html" else ""}<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{OG}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(fm["title_display"])}: {e(fm["subtitle"])}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{OG}">
+<meta name="twitter:image:alt" content="{e(fm["title_display"])}: {e(fm["subtitle"])}">
+{jsonld(ld) + chr(10) if ld else ""}{HERO_SCRIPT + chr(10) if home else ""}</head>
 <body>
 <a class="skip" href="#main">Skip to the text</a>
 <header class="site">
@@ -202,17 +297,20 @@ def page(*, title, desc, path, body, current=None, wide=False, home=False, fm):
 <p>{CONFLICT_HTML}</p>
 <p>{e(fm["license"])} Full terms: <a href="/{V}/part-7/">Part 7</a>.</p>
 <p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="{VENUE}">{VENUE.replace("https://", "")}</a>, commit <span class="hash">{VENUE_COMMIT[:7]}</span>.</p>
+<p><a href="/colophon/"{' aria-current="page"' if path == "/colophon/" else ""}>Colophon</a></p>
 </div></footer>
 </body>
 </html>
 """
 
 CONFLICT_HTML = ""        # set in main(): Part 0's conflict disclosure, as sealed
+ONE_AUTHOR = ""           # set in main(): Part 0's sentence on whose work this is, plain
+SITE_NAME = ("", "")      # set in main(): the site's name and short name
 ONE_AUTHOR_HTML = ""      # set in main(): Part 0's sentence on whose work this is, as sealed
 
 # ------------------------------------------------------------------ build
 def main():
-    global CONFLICT_HTML, ONE_AUTHOR_HTML
+    global CONFLICT_HTML, ONE_AUTHOR_HTML, ONE_AUTHOR, SITE_NAME, HERO_SCRIPT, CSS_LINK
     ap = argparse.ArgumentParser()
     ap.add_argument("--venue", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
@@ -246,14 +344,25 @@ def main():
     CONFLICT_HTML = pandoc(conflict, "html5").strip().removeprefix("<p>").removesuffix("</p>")
     one_author = re.search(r"(?m)^This document is one author's work\. .+$", part0)
     if not one_author: die("Part 0 has no sentence on whose work this is")
-    ONE_AUTHOR_HTML = e(one_author.group(0))
+    ONE_AUTHOR = one_author.group(0)
+    ONE_AUTHOR_HTML = e(ONE_AUTHOR)
+    SITE_NAME = (fm["title_display"], f"{fm['short_name']} {V}")
 
     # 2. assets
     (out / "assets").mkdir()
     shutil.copytree(here / "assets" / "fonts", out / "assets" / "fonts")
-    shutil.copy(here / "assets" / "site.css", out / "assets" / "site.css")
-    shutil.copy(here / "assets" / "hero.js", out / "assets" / "hero.js")
+    names = {}
+    for n in ("site.css", "hero.js"):                             # content-hashed names: a cached old file can never meet new HTML
+        b = (here / "assets" / n).read_bytes(); stem, ext = n.rsplit(".", 1)
+        names[n] = f"{stem}.{sha(b)[:10]}.{ext}"
+        (out / "assets" / names[n]).write_bytes(b)
     shutil.copytree(here / "assets" / "device", out / "assets" / "device")
+    for n in ("og.png", "apple-touch-icon.png"): shutil.copy(here / "assets" / n, out / "assets" / n)
+    sri = lambda b: "sha384-" + __import__("base64").b64encode(hashlib.sha384(b).digest()).decode()
+    CSS_LINK = f'<link rel="stylesheet" href="/assets/{names["site.css"]}" integrity="{sri((out / "assets" / names["site.css"]).read_bytes())}">'
+    HERO_SCRIPT = f'<script src="/assets/{names["hero.js"]}" integrity="{sri((out / "assets" / names["hero.js"]).read_bytes())}" defer></script>'
+    for k in KEYWORDS:
+        if k.lower() not in md.lower(): die(f"the keyword {k!r} is not in the sealed text")
     (out / "assets" / "mark.svg").write_text(mark_svg(h))
 
     # 3. the section pages and their Markdown copies
@@ -267,6 +376,7 @@ def main():
         (out / V / f"{sid}.md").write_bytes(text.encode("utf-8"))
         shift = -2 if kind == "R" else -1
         frag = pandoc(text, "html5", shift)
+        frag = re.sub(r'(<col)\s+style="[^"]*"', r"\1", frag)       # column widths the stylesheet overrides; no inline style
         frag = heading_ids(frag, sid)
         frag = dress_tables(frag, sid)
         frag = link_refs(frag, sid)
@@ -289,10 +399,22 @@ def main():
 </dl>
 {pn}"""
         title = f"{nav_title(kind, num, t)} · {fm['short_name']} {V}"
-        desc = f"{cite(kind, num)}: {t}. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24."
+        lead = first_sentence(text)
+        if sid == "annex-c": lead = "The terms it defines: " + ", ".join(n for n, _ in glossary(text)) + "."
+        desc = f"{cite(kind, num)}: {t}." + (f" {lead}" if lead else " The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.")
+        sec = {"@type": "CreativeWork", "@id": addr + "#section", "name": nav_title(kind, num, t), "alternateName": cite(kind, num),
+               "url": addr, "position": k + 1, "isPartOf": {"@id": STD_ID}, "author": {"@id": PERSON_ID}, "license": PART7, "inLanguage": "en",
+               "encoding": {"@type": "MediaObject", "contentUrl": f"{SITE}/{V}/{sid}.md", "encodingFormat": "text/markdown", "sha256": sha(text.encode("utf-8"))}}
+        graph = ld_page(addr, title, desc, about=addr + "#section", crumbs=[("Home", SITE + "/"), ("Contents", f"{SITE}/{V}/"), (nav_title(kind, num, t), addr)])
+        graph += [sec, ld_standard(fm), ld_person(fm)]
+        if sid == "annex-c":
+            terms = glossary(text)
+            if len(terms) < 10: die("Annex C's glossary was not read")
+            graph.append({"@type": "DefinedTermSet", "@id": addr + "#glossary", "name": f"{cite(kind, num)}: {t}", "url": addr,
+                          "hasDefinedTerm": [{"@type": "DefinedTerm", "name": n, "description": d, "inDefinedTermSet": {"@id": addr + "#glossary"}} for n, d in terms]})
         (out / V / sid / "index.html").write_text(page(title=title, desc=desc, path=f"/{V}/{sid}/", body=body,
                                                         current=f"/{V}/{sid}/" if sid in ("part-4", "part-5") else None,
-                                                        wide=sid in ("part-4", "part-5", "annex-a"), fm=fm))
+                                                        wide=sid in ("part-4", "part-5", "annex-a"), fm=fm, ld=graph, md=f"/{V}/{sid}.md"))
         toc.append((sid, kind, num, t))
 
     # 4. the word check: every page's sealed block against its section
@@ -320,8 +442,10 @@ def main():
 <p>Each Part, Requirement and Annex of the sealed text has its own page and a Markdown copy. {e(fm["short_name"])} {V} R8 is at <a href="/{V}/r8/">/{V}/r8/</a>; question 10 of Part 4 is at <a href="/{V}/part-4/#q10">/{V}/part-4/#q10</a>.</p>
 {toc_html()}
 <p class="note">{version_line}. The whole source: <a href="/{SRC}">{SRC}</a>. The PDF: <a href="/TDLS-AI-v0.1.pdf">TDLS-AI-v0.1.pdf</a>, 83 pages.</p>"""
-    (out / V / "index.html").write_text(page(title=f"Contents · {fm['short_name']} {V}", desc="The Parts, Requirements and Annexes of The Data Licensing Standard for AI, version 0.1, each at its own address.",
-                                             path=f"/{V}/", body=contents, current=f"/{V}/", fm=fm))
+    cdesc = "The Parts, Requirements and Annexes of The Data Licensing Standard for AI, version 0.1, each at its own address."
+    (out / V / "index.html").write_text(page(title=f"Contents · {fm['short_name']} {V}", desc=cdesc,
+                                             path=f"/{V}/", body=contents, current=f"/{V}/", fm=fm,
+                                             ld=ld_page(f"{SITE}/{V}/", f"Contents · {fm['short_name']} {V}", cdesc, typ="CollectionPage", crumbs=[("Home", SITE + "/"), ("Contents", f"{SITE}/{V}/")]) + [ld_standard(fm), ld_person(fm)]))
 
     # the home page: the cover, as a page. The plate and the black band carry the cover's words (the sealed PDF, page 1,
     # checked below), the front matter's fields and Part 4's sealed rows, with the site's links and the switch; the
@@ -365,7 +489,7 @@ def main():
 </div>
 <p class="req">A BUYER'S REQUIREMENT</p>
 <div class="stage" data-stage role="img" aria-label="The engraved device of the cover, a carved neoclassical anthropomorphic mascaron sculpted in high relief; the device's two sides break into blocks.">
-<div class="tilt" data-tilt><img class="fill" data-fallback src="/assets/device/plate.png" alt="" width="805" height="552"><canvas class="pad" data-dust aria-hidden="true"></canvas></div>
+<div class="tilt" data-tilt><img class="fill" data-fallback src="/assets/device/plate.webp" alt="" width="805" height="552" fetchpriority="high" decoding="async"><canvas class="pad" data-dust aria-hidden="true"></canvas></div>
 <canvas class="pad" data-matrix aria-hidden="true"></canvas>
 <canvas class="wide" data-stream aria-hidden="true"></canvas>
 </div>
@@ -394,7 +518,7 @@ def main():
 <hr>
 <div class="author">
 <span class="mk" aria-hidden="true"></span>
-<div class="who"><p class="name">{e(fm["author"])}</p><p class="cred">{e(fm["credentials"])}</p></div>
+<div class="who"><p class="name"><a href="/colophon/#about-the-author">{e(fm["author"])}</a></p><p class="cred">{e(fm["credentials"])}</p></div>
 <div class="cap"><p>{e(fm["capacity_cover"])}</p><p class="ser">{e(fm["serial"])}</p></div>
 </div>
 <div class="foot"><a href="/TDLS-AI-v0.1.pdf#page=3">{V} · {e(fm["date"])} · FIRST ASSESSMENT BY 2027-02-14</a><a href="/verify/">REPOSITORY AND SEAL TOKENS AT RELEASE</a></div>
@@ -418,8 +542,11 @@ def main():
 </section>"""
     if "Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs." not in home:
         die("home action line")
-    (out / "index.html").write_text(page(title=f"{fm['title_display']} ({fm['short_name']}) {V}",
-                                         desc=f"{fm['subtitle']}. {fm['scope_line']}", path="/", body=home, home=True, fm=fm))
+    htitle, hdesc = f"{fm['title_display']} ({fm['short_name']}) {V}", f"{fm['subtitle']}. {fm['scope_line']}"
+    parts = [{"@type": "CreativeWork", "@id": f"{SITE}/{V}/{sid}/#section", "name": nav_title(kind, num, t), "url": f"{SITE}/{V}/{sid}/", "position": i + 1}
+             for i, (sid, kind, num, t) in enumerate(toc)]
+    hgraph = ld_page(SITE + "/", htitle, hdesc) + [ld_standard(fm, full=True, parts=parts, h=h), ld_person(fm, full=True)]
+    (out / "index.html").write_text(page(title=htitle, desc=hdesc, path="/", body=home, home=True, fm=fm, ld=hgraph))
 
     sfiles = [("tdls-ai-vendor-declaration.schema.json", "The vendor declaration schema (JSON Schema 2020-12), version 0.3.0"),
               ("example-declaration.json", "An example declaration"),
@@ -438,10 +565,15 @@ def main():
 <pre><code>.venv/bin/python validate.py tdls-ai-vendor-declaration.schema.json example-declaration.json</code></pre>
 <p>The last command prints <code>valid: example-declaration.json conforms to TDLS-AI Vendor Declaration (The Data Licensing Standard for AI, v0.1) ({SCHEMA_ID})</code>. A declaration that validates has the right fields; validation scores nothing.</p>"""
     (out / "schema").mkdir(exist_ok=True)
+    sdesc = "The machine-readable vendor declaration of The Data Licensing Standard for AI, version 0.1: schema 0.3.0, example, validator and crosswalk."
     for p in ("schema", SCHEMA_DIR):
-        (out / p / "index.html").write_text(page(title=f"The vendor declaration schema 0.3.0 · {fm['short_name']} {V}",
-                                                 desc="The machine-readable vendor declaration of The Data Licensing Standard for AI, version 0.1: schema 0.3.0, example, validator and crosswalk.",
-                                                 path=f"/{p}/", body=schema_pg, current="/schema/", wide=True, fm=fm))
+        stitle = f"The vendor declaration schema 0.3.0 · {fm['short_name']} {V}"
+        sg = ld_page(f"{SITE}/schema/", stitle, sdesc, about=SCHEMA_ID, crumbs=[("Home", SITE + "/"), ("Schema", f"{SITE}/schema/")])
+        sg += [{"@type": "MediaObject", "@id": SCHEMA_ID, "name": schema_json.get("title", "The vendor declaration schema"), "url": SCHEMA_ID,
+                "contentUrl": SCHEMA_ID, "version": "0.3.0", "encodingFormat": "application/schema+json", "license": PART7, "isPartOf": {"@id": STD_ID},
+                "author": {"@id": PERSON_ID}, "sha256": sha((out / SCHEMA_DIR / "tdls-ai-vendor-declaration.schema.json").read_bytes())},
+               ld_standard(fm), ld_person(fm)]
+        (out / p / "index.html").write_text(page(title=stitle, desc=sdesc, path="/schema/", body=schema_pg, current="/schema/", wide=True, fm=fm, ld=sg))
 
     vfiles = [("TDLS-AI-v0.1.pdf", "The document, 83 pages"), ("TDLS-AI-v0.1.md", "The Markdown source of the document's text"),
               ("TDLS-AI-v0.1.sha256", "The SHA-256 of the PDF and of the source text"),
@@ -464,16 +596,60 @@ def main():
 <p>Each command prints <code>Verification: OK</code>, after a line on standard error that names OpenSSL's configuration file. On another system, use a PEM file of this root certificate in place of that path; the venue's README says how to check its fingerprint and how to read each token's time.</p>
 <p>The same files, with the same SHA-256 values, are published at the venue: <a href="{VENUE}">{VENUE.replace("https://", "")}</a>, commit <span class="hash">{VENUE_COMMIT}</span>.</p>"""
     (out / "verify").mkdir()
-    (out / "verify" / "index.html").write_text(page(title=f"Verify the seal · {fm['short_name']} {V}",
-                                                    desc="Check the SHA-256 values and the RFC 3161 time-stamp tokens of The Data Licensing Standard for AI, version 0.1.",
-                                                    path="/verify/", body=verify, current="/verify/", wide=True, fm=fm))
+    vtitle, vdesc = f"Verify the seal · {fm['short_name']} {V}", "Check the SHA-256 values and the RFC 3161 time-stamp tokens of The Data Licensing Standard for AI, version 0.1."
+    (out / "verify" / "index.html").write_text(page(title=vtitle, desc=vdesc, path="/verify/", body=verify, current="/verify/", wide=True, fm=fm,
+                                                    ld=ld_page(f"{SITE}/verify/", vtitle, vdesc, crumbs=[("Home", SITE + "/"), ("Verify the seal", f"{SITE}/verify/")]) + [ld_standard(fm), ld_person(fm)]))
+
+    # the colophon, as printed on page 3 of the sealed PDF (checked word for word below)
+    lic1, lic2 = fm["license"].split(". ", 1)
+    colophon = [("this-edition", "01", "This edition"), ("about-the-author", "02", "About the author"), ("seal", "03", "Seal"),
+                ("next-assessment", "04", "Next assessment"), ("cite-as", "05", "Cite as")]
+    seal_txt = "At publication, the SHA-256 of the published PDF and the SHA-256 of the Markdown source are time-stamped under RFC 3161. The tokens, both hashes and the verification command are published beside this document. A reader verifies the seal without trusting the author."
+    next_txt = "The first quarterly assessment of training-data diligence is published by 2027-02-14; its sections and method are fixed and sealed before the first issue."
+    cite_txt = "Weeks, A. D. (2026). The Data Licensing Standard for AI (TDLS-AI) v0.1. Sealed on the date in the published time-stamp token. The schema (Annex A) is cited by its $id and version."
+    hash_txt = "The build script reads the parameters of the engraved elements on the cover and of the band and thread from this hash; a changed text changes them."
+    try:
+        p3 = subprocess.run(["pdftotext", "-raw", "-f", "3", "-l", "3", str(a.venue / "TDLS-AI-v0.1.pdf"), "-"], capture_output=True, check=True).stdout.decode("utf-8")
+    except (OSError, subprocess.CalledProcessError): die("pdftotext (poppler) is needed to check the colophon's words")
+    for w in ["Colophon", "THIS EDITION", f"VERSION {V}", f"PUBLISHED {fm['date']}", f"SERIAL {fm['serial']}", f"LICENSE {fm['license']}",
+              f"SOURCE SHA-256 {h}", hash_txt, "ABOUT THE AUTHOR", fm["author"], fm["credentials_full"], fm["capacity"],
+              "SEAL", seal_txt, "NEXT ASSESSMENT", next_txt, "CITE AS", cite_txt]:
+        if flat(w) not in flat(p3): die(f"the colophon does not carry: {w[:60]}")
+    sec_h = lambda sid, n, t: f'<section class="colo" id="{sid}"><p class="num">{n}</p><h2>{t}</h2>'
+    colo = f"""<p class="kicker">{kick(fm["short_name"] + " " + V)} · Colophon</p>
+<h1>Colophon</h1>
+<p class="note">As printed on page 3 of <a href="/TDLS-AI-v0.1.pdf#page=3">the sealed PDF</a>. The link in entry 03 is added by this site; the words are as printed.</p>
+{sec_h(*colophon[0])}
+<dl class="kv"><dt>Version</dt><dd>{V}</dd><dt>Published</dt><dd>{e(fm["date"])}</dd><dt>Serial</dt><dd>{e(fm["serial"])}</dd>
+<dt>License</dt><dd>{e(lic1)}.<br>{e(lic2)}</dd><dt>Source SHA-256</dt><dd class="hash">{h}</dd></dl>
+<p>{e(hash_txt)}</p></section>
+{sec_h(*colophon[1])}
+<p class="name">{e(fm["author"])}</p>
+<p>{e(fm["credentials_full"])}</p>
+<p>{e(fm["capacity"])}</p></section>
+{sec_h(*colophon[2])}
+<p>{e(seal_txt).replace("published beside this document", '<a href="/verify/">published beside this document</a>')}</p></section>
+{sec_h(*colophon[3])}
+<p>{e(next_txt)}</p></section>
+{sec_h(*colophon[4])}
+<p>{e(cite_txt)}</p></section>"""
+    got = words(re.sub(r"<[^>]+>", " ", colo[colo.index('<section class="colo"'):]).lower())
+    seg = flat(p3)[flat(p3).index("01 THIS EDITION"):]
+    seg = seg[:seg.index(cite_txt) + len(cite_txt)]
+    if got != words(seg.lower()): die("the colophon page's words differ from page 3 of the sealed PDF")
+    (out / "colophon").mkdir()
+    ctitle = f"Colophon · {fm['short_name']} {V}"
+    cdesc2 = f"The colophon of {fm['title_display']} ({fm['short_name']}) {V}: this edition, about the author, the seal, the next assessment, and how to cite it."
+    (out / "colophon" / "index.html").write_text(page(title=ctitle, desc=cdesc2, path="/colophon/", body=colo, fm=fm,
+                                                      ld=ld_page(f"{SITE}/colophon/", ctitle, cdesc2, typ="AboutPage", about=PERSON_ID,
+                                                                 crumbs=[("Home", SITE + "/"), ("Colophon", f"{SITE}/colophon/")]) + [ld_standard(fm), ld_person(fm, full=True)]))
 
     nf = f"""<p class="kicker">404</p>
 <h1>Nothing is published at this address</h1>
 <p>The text of {e(fm["short_name"])} {V} is at <a href="/{V}/">/{V}/</a>, a page for each Part, Requirement and Annex.</p>
 {toc_html()}"""
     (out / "404.html").write_text(page(title=f"Not found · {fm['short_name']} {V}", desc="Nothing is published at this address.",
-                                       path="/404.html", body=nf, fm=fm))
+                                       path="/404.html", body=nf, fm=fm, robots="noindex, follow"))
 
     # 6. robots.txt, llms.txt, sitemap, CNAME, .nojekyll
     p7 = next(t for i, *_, t in secs if i == "part-7")
@@ -501,7 +677,9 @@ Sitemap: {SITE}/sitemap.xml
             "## The document", "",
             f"- [The sealed source text]({SITE}/{SRC}): the whole document in Markdown, SHA-256 {h}",
             f"- [The PDF]({SITE}/TDLS-AI-v0.1.pdf): 83 pages, SHA-256 {SEALED['TDLS-AI-v0.1.pdf']}",
-            f"- [Contents]({SITE}/{V}/): a page for each Part, Requirement and Annex", ""]
+            f"- [Contents]({SITE}/{V}/): a page for each Part, Requirement and Annex",
+            f"- [The whole text in one file]({SITE}/llms-full.txt): the sealed source, byte for byte, SHA-256 {h}",
+            f"- [Colophon]({SITE}/colophon/): this edition, about the author, the seal, the next assessment, and how to cite it", ""]
     for head, kinds in (("## Requirements", ("R",)), ("## Parts", ("Part",)), ("## Annexes", ("Annex",))):
         llms += [head, ""]
         llms += [f"- [{nav_title(kind, num, t)}]({SITE}/{V}/{sid}.md): cite as {cite(kind, num)}" for sid, kind, num, t in toc if kind in kinds]
@@ -514,15 +692,29 @@ Sitemap: {SITE}/sitemap.xml
              f"- [Verify the seal]({SITE}/verify/): the SHA-256 values and the RFC 3161 tokens",
              f"- [The venue]({VENUE}): the same sealed files, commit {VENUE_COMMIT}", ""]
     (out / "llms.txt").write_text("\n".join(llms))
-    urls = ["/", f"/{V}/"] + [f"/{V}/{s}/" for s, *_ in toc] + ["/schema/", "/verify/", f"/{SRC}", "/TDLS-AI-v0.1.pdf", f"/{SCHEMA_DIR}/tdls-ai-vendor-declaration.schema.json"]
+    (out / "llms-full.txt").write_bytes(md_bytes)                    # the sealed source, byte for byte, under the name AI tools look for
+    pages = ["/", f"/{V}/"] + [f"/{V}/{s}/" for s, *_ in toc] + ["/schema/", "/verify/", "/colophon/"]
+    files = [f"/{SRC}", "/TDLS-AI-v0.1.pdf", f"/{SCHEMA_DIR}/tdls-ai-vendor-declaration.schema.json"]
     (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-                                     + "".join(f"<url><loc>{SITE}{u}</loc><lastmod>2026-11-24</lastmod></url>\n" for u in urls) + "</urlset>\n")
+                                     + "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{BUILD_DATE}</lastmod></url>\n" for u in pages)
+                                     + "".join(f"<url><loc>{SITE}{u}</loc><lastmod>2026-11-24</lastmod></url>\n" for u in files) + "</urlset>\n")
+    (out / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY)
     (out / "CNAME").write_text("datalicensingstandard.org\n")
     (out / ".nojekyll").write_text("")
 
     # 7. no third party: every src and href on every page is on this site, the venue, or a named source address
     for f in out.rglob("*.html"):
         t = f.read_text()
+        if t.count(f'<meta http-equiv="Content-Security-Policy" content="{csp(f == out / "index.html")}">') != 1: die(f"{f}: no security policy, or the wrong one")
+        if re.search(r'\sstyle="', t): die(f"{f}: an inline style")
+        if re.search(r'\son[a-z]+="', t) or "javascript:" in t: die(f"{f}: an inline handler or a javascript: address")
+        if t.count(CSS_LINK) != 1: die(f"{f}: the stylesheet without its integrity hash")
+        blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', t, re.S)
+        if len(blocks) > 1: die(f"{f}: more than one block of structured data")
+        for b in blocks:
+            try: json.loads(b)
+            except ValueError as x: die(f"{f}: structured data that does not parse: {x}")
+        t = re.sub(r'<script type="application/ld\+json">.*?</script>', "", t, flags=re.S)
         n_script = t.count("<script")
         if f == out / "index.html":
             if n_script != 1 or t.count(HERO_SCRIPT) != 1: die(f"{f}: the home page carries a script other than {HERO_SCRIPT}")
@@ -531,8 +723,8 @@ Sitemap: {SITE}/sitemap.xml
             for u in re.findall(r'(?:src|href)="([^"]+)"', tag):
                 if u.startswith("/") or u.startswith(SITE + "/"): continue
                 die(f"{f}: a resource from another host: {u}")
-    if re.search(r"url\((?!fonts/|mark\.svg)", (out / "assets" / "site.css").read_text()): die("site.css loads from elsewhere")
-    if re.search(r"https?://", (out / "assets" / "hero.js").read_text()): die("hero.js names another host")
+    if re.search(r"url\((?!fonts/|mark\.svg)", (out / "assets" / names["site.css"]).read_text()): die("site.css loads from elsewhere")
+    if re.search(r"https?://", (out / "assets" / names["hero.js"]).read_text()): die("hero.js names another host")
     print(f"built {sum(1 for _ in out.rglob('*') if _.is_file())} files into {out}; source SHA-256 {h}; {len(secs)} sections; checks passed")
 
 if __name__ == "__main__":

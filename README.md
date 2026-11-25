@@ -12,9 +12,13 @@ From a checkout of the venue at commit de671fb:
 python3 build/build.py --venue PATH_TO_VENUE --out docs
 ```
 
-The build stops if a sealed file differs from its SHA-256, if the Markdown copies do not give back the sealed source, or if the words of a page's sealed block differ from its section. It needs Python 3.9 or later, pandoc 3, and pdftotext (poppler) to check the cover's words on the home page against the sealed PDF.
+The build stops if a sealed file differs from its SHA-256, if the Markdown copies do not give back the sealed source, or if the words of a page's sealed block differ from its section. It needs Python 3.9 or later, pandoc 3, and pdftotext (poppler) to check the cover's words on the home page and the colophon's words against the sealed PDF.
 
-The home page sets the cover of the sealed PDF as a page. Its engraved device moves by `build/assets/hero.js`, the one script on the site, which loads only from this site; the device's image in `build/assets/device/` is cut from that cover, and its point files are drawn from it. Without the script the page shows the engraving still.
+The home page sets the cover of the sealed PDF as a page. Its engraved device moves by `build/assets/hero.js`, the one script on the site (served under a name that carries its hash), which loads only from this site; the device's image in `build/assets/device/` is cut from that cover, and its point files are drawn from it. Without the script the page shows the engraving still. After 5 seconds without pointer movement the device holds still and the script stops running until the next movement, a touch on the device or a press.
+
+Every page carries its own security policy in a meta tag: scripts, styles, images, fonts and data from this site alone, nothing inline except the structured data, which is not run, no forms, no embedded frames, no base address. The stylesheet and the script carry integrity hashes, and their names carry their hashes, so a cached old file never meets a new page. The site sets no cookies and stores nothing in the browser.
+
+For search and AI tools: each section page has a description drawn from its own sealed words, every page has structured data in the schema.org vocabulary (the standard, its sections, the author, the glossary of Annex C as defined terms), with the license given as Part 7 states it, and a preview image; each section page links its Markdown copy. `llms.txt` is a guide for language models and `llms-full.txt` is the sealed source, byte for byte. The keywords are the sealed text's own words; the build checks each one against the source. The colophon at `/colophon/` is page 3 of the sealed PDF, word for word, and the build checks it against that page.
 
 ## License
 

@@ -3,16 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
 <title>R8 · Evaluation data and contamination · TDLS-AI v0.1</title>
-<meta name="description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta name="description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form …">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="Andrew Delaurier Weeks">
+<meta name="keywords" content="TDLS-AI, AI training data, training data, data licensing, vendor questionnaire, scoring sheet, procurement, request for proposal, diligence, provenance, chain of custody, consent basis, de-identification, synthetic data, human data, sensor records, evaluation data, contamination, RL environment, reinforcement learning, deletion, evidence package, attestation, health data, financial and payment data, brokers, marketplaces, JSON Schema, vendor declaration, RFC 3161">
 <link rel="canonical" href="https://datalicensingstandard.org/v0.1/r8/">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="license" href="/v0.1/part-7/">
+<meta name="format-detection" content="telephone=no">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.27e2d05e22.css" integrity="sha384-KeCN1soZncdH456b/wZXBcH1Nft04JISgtelh34XpWmBpNQ7LNZqP0fRYWPVw8JC">
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<link rel="alternate" type="text/markdown" href="/v0.1/r8.md" title="This section as sealed">
+<meta property="og:site_name" content="The Data Licensing Standard for AI (TDLS-AI)">
 <meta property="og:title" content="R8 · Evaluation data and contamination · TDLS-AI v0.1">
-<meta property="og:description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form …">
 <meta property="og:url" content="https://datalicensingstandard.org/v0.1/r8/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://datalicensingstandard.org/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Data Licensing Standard for AI: Requirements, evidence and scoring for AI training data vendors">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="R8 · Evaluation data and contamination · TDLS-AI v0.1">
+<meta name="twitter:description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form …">
+<meta name="twitter:image" content="https://datalicensingstandard.org/assets/og.png">
+<meta name="twitter:image:alt" content="The Data Licensing Standard for AI: Requirements, evidence and scoring for AI training data vendors">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://datalicensingstandard.org/v0.1/r8/#webpage","url":"https://datalicensingstandard.org/v0.1/r8/","name":"R8 · Evaluation data and contamination · TDLS-AI v0.1","description":"TDLS-AI v0.1 R8: Evaluation data and contamination. Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form …","inLanguage":"en","isPartOf":{"@id":"https://datalicensingstandard.org/#website"},"about":{"@id":"https://datalicensingstandard.org/v0.1/r8/#section"},"thumbnailUrl":"https://datalicensingstandard.org/assets/og.png","dateModified":"2026-11-25","breadcrumb":{"@id":"https://datalicensingstandard.org/v0.1/r8/#breadcrumb"}},{"@type":"WebSite","@id":"https://datalicensingstandard.org/#website","url":"https://datalicensingstandard.org/","name":"The Data Licensing Standard for AI","alternateName":"TDLS-AI v0.1","inLanguage":"en","publisher":{"@id":"https://datalicensingstandard.org/colophon/#about-the-author"}},{"@type":"BreadcrumbList","@id":"https://datalicensingstandard.org/v0.1/r8/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://datalicensingstandard.org/"},{"@type":"ListItem","position":2,"name":"Contents","item":"https://datalicensingstandard.org/v0.1/"},{"@type":"ListItem","position":3,"name":"R8 · Evaluation data and contamination","item":"https://datalicensingstandard.org/v0.1/r8/"}]},{"@type":"CreativeWork","@id":"https://datalicensingstandard.org/v0.1/r8/#section","name":"R8 · Evaluation data and contamination","alternateName":"TDLS-AI v0.1 R8","url":"https://datalicensingstandard.org/v0.1/r8/","position":12,"isPartOf":{"@id":"https://datalicensingstandard.org/#standard"},"author":{"@id":"https://datalicensingstandard.org/colophon/#about-the-author"},"license":"https://datalicensingstandard.org/v0.1/part-7/","inLanguage":"en","encoding":{"@type":"MediaObject","contentUrl":"https://datalicensingstandard.org/v0.1/r8.md","encodingFormat":"text/markdown","sha256":"2e0603250a731fa340f5b3b298c744bd481f36897bd2acf9c497ba14e625238f"}},{"@type":"CreativeWork","@id":"https://datalicensingstandard.org/#standard","name":"The Data Licensing Standard for AI","alternateName":["TDLS-AI","TDLS-AI v0.1"],"url":"https://datalicensingstandard.org/","version":"0.1","datePublished":"2026-11-24","author":{"@id":"https://datalicensingstandard.org/colophon/#about-the-author"}},{"@type":"Person","@id":"https://datalicensingstandard.org/colophon/#about-the-author","name":"Andrew Delaurier Weeks","url":"https://datalicensingstandard.org/colophon/#about-the-author"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the text</a>
@@ -87,6 +111,7 @@ An evaluation set measures a model only if the model has not seen it. R8 asks wh
 <p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
 <p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
 <p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">de671fb</span>.</p>
+<p><a href="/colophon/">Colophon</a></p>
 </div></footer>
 </body>
 </html>

@@ -2,7 +2,9 @@
    The device is the cover's own engraving. It turns toward the pointer, and the switch sets what moves:
    IN, data streaming into the dissolve at its sides; OUT, data breaking off and flying toward the viewer;
    DUST, the engraving turning to dust where the pointer passes, then reforming; MATRIX, the whole device as a
-   field of dust. No request leaves this site; without this script the page shows the engraving still. */
+   field of dust. After 5 seconds without pointer movement the device holds still and the script stops running until
+   the next movement, a touch on the device or a press; it also sleeps while the device is out of view. No request leaves this site;
+   without this script the page shows the engraving still. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-hero]');
@@ -32,8 +34,12 @@
     cx: null, cy: null, last: -1e9, lx: null, ly: null, pcx: null, pcy: null, pvx: 0, pvy: 0, lastMove: -1e9, onFace: false,
     yaw: 0, yv: 0, pitch: 0, pv: 0, lt: 0, y2: 0, p2: 0, ty2: 0, tp2: 0,
     active: 0, clean: false, drawn: false, inP: [], inS: [], outP: [], acc: [0, 0, 0, 0], streamClear: true,
-    mode: 'in', seen: null, modeAt: -1e9
+    mode: 'in', seen: null, modeAt: -1e9, act: performance.now(), visible: true, running: false
   };
+  var HOLD = 5000;                       // the device holds still after this long without pointer movement
+  function awake(now) { return now - s.act < HOLD; }
+  function kick() { if (!s.running && s.visible && s.started) { s.running = true; s.lt = 0; requestAnimationFrame(tick); } }
+  function wake() { s.act = performance.now(); kick(); }
   var plate = null, P3 = null, P2 = null, T = null, mcv = null, mctx = null, mimg = null;
 
   // the switch
@@ -50,7 +56,8 @@
       var b = e.target && e.target.closest ? e.target.closest('button[data-mode]') : null;
       if (!b) return;
       s.mode = b.getAttribute('data-mode');
-      paint();
+      if (s.mode === 'dust') need3(); if (s.mode === 'matrix') need2();
+      paint(); wake();
     });
     sw.hidden = false;
   }
@@ -65,10 +72,14 @@
     if (Math.abs(det) < 1e-6) return [px, py];
     return [(-sx * a22 + a12 * sy) / det - tx + ox, (-a11 * sy + a21 * sx) / det - ty + oy];
   }
+  var tq = { yaw: NaN, pitch: NaN, ca: 1, sa: 0, cb: 1, sb: 0 };
   function proj(lx, ly, W, H) {
-    var ox = W * 0.5, oy = H * 0.55, a = s.yaw * D2R, b = -s.pitch * D2R, U = lx - ox + s.yaw * 0.7, V = ly - oy + s.pitch * 0.7;
-    var ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
-    var X = U * ca + V * sb * sa, Y = V * cb, Z = -U * sa + V * sb * ca, w = 1 - Z / PERS;
+    if (tq.yaw !== s.yaw || tq.pitch !== s.pitch) {
+      tq.yaw = s.yaw; tq.pitch = s.pitch;
+      tq.ca = Math.cos(s.yaw * D2R); tq.sa = Math.sin(s.yaw * D2R); tq.cb = Math.cos(-s.pitch * D2R); tq.sb = Math.sin(-s.pitch * D2R);
+    }
+    var ox = W * 0.5, oy = H * 0.55, U = lx - ox + s.yaw * 0.7, V = ly - oy + s.pitch * 0.7;
+    var X = U * tq.ca + V * tq.sb * tq.sa, Y = V * tq.cb, Z = -U * tq.sa + V * tq.sb * tq.ca, w = 1 - Z / PERS;
     return [X / w + ox, Y / w + oy];
   }
   function hit(x, y, W) {
@@ -79,7 +90,9 @@
   }
 
   // one pointer for every setting
+  function onStage(e) { var r = stage.getBoundingClientRect(); return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom; }
   window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch' && !s.touchOn) return;
     var r = stage.getBoundingClientRect(), W = stage.clientWidth, H = stage.clientHeight, k = W / (r.width || 1);
     var mx = (e.clientX - r.left) * k, my = (e.clientY - r.top) * k;
     if (s.pcx !== null) { s.pvx = (e.clientX - s.pcx) * k; s.pvy = (e.clientY - s.pcy) * k; }
@@ -92,15 +105,31 @@
     s.tp2 = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height * 0.55)) / (w * 0.32))) * 8;
     var L = toLocal(mx, my, W, H);
     s.onFace = hit(L[0], L[1], W);
+    wake();
   }, { passive: true });
+  window.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'touch') { s.touchOn = onStage(e); if (!s.touchOn) return; }
+    wake();
+  }, { passive: true });
+  window.addEventListener('pointerup', function (e) { if (e.pointerType === 'touch') s.touchOn = false; }, { passive: true });
+  window.addEventListener('resize', function () { s.clean = false; kick(); }, { passive: true });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      s.visible = es[es.length - 1].isIntersecting;
+      if (s.visible) kick();
+    }, { rootMargin: '200px 0px' }).observe(root);
+  }
   document.documentElement.addEventListener('pointerleave', function () { s.cx = null; s.last = -1e9; s.lx = null; s.pcx = null; s.onFace = false; });
 
   // the device's data: the plate, its grains, the dust field, the dissolve's blocks
   var im = new Image();
   im.onload = function () { plate = im; s.clean = false; };
-  im.src = A + 'plate.png';
+  im.src = A + 'plate.webp';
   function getJSON(u, f) { fetch(u).then(function (r) { return r.json(); }).then(f).catch(function () {}); }
-  getJSON(A + 'touch.json', function (d) {
+  var asked3 = false, asked2 = false;
+  function need3() { if (asked3) return; asked3 = true; getJSON(A + 'touch.json', load3); }
+  function need2() { if (asked2) return; asked2 = true; getJSON(A + 'dust.json', load2); }
+  function load3(d) {
     var n = d.p.length / 3, gw = d.gw, gh = d.gh, i, x, y;
     var P = { n: n, gw: gw, gh: gh, hx: new Float32Array(n), hy: new Float32Array(n), r: new Float32Array(n), ox: new Float32Array(n), oy: new Float32Array(n), vx: new Float32Array(n), vy: new Float32Array(n), dz: new Float32Array(n), lt: new Float64Array(n), rd: new Float32Array(n), cell: new Int32Array(n), occ: new Uint8Array(gw * gh) };
     var own = new Uint8Array(gw * gh);
@@ -118,17 +147,21 @@
     }
     mcv = document.createElement('canvas'); mcv.width = gw; mcv.height = gh;
     mctx = mcv.getContext('2d'); mimg = mctx.createImageData(gw, gh);
-    P3 = P;
-  });
-  getJSON(A + 'dust.json', function (d) {
+    P3 = P; kick();
+  }
+  function load2(d) {
     var n = d.p.length / 4;
     var P = { n: n, hx: new Float32Array(n), hy: new Float32Array(n), hz: new Float32Array(n), r: new Float32Array(n), ox: new Float32Array(n), oy: new Float32Array(n), vx: new Float32Array(n), vy: new Float32Array(n) };
     for (var i = 0; i < n; i++) { P.hx[i] = d.p[i * 4]; P.hy[i] = d.p[i * 4 + 1]; P.hz[i] = d.p[i * 4 + 2]; P.r[i] = d.p[i * 4 + 3] / 20; }
     P2 = P;
     var mb = sw ? sw.querySelector('button[data-mode="matrix"]') : null;
     if (mb) mb.disabled = false;
-    paint();
-  });
+    paint(); kick();
+  }
+  function later(f) { if (window.requestIdleCallback) window.requestIdleCallback(f, { timeout: 2000 }); else setTimeout(f, 1200); }
+  // the first frame waits for the page to load, so the device's motion never competes with the page's first paint
+  function start() { s.started = true; s.act = performance.now(); kick(); later(function () { need3(); need2(); }); }
+  if (document.readyState === 'complete') later(start); else window.addEventListener('load', function () { later(start); });
   getJSON(A + 'debris.json', function (d) {
     var L = [], R = [];
     for (var i = 0; i < d.p.length; i += 4) {
@@ -145,7 +178,7 @@
       var dz = P.dz[n], bx = P.hx[n] * sc, by = P.hy[n] * sc;
       var dx = bx + P.ox[n] - mx, dy = by + P.oy[n] - my, d2 = dx * dx + dy * dy, near = d2 < R2;
       if (dz === 0 && (!waking || !near)) continue;
-      if (near && dustOn) {
+      if (near && dustOn && awake(now)) {
         var d = Math.sqrt(d2) + 0.01, qq = 1 - d / REACH, q2 = qq * qq;
         P.vx[n] += dx / d * q2 * FORCE + s.pvx * qq * 0.24 - dy / d * q2 * 0.9 + (Math.random() - 0.5) * qq * 2.2;
         P.vy[n] += dy / d * q2 * FORCE + s.pvy * qq * 0.24 + dx / d * q2 * 0.9 + (Math.random() - 0.5) * qq * 2.2;
@@ -272,15 +305,16 @@
       size: size * g.sc, cells: cluster ? POLY[Math.floor(Math.random() * POLY.length)] : [[0, 0]],
       tone: speck ? rnd(0.3, 0.6) : rnd(0.18, 0.62), rot: rnd(0, 6.2832), wr: rnd(-2.4, 2.4), fl: rnd(0, 6.2832), wf: speck ? 0 : rnd(-3.2, 3.2), age: 0 });
   }
-  function drawStream(r, W, H, sc, dt) {
-    var spawning = s.mode === 'in' || s.mode === 'out', i, p;
+  function drawStream(W, H, sc, dt, now) {
+    var spawning = !reduce && (s.mode === 'in' || s.mode === 'out') && awake(now), i, p;
     if (!spawning && !s.inP.length && !s.inS.length && !s.outP.length) {
       if (!s.streamClear) { var c0 = cvs.getContext('2d'); c0.setTransform(1, 0, 0, 1, 0, 0); c0.clearRect(0, 0, cvs.width, cvs.height); s.streamClear = true; }
       return;
     }
     s.streamClear = false;
-    var cr = cvs.getBoundingClientRect(), k = cvs.clientWidth / (cr.width || 1), CW = cvs.clientWidth, CH = cvs.clientHeight;
-    var g = { sc: sc, sox: (r.left - cr.left) * k, soy: (r.top - cr.top) * k, W: W, H: H, CW: CW, CH: CH };
+    // the stream canvas is the viewport's width and starts 40% of the device's height above it (site.css)
+    var CW = s.cw, CH = s.ch;
+    var g = { sc: sc, sox: (CW - W) / 2, soy: H * 0.40, W: W, H: H, CW: CW, CH: CH };
     var dens = reduce ? 0 : 1;
     if (spawning) {
       var out = s.mode === 'out';
@@ -294,7 +328,7 @@
         }
       }
     }
-    var dpr = Math.min(1.5, window.devicePixelRatio || 1), CWp = Math.round(CW * dpr), CHp = Math.round(CH * dpr);
+    var dpr = Math.min(1.25, window.devicePixelRatio || 1), CWp = Math.round(CW * dpr), CHp = Math.round(CH * dpr);
     if (cvs.width !== CWp || cvs.height !== CHp) { cvs.width = CWp; cvs.height = CHp; }
     var ctx = cvs.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -359,36 +393,36 @@
     ctx.globalAlpha = 1;
   }
 
-  // every frame
+  // every frame: read the layout first, write after; sleep when nothing moves
   function tick(ts) {
-    requestAnimationFrame(tick);
+    if (!s.visible) { s.running = false; return; }
     var now = performance.now();
     var dt = Math.min(0.05, s.lt ? (ts - s.lt) / 1000 : 1 / 60); s.lt = ts;
-    if (s.mode !== s.seen) { if (s.mode === 'matrix') { s.y2 = s.yaw; s.p2 = s.pitch; } s.seen = s.mode; s.modeAt = now; s.clean = false; }
-    var r = stage.getBoundingClientRect();
-    if (r.bottom < -300 || r.top > (window.innerHeight || 2000) + 300) return;
-    var W = stage.clientWidth, H = stage.clientHeight, kk = W / (r.width || 1), sc = W / SW;
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
-    var idle = s.cx === null || ts - s.last > 3500, gy = 0, gp = 0;
-    if (!reduce) {
-      if (idle) { gy = Math.sin(ts / 3100) * 0.22; gp = Math.sin(ts / 4300 + 1) * 0.18; }
-      else { gy = Math.tanh((s.cx - (r.left + r.width / 2)) / (r.width * 0.55)); gp = Math.tanh((s.cy - (r.top + r.height * 0.52)) / (r.width * 0.42)); }
+    var r = stage.getBoundingClientRect(), W = stage.clientWidth, H = stage.clientHeight;
+    s.cw = cvs.clientWidth; s.ch = cvs.clientHeight;
+    if (s.mode !== s.seen) { if (s.mode === 'matrix') { s.y2 = s.yaw; s.p2 = s.pitch; } s.prev = s.seen; s.seen = s.mode; s.modeAt = now; s.clean = false; }
+    var kk = W / (r.width || 1), sc = W / SW, dpr = Math.min(2, window.devicePixelRatio || 1), on = awake(now);
+    var gy = 0, gp = 0;
+    if (!reduce && s.cx !== null) {
+      gy = Math.tanh((s.cx - (r.left + r.width / 2)) / (r.width * 0.55));
+      gp = Math.tanh((s.cy - (r.top + r.height * 0.52)) / (r.width * 0.42));
     }
-    var w = idle ? 2.6 : EASE, sy = crit(s.yaw, s.yv, gy * TURN, w, dt), spp = crit(s.pitch, s.pv, gp * TILT, w, dt);
+    var sy = crit(s.yaw, s.yv, gy * TURN, EASE, dt), spp = crit(s.pitch, s.pv, gp * TILT, EASE, dt);
+    var turning = Math.abs(sy[0] - s.yaw) + Math.abs(spp[0] - s.pitch) > 0.0005;
     s.yaw = sy[0]; s.yv = sy[1]; s.pitch = spp[0]; s.pv = spp[1];
-    tilt.style.transform = 'perspective(' + PERS + 'px) rotateY(' + s.yaw.toFixed(3) + 'deg) rotateX(' + (-s.pitch).toFixed(3) + 'deg) translate3d(' + (s.yaw * 0.7).toFixed(2) + 'px,' + (s.pitch * 0.7).toFixed(2) + 'px,0)';
+    if (turning) tilt.style.transform = 'perspective(' + PERS + 'px) rotateY(' + s.yaw.toFixed(3) + 'deg) rotateX(' + (-s.pitch).toFixed(3) + 'deg) translate3d(' + (s.yaw * 0.7).toFixed(2) + 'px,' + (s.pitch * 0.7).toFixed(2) + 'px,0)';
     s.pvx *= 0.82; s.pvy *= 0.82;
+    var mx = -9999, my = -9999;
+    if (s.cx !== null) { var L = toLocal((s.cx - r.left) * kk, (s.cy - r.top) * kk, W, H); mx = L[0]; my = L[1]; }
     if (plate) {
-      var mx = -9999, my = -9999;
-      if (s.cx !== null) { var L = toLocal((s.cx - r.left) * kk, (s.cy - r.top) * kk, W, H); mx = L[0]; my = L[1]; }
       var dustOn = s.mode === 'dust';
       if (P3 && (dustOn || s.active > 0)) physics3(sc, mx, my, now, dustOn);
       if (s.mode !== 'matrix' || now - s.modeAt < 700 || !s.clean) drawPlate(W, H, sc, dpr);
     }
-    if (P2 && (s.mode === 'matrix' || now - s.modeAt < 700)) {
-      drawMatrix(W, H, sc, dpr, ts, s.cx !== null ? (s.cx - r.left) * kk : -9999, s.cx !== null ? (s.cy - r.top) * kk : -9999);
-    }
-    if (T) drawStream(r, W, H, sc, dt);
+    var matrixLive = P2 && ((s.mode === 'matrix' && on) || (now - s.modeAt < 700 && (s.mode === 'matrix' || s.prev === 'matrix')));
+    if (matrixLive) drawMatrix(W, H, sc, dpr, ts, s.cx !== null ? (s.cx - r.left) * kk : -9999, s.cx !== null ? (s.cy - r.top) * kk : -9999);
+    if (T) drawStream(W, H, sc, dt, now);
+    var busy = (on && (!reduce || s.mode === 'dust' || s.mode === 'matrix')) || turning || s.active > 0 || (!s.clean && plate) || matrixLive || s.inP.length || s.inS.length || s.outP.length || !s.streamClear;
+    if (busy) requestAnimationFrame(tick); else s.running = false;
   }
-  requestAnimationFrame(tick);
 })();

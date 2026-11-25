@@ -116,7 +116,7 @@ col{width:auto!important}
 .plate-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-left:auto}
 .lic{font:400 12px/1.4 var(--mono);letter-spacing:.16em;color:var(--muted);text-align:right}
 .switch{display:inline-flex;flex-wrap:wrap;align-items:stretch;border:1px solid var(--ink);font:500 11px/1 var(--mono);letter-spacing:.16em}
-.switch[hidden]{display:none}
+.switch[hidden]{display:inline-flex;visibility:hidden}
 .switch span{display:inline-flex;align-items:center;padding:0 12px;color:var(--muted)}
 .switch button{appearance:none;-webkit-appearance:none;margin:0;border:0;border-left:1px solid var(--ink);padding:0 14px;min-height:36px;font:inherit;letter-spacing:inherit;background:transparent;color:var(--ink);cursor:pointer}
 .switch button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -129,7 +129,7 @@ col{width:auto!important}
 .stage .tilt{position:absolute;inset:0;transform-origin:50% 55%;will-change:transform;transition:opacity .5s ease}
 .stage .pad{position:absolute;left:-10%;top:-18%;width:120%;height:124%;pointer-events:none}
 .stage [data-matrix]{opacity:0;transition:opacity .5s ease}
-.stage .wide{position:absolute;left:calc(50% - 50vw);width:100vw;top:-40%;height:230%;pointer-events:none;z-index:3}
+.stage .wide{position:absolute;left:calc(50% - 50vw);width:100vw;top:-40%;height:190%;pointer-events:none;z-index:3}
 .plate h1{margin:28px 0 0;text-align:center;font:500 clamp(40px,6.4vw,86px)/1.05 var(--serif);letter-spacing:-0.01em}
 .plate .sub{margin:16px 0 0;text-align:center;font:italic 400 clamp(21px,2.6vw,30px)/1.3 var(--serif);color:var(--green)}
 .plate .scope{margin:12px auto 0;max-width:760px;text-align:center;font-size:18px;line-height:1.55}
@@ -197,3 +197,15 @@ footer.site strong{color:var(--ink)}
   .home section.more h2{font-size:32px}
   footer.site .in{padding:28px 16px 40px}
 }
+
+/* the colophon, as printed */
+.colo{border-top:1px solid var(--ink);margin:30px 0 0;padding-top:14px}
+.colo .num{margin:0;font:500 13px/1.4 var(--mono);letter-spacing:.12em;color:var(--green)}
+.colo h2{margin:4px 0 14px;font:500 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.colo .name{font:500 26px/1.2 var(--serif);margin:0 0 8px}
+.kv{display:grid;grid-template-columns:minmax(0,10em) minmax(0,1fr);gap:6px 18px;margin:0 0 14px}
+.kv dt{font:500 11px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kv dd{margin:0;overflow-wrap:anywhere}
+.band .name a{color:#fff;text-decoration:none}
+.band .name a:hover{text-decoration:underline}
+@media (max-width:480px){.kv{grid-template-columns:1fr}}
