@@ -13,25 +13,33 @@
 <meta property="og:description" content="Requirements, evidence and scoring for AI training data vendors. Licensed datasets, human data, synthetic data, sensor records, evaluation data and RL environments, and the brokers, marketplaces and vendors that supply them.">
 <meta property="og:url" content="https://datalicensingstandard.org/">
 <meta property="og:type" content="website">
+<script src="/assets/hero.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the text</a>
-<div class="band" aria-hidden="true"><i></i></div>
 <header class="site">
-<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
-<nav class="top" aria-label="Site"><a href="/" aria-current="page">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+<a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
+<nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
-<div class="hero">
-<span class="mk" aria-hidden="true"></span>
-<div>
-<p class="serial">TDLS-AI 0000 0002 A</p>
+<main id="main" class="home">
+<section class="plate" data-hero>
+<div class="plate-top">
+<div><p class="serial">TDLS-AI 0000 0002 A</p><p class="srchash">SOURCE SHA-256 e2a4c2f89cb919f0</p></div>
+<div class="plate-right">
+<div class="switch" role="group" aria-label="What the engraved device does" data-switch hidden><span>DATA</span><button type="button" data-mode="in" aria-pressed="true" title="Blocks stream into the device's sides">IN</button><button type="button" data-mode="out" aria-pressed="false" title="Blocks break off and fly toward the viewer">OUT</button><button type="button" data-mode="dust" aria-pressed="false" title="The engraving turns to dust where the pointer passes">DUST</button><button type="button" data-mode="matrix" aria-pressed="false" title="The whole device as a field of dust" disabled>MATRIX</button></div>
+<p class="lic">OPEN · CC BY 4.0 TEXT · MIT SCHEMA</p>
+</div>
+</div>
+<p class="req">A BUYER'S REQUIREMENT</p>
+<div class="stage" data-stage role="img" aria-label="The engraved device of the cover, a carved neoclassical anthropomorphic mascaron sculpted in high relief; the device's two sides break into blocks.">
+<div class="tilt" data-tilt><img class="fill" data-fallback src="/assets/device/plate.png" alt="" width="805" height="552"><canvas class="pad" data-dust aria-hidden="true"></canvas></div>
+<canvas class="pad" data-matrix aria-hidden="true"></canvas>
+<canvas class="wide" data-stream aria-hidden="true"></canvas>
+</div>
 <h1>The Data Licensing Standard for AI</h1>
 <p class="sub">Requirements, evidence and scoring for AI training data vendors</p>
 <p class="scope">Licensed datasets, human data, synthetic data, sensor records, evaluation data and RL environments, and the brokers, marketplaces and vendors that supply them.</p>
 <p class="meta">Version 0.1 (v0.1), public draft for adoption · 2026-11-24 · Andrew Delaurier Weeks</p>
-</div>
-</div>
 <div class="tiers">
 <div><b>D</b><span>Declared</span><p>The vendor states it, in the schema's fields, with a named person and a date.</p></div>
 <div><b>M</b><span>Measured</span><p>A measurement backs it, made by the vendor or verified by the buyer.</p></div>
@@ -39,23 +47,76 @@
 </div>
 <p class="note">The tiers as the document defines them, with their conditions: <a href="/v0.1/part-3/">Part 3</a>.</p>
 <div class="actions">
-<a class="btn primary" href="/TDLS-AI-v0.1.pdf">The document, PDF, 83 pages</a>
+<a class="btn primary" href="/v0.1/">Read the standard</a>
 <a class="btn" href="/v0.1/part-4/">The vendor questionnaire</a>
 <a class="btn" href="/v0.1/part-5/">The scoring sheet</a>
-<a class="btn" href="/schema/">The schema</a>
-<a class="btn" href="/verify/">Verify the seal</a>
+<a class="btn pdf" href="/TDLS-AI-v0.1.pdf">The PDF, 83 pages</a>
 </div>
-<p>Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs.</p>
-<h2>The text, section by section</h2>
-<p>Each Part, Requirement and Annex has its own page, at /v0.1/&lt;id&gt;/, with a Markdown copy of its sealed text.</p>
+</section>
+<section class="band" id="declaration">
+<p class="action">Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs.</p>
+<p class="lab" id="decl-lab">EMBED THE DECLARATION; EVERY TOOL THAT READS IT READS THE SAME FIELDS</p>
+<div class="code" tabindex="0" role="region" aria-labelledby="decl-lab"><pre>{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;$id&quot;: &quot;https://datalicensingstandard.org/schema/0.3.0/tdls-ai-vendor-declaration.schema.json&quot;,
+  &quot;required&quot;: [&quot;schema_version&quot;, &quot;declaration_id&quot;, &quot;delivery&quot;, &quot;accountable_person&quot;, &quot;declared_at&quot;,
+    &quot;components&quot;, &quot;de_identification&quot;, &quot;attestation&quot;, &quot;evidence_package&quot;, &quot;health_data&quot;, &quot;financial_data&quot;,
+    &quot;term&quot;, &quot;evaluation_use&quot;, &quot;deletion_propagation&quot;, &quot;relationship_disclosure&quot;, &quot;synthetic_data&quot;,
+    &quot;human_data&quot;, &quot;sensor_records&quot;, &quot;rl_environment&quot;, &quot;signature&quot;],
+  &quot;de_identification&quot;: { &quot;claimed&quot;: true, &quot;tier&quot;: &quot;measured&quot;, &quot;attacker_assumed&quot;: &quot;...&quot;, &quot;method&quot;: &quot;...&quot;,
+    &quot;measured_on&quot;: { &quot;...&quot;: &quot;...&quot; }, &quot;residual&quot;: &quot;...&quot;, &quot;measurement_record_hash&quot;: &quot;...&quot; }
+}</pre></div>
+<p class="val"><a href="/schema/">validate: python3 validate.py tdls-ai-vendor-declaration.schema.json example-declaration.json · MIT</a></p>
+<hr>
+<div class="author">
+<span class="mk" aria-hidden="true"></span>
+<div class="who"><p class="name">Andrew Delaurier Weeks</p><p class="cred">PCI DSS assessment work, Fortune 500 payment environments; ISO/IEC 27001:2022 Lead Auditor certification</p></div>
+<div class="cap"><p>Written in a personal capacity; not on behalf of, or reviewed by, any employer.</p><p class="ser">TDLS-AI 0000 0002 A</p></div>
+</div>
+<div class="foot"><a href="/TDLS-AI-v0.1.pdf#page=3">v0.1 · 2026-11-24 · FIRST ASSESSMENT BY 2027-02-14</a><a href="/verify/">REPOSITORY AND SEAL TOKENS AT RELEASE</a></div>
+</section>
+<section class="more" id="contents">
+<p class="kicker">The text, section by section</p>
+<h2>Contents</h2>
+<p class="note">Each Part, Requirement and Annex has its own page, at /v0.1/&lt;id&gt;/, with a Markdown copy of its sealed text.</p>
 <ul class="toc"><li><a href="/v0.1/part-0/"><em>Part 0</em><span>How to use this document</span></a></li><li><a href="/v0.1/part-1/"><em>Part 1</em><span>Purpose and scope</span></a></li><li><a href="/v0.1/part-2/"><em>Part 2</em><span>The record this rests on</span></a></li><li><a href="/v0.1/part-3/"><em>Part 3</em><span>Requirements</span></a></li><li><a href="/v0.1/r1/"><em>R1</em><span>Provenance and chain of custody</span></a></li><li><a href="/v0.1/r2/"><em>R2</em><span>Rights and consent basis</span></a></li><li><a href="/v0.1/r3/"><em>R3</em><span>De-identification, stated as a measurement</span></a></li><li><a href="/v0.1/r4/"><em>R4</em><span>Independence of any attestation offered</span></a></li><li><a href="/v0.1/r5/"><em>R5</em><span>The evidence package</span></a></li><li><a href="/v0.1/r6/"><em>R6</em><span>Health data</span></a></li><li><a href="/v0.1/r7/"><em>R7</em><span>Term, renewal and re-measurement</span></a></li><li><a href="/v0.1/r8/"><em>R8</em><span>Evaluation data and contamination</span></a></li><li><a href="/v0.1/r9/"><em>R9</em><span>Deletion and downstream propagation</span></a></li><li><a href="/v0.1/r10/"><em>R10</em><span>Disclosure of relationships</span></a></li><li><a href="/v0.1/r11/"><em>R11</em><span>Financial and payment data</span></a></li><li><a href="/v0.1/r12/"><em>R12</em><span>Hosted environments</span></a></li><li><a href="/v0.1/part-4/"><em>Part 4</em><span>The vendor questionnaire</span></a></li><li><a href="/v0.1/part-5/"><em>Part 5</em><span>The scoring sheet</span></a></li><li><a href="/v0.1/part-6/"><em>Part 6</em><span>Statement of the author&#x27;s practice</span></a></li><li><a href="/v0.1/part-7/"><em>Part 7</em><span>Versioning, seal and citation</span></a></li><li><a href="/v0.1/annex-a/"><em>Annex A</em><span>The vendor declaration, machine-readable</span></a></li><li><a href="/v0.1/annex-b/"><em>Annex B</em><span>The rules, quoted</span></a></li><li><a href="/v0.1/annex-c/"><em>Annex C</em><span>Glossary</span></a></li></ul>
+</section>
+<section class="more" id="questions">
+<p class="kicker">Three of the 25 questions · Part 4</p>
+<h2><a href="/v0.1/part-4/">The vendor questionnaire</a></h2>
+<div class="tbl qs"><table><thead>
+<tr class="header">
+<th>No.</th>
+<th>Question</th>
+<th>Req.</th>
+<th>Answer format</th>
+</tr>
+</thead><tbody><tr>
+<td data-label="No."><a href="/v0.1/part-4/#q1">1</a></td>
+<td data-label="Question">List each component of the delivery with its source, collection method, custodians since collection, the authority under which it was collected, and, for any component collected from a third party, the agreement or terms under which it was collected.</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a></td>
+<td data-label="Answer format">Table per component</td>
+</tr><tr>
+<td data-label="No."><a href="/v0.1/part-4/#q18">18</a></td>
+<td data-label="Question">Was any part of the delivery produced to order by a contracted workforce? If yes: the contributor agreement template; the counts of contributors and of signed agreements; the consent basis for any contributor's own personal data in the work; any staffing firm or contributor marketplace between you and the contributors.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r10/">R10</a></td>
+<td data-label="Answer format">Template; counts; text</td>
+</tr><tr>
+<td data-label="No."><a href="/v0.1/part-4/#q23">23</a></td>
+<td data-label="Question">For an RL environment: which tasks overlap public benchmarks; how held-out tasks are kept apart; whether any task or grader file in this build, or a version of one changed only in wording, values or format, has reached any other party, and in what form; the exclusivity terms offered to this buyer, and for how long.</td>
+<td data-label="Req."><a href="/v0.1/r8/">R8</a></td>
+<td data-label="Answer format">Text; records</td>
+</tr></tbody></table></div>
+</section>
+<section class="more" id="cite">
 <h2>Cite as</h2>
 <p>Weeks, A. D. (2026). The Data Licensing Standard for AI (TDLS-AI) v0.1. Sealed on the date in the published time-stamp token. A requirement is cited by short name, version and number, as in TDLS-AI v0.1 R8; a question, as in TDLS-AI v0.1 R8, question 10. The schema (Annex A) is cited by its <code>$id</code> and version.</p>
 <h2>This edition</h2>
 <p>v0.1, 2026-11-24, public draft for adoption. It supersedes the edition sealed on 2026-11-16. That edition's source has the SHA-256 <span class="hash">626b49613704368ae40b17d5cbbe20dfd3559961883d25cb8a1e9366dd21bf86</span>, and it is archived at <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard/commit/9ef537703d4ef6d2fe7114da85f2dd584f31ba78">github.com/AndrewDelaurierWeeks/data-licensing-standard/commit/9ef537703d4ef6d2fe7114da85f2dd584f31ba78</a>.</p>
+</section>
 </main>
 <footer class="site"><div class="in">
-<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result. This document is one author&#x27;s work. No standards body, regulator, court, party or publisher named in it developed, reviewed, approved or endorsed it. Each such name identifies that body&#x27;s own text or record or, in the author&#x27;s credentials, the subject of his work and training.</p>
 <p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
 <p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
 <p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">de671fb</span>.</p>

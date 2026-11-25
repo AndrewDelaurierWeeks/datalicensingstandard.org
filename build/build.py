@@ -145,6 +145,10 @@ def heading_ids(fragment, sid):
 def inline_md(text):
     return pandoc(text, "html5").strip().removeprefix("<p>").removesuffix("</p>")
 
+def kick(t):
+    """A kicker's text, escaped, with the version kept in lower case under the kicker's capitals."""
+    return e(t).replace(V, f'<span class="v">{V}</span>')
+
 def words(s):
     return re.findall(r"[\w$]+", html.unescape(s).replace(" ", " "))
 
@@ -160,12 +164,14 @@ def mark_svg(h, color="#000"):
             f'<g fill="{color}">{cells}</g></svg>')
 
 # ------------------------------------------------------------------ the page frame
-NAV = [("/", "Home"), (f"/{V}/", "Contents"), (f"/{V}/part-4/", "Questions"), (f"/{V}/part-5/", "Scoring"),
+NAV = [(f"/{V}/", "Contents"), (f"/{V}/part-4/", "Questions"), (f"/{V}/part-5/", "Scoring"),
        ("/schema/", "Schema"), ("/verify/", "Verify"), ("/TDLS-AI-v0.1.pdf", "PDF")]
+HERO_SCRIPT = '<script src="/assets/hero.js" defer></script>'      # the home page's one script, served from this site
 
-def page(*, title, desc, path, body, current=None, wide=False, fm):
-    nav = "".join(f'<a href="{u}"{" aria-current=\"page\"" if u == current else ""}>{t}</a>' for u, t in NAV)
+def page(*, title, desc, path, body, current=None, wide=False, home=False, fm):
+    nav = "".join(f'<a href="{u}"{" class=\"pdf\"" if t == "PDF" else ""}{" aria-current=\"page\"" if u == current else ""}>{t}</a>' for u, t in NAV)
     canon = f"{SITE}{path}"
+    cls = ' class="home"' if home else (' class="wide"' if wide else "")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -181,19 +187,18 @@ def page(*, title, desc, path, body, current=None, wide=False, fm):
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{canon}">
 <meta property="og:type" content="website">
-</head>
+{HERO_SCRIPT + chr(10) if home else ""}</head>
 <body>
 <a class="skip" href="#main">Skip to the text</a>
-<div class="band" aria-hidden="true"><i></i></div>
 <header class="site">
-<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>{e(fm["title_display"])}</b><small>{e(fm["short_name"])} {V}</small></span></a>
+<a class="brand" href="/" aria-label="{e(fm["short_name"])} {V}, {e(fm["title_display"])}, home"><span class="mk" aria-hidden="true"></span><span>{e(fm["short_name"])} {V}</span></a>
 <nav class="top" aria-label="Site">{nav}</nav>
 </header>
-<main id="main"{' class="wide"' if wide else ""}>
+<main id="main"{cls}>
 {body}
 </main>
 <footer class="site"><div class="in">
-<p>{e(fm["capacity"])}</p>
+<p>{e(fm["capacity"])} {ONE_AUTHOR_HTML}</p>
 <p>{CONFLICT_HTML}</p>
 <p>{e(fm["license"])} Full terms: <a href="/{V}/part-7/">Part 7</a>.</p>
 <p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="{VENUE}">{VENUE.replace("https://", "")}</a>, commit <span class="hash">{VENUE_COMMIT[:7]}</span>.</p>
@@ -203,10 +208,11 @@ def page(*, title, desc, path, body, current=None, wide=False, fm):
 """
 
 CONFLICT_HTML = ""        # set in main(): Part 0's conflict disclosure, as sealed
+ONE_AUTHOR_HTML = ""      # set in main(): Part 0's sentence on whose work this is, as sealed
 
 # ------------------------------------------------------------------ build
 def main():
-    global CONFLICT_HTML
+    global CONFLICT_HTML, ONE_AUTHOR_HTML
     ap = argparse.ArgumentParser()
     ap.add_argument("--venue", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
@@ -238,13 +244,16 @@ def main():
     part0 = next(t for i, *_, t in secs if i == "part-0")
     conflict = re.search(r"(?m)^\*\*Conflict disclosure\.\*\* .+$", part0).group(0)
     CONFLICT_HTML = pandoc(conflict, "html5").strip().removeprefix("<p>").removesuffix("</p>")
+    one_author = re.search(r"(?m)^This document is one author's work\. .+$", part0)
+    if not one_author: die("Part 0 has no sentence on whose work this is")
+    ONE_AUTHOR_HTML = e(one_author.group(0))
 
     # 2. assets
     (out / "assets").mkdir()
     shutil.copytree(here / "assets" / "fonts", out / "assets" / "fonts")
     shutil.copy(here / "assets" / "site.css", out / "assets" / "site.css")
-    shutil.copy(here / "assets" / "band.svg", out / "assets" / "band.svg")
-    if h not in (out / "assets" / "band.svg").read_text(): die("band.svg was not drawn from this source hash")
+    shutil.copy(here / "assets" / "hero.js", out / "assets" / "hero.js")
+    shutil.copytree(here / "assets" / "device", out / "assets" / "device")
     (out / "assets" / "mark.svg").write_text(mark_svg(h))
 
     # 3. the section pages and their Markdown copies
@@ -261,6 +270,7 @@ def main():
         frag = heading_ids(frag, sid)
         frag = dress_tables(frag, sid)
         frag = link_refs(frag, sid)
+        if sid == "part-4": part4_frag = frag
         prev = secs[k - 1] if k else None
         nxt = secs[k + 1] if k + 1 < len(secs) else None
         pn = '<nav class="pn" aria-label="Sections">'
@@ -268,7 +278,7 @@ def main():
         if nxt: pn += f'<a class="next" href="/{V}/{nxt[0]}/">Next: {e(nav_title(nxt[1], nxt[2], nxt[3]))}</a>'
         pn += "</nav>"
         addr = f"{SITE}/{V}/{sid}/"
-        body = f"""<p class="kicker">{e(cite(kind, num))}</p>
+        body = f"""<p class="kicker">{kick(cite(kind, num))}</p>
 <div class="sealed" data-section="{sid}" data-source-sha256="{h}">
 {frag}</div>
 <dl class="record">
@@ -305,7 +315,7 @@ def main():
             rows.append(f'<li><a href="/{V}/{sid}/"><em>{e(label(kind, num))}</em><span>{e(t)}</span></a></li>')
         return f'<ul class="toc">{"".join(rows)}</ul>'
     version_line = f'{e(fm["version"])} · {e(fm["date"])} · {e(fm["author"])}'
-    contents = f"""<p class="kicker">{e(fm["short_name"])} {V} · Contents</p>
+    contents = f"""<p class="kicker">{kick(fm["short_name"] + " " + V)} · Contents</p>
 <h1>Contents</h1>
 <p>Each Part, Requirement and Annex of the sealed text has its own page and a Markdown copy. {e(fm["short_name"])} {V} R8 is at <a href="/{V}/r8/">/{V}/r8/</a>; question 10 of Part 4 is at <a href="/{V}/part-4/#q10">/{V}/part-4/#q10</a>.</p>
 {toc_html()}
@@ -313,16 +323,56 @@ def main():
     (out / V / "index.html").write_text(page(title=f"Contents · {fm['short_name']} {V}", desc="The Parts, Requirements and Annexes of The Data Licensing Standard for AI, version 0.1, each at its own address.",
                                              path=f"/{V}/", body=contents, current=f"/{V}/", fm=fm))
 
-    home = f"""<div class="hero">
-<span class="mk" aria-hidden="true"></span>
-<div>
-<p class="serial">{e(fm["serial"])}</p>
+    # the home page: the cover, as a page. The plate and the black band carry the cover's words (the sealed PDF, page 1,
+    # checked below), the front matter's fields and Part 4's sealed rows, with the site's links and the switch; the
+    # device in motion is assets/hero.js.
+    qrows = []
+    for n in (1, 18, 23):
+        m = re.search(rf'<tr id="q{n}"[^>]*>(.*?)</tr>', part4_frag, re.S)
+        if not m: die(f"Part 4 has no row q{n}")
+        r = re.sub(rf'(<td data-label="No\.">){n}(</td>)', rf'\g<1><a href="/{V}/part-4/#q{n}">{n}</a>\g<2>', m.group(1), count=1)
+        if f"#q{n}" not in r: die(f"Part 4's row q{n} has no number cell")
+        qrows.append(f"<tr>{r}</tr>")
+    nq = len(re.findall(r'<tr id="q\d+"', part4_frag))
+    if nq != 25: die(f"Part 4 has {nq} numbered rows, not 25")
+    qhead = re.search(r"<thead>.*?</thead>", part4_frag, re.S).group(0)
+    schema_json = json.loads((out / SCHEMA_DIR / "tdls-ai-vendor-declaration.schema.json").read_text())
+    req = schema_json["required"]
+    excerpt = ('{\n  "$schema": "' + schema_json["$schema"] + '",\n  "$id": "' + SCHEMA_ID + '",\n  "required": ['
+               + ", ".join(f'"{x}"' for x in req[:5]) + ",\n    " + ", ".join(f'"{x}"' for x in req[5:11]) + ",\n    "
+               + ", ".join(f'"{x}"' for x in req[11:16]) + ",\n    " + ", ".join(f'"{x}"' for x in req[16:]) + "],\n"
+               '  "de_identification": { "claimed": true, "tier": "measured", "attacker_assumed": "...", "method": "...",\n'
+               '    "measured_on": { "...": "..." }, "residual": "...", "measurement_record_hash": "..." }\n}')
+    for k in ("claimed", "tier", "attacker_assumed", "method", "measured_on", "residual", "measurement_record_hash"):
+        if k not in schema_json["properties"]["de_identification"]["properties"]: die(f"the cover's excerpt names de_identification.{k}, which the schema lacks")
+    try:
+        cover = subprocess.run(["pdftotext", "-l", "1", str(a.venue / "TDLS-AI-v0.1.pdf"), "-"], capture_output=True, check=True).stdout.decode("utf-8")
+    except (OSError, subprocess.CalledProcessError): die("pdftotext (poppler) is needed to check the cover's words")
+    flat = lambda t: " ".join(t.split())
+    for w in ["A BUYER'S REQUIREMENT", "OPEN · CC BY 4.0 TEXT · MIT SCHEMA", f"SOURCE SHA-256 {h[:16]}", fm["serial"],
+              "EMBED THE DECLARATION; EVERY TOOL THAT READS IT READS THE SAME FIELDS", excerpt,
+              "validate: python3 validate.py tdls-ai-vendor-declaration.schema.json example-declaration.json · MIT",
+              fm["author"], fm["credentials"], fm["capacity_cover"], f"{V} · {fm['date']} · FIRST ASSESSMENT BY 2027-02-14",
+              "REPOSITORY AND SEAL TOKENS AT RELEASE"]:
+        if flat(w) not in flat(cover): die(f"the cover does not carry: {w[:60]}")
+    home = f"""<section class="plate" data-hero>
+<div class="plate-top">
+<div><p class="serial">{e(fm["serial"])}</p><p class="srchash">SOURCE SHA-256 {h[:16]}</p></div>
+<div class="plate-right">
+<div class="switch" role="group" aria-label="What the engraved device does" data-switch hidden><span>DATA</span><button type="button" data-mode="in" aria-pressed="true" title="Blocks stream into the device's sides">IN</button><button type="button" data-mode="out" aria-pressed="false" title="Blocks break off and fly toward the viewer">OUT</button><button type="button" data-mode="dust" aria-pressed="false" title="The engraving turns to dust where the pointer passes">DUST</button><button type="button" data-mode="matrix" aria-pressed="false" title="The whole device as a field of dust" disabled>MATRIX</button></div>
+<p class="lic">OPEN · CC BY 4.0 TEXT · MIT SCHEMA</p>
+</div>
+</div>
+<p class="req">A BUYER'S REQUIREMENT</p>
+<div class="stage" data-stage role="img" aria-label="The engraved device of the cover, a carved neoclassical anthropomorphic mascaron sculpted in high relief; the device's two sides break into blocks.">
+<div class="tilt" data-tilt><img class="fill" data-fallback src="/assets/device/plate.png" alt="" width="805" height="552"><canvas class="pad" data-dust aria-hidden="true"></canvas></div>
+<canvas class="pad" data-matrix aria-hidden="true"></canvas>
+<canvas class="wide" data-stream aria-hidden="true"></canvas>
+</div>
 <h1>{e(fm["title_display"])}</h1>
 <p class="sub">{e(fm["subtitle"])}</p>
 <p class="scope">{e(fm["scope_line"])}</p>
 <p class="meta">{version_line}</p>
-</div>
-</div>
 <div class="tiers">
 <div><b>D</b><span>Declared</span><p>The vendor states it, in the schema's fields, with a named person and a date.</p></div>
 <div><b>M</b><span>Measured</span><p>A measurement backs it, made by the vendor or verified by the buyer.</p></div>
@@ -330,24 +380,46 @@ def main():
 </div>
 <p class="note">The tiers as the document defines them, with their conditions: <a href="/{V}/part-3/">Part 3</a>.</p>
 <div class="actions">
-<a class="btn primary" href="/TDLS-AI-v0.1.pdf">The document, PDF, 83 pages</a>
+<a class="btn primary" href="/{V}/">Read the standard</a>
 <a class="btn" href="/{V}/part-4/">The vendor questionnaire</a>
 <a class="btn" href="/{V}/part-5/">The scoring sheet</a>
-<a class="btn" href="/schema/">The schema</a>
-<a class="btn" href="/verify/">Verify the seal</a>
+<a class="btn pdf" href="/TDLS-AI-v0.1.pdf">The PDF, 83 pages</a>
 </div>
-<p>Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs.</p>
-<h2>The text, section by section</h2>
-<p>Each Part, Requirement and Annex has its own page, at /{V}/&lt;id&gt;/, with a Markdown copy of its sealed text.</p>
+</section>
+<section class="band" id="declaration">
+<p class="action">Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs.</p>
+<p class="lab" id="decl-lab">EMBED THE DECLARATION; EVERY TOOL THAT READS IT READS THE SAME FIELDS</p>
+<div class="code" tabindex="0" role="region" aria-labelledby="decl-lab"><pre>{e(excerpt)}</pre></div>
+<p class="val"><a href="/schema/">validate: python3 validate.py tdls-ai-vendor-declaration.schema.json example-declaration.json · MIT</a></p>
+<hr>
+<div class="author">
+<span class="mk" aria-hidden="true"></span>
+<div class="who"><p class="name">{e(fm["author"])}</p><p class="cred">{e(fm["credentials"])}</p></div>
+<div class="cap"><p>{e(fm["capacity_cover"])}</p><p class="ser">{e(fm["serial"])}</p></div>
+</div>
+<div class="foot"><a href="/TDLS-AI-v0.1.pdf#page=3">{V} · {e(fm["date"])} · FIRST ASSESSMENT BY 2027-02-14</a><a href="/verify/">REPOSITORY AND SEAL TOKENS AT RELEASE</a></div>
+</section>
+<section class="more" id="contents">
+<p class="kicker">The text, section by section</p>
+<h2>Contents</h2>
+<p class="note">Each Part, Requirement and Annex has its own page, at /{V}/&lt;id&gt;/, with a Markdown copy of its sealed text.</p>
 {toc_html()}
+</section>
+<section class="more" id="questions">
+<p class="kicker">Three of the 25 questions · Part 4</p>
+<h2><a href="/{V}/part-4/">The vendor questionnaire</a></h2>
+<div class="tbl qs"><table>{qhead}<tbody>{"".join(qrows)}</tbody></table></div>
+</section>
+<section class="more" id="cite">
 <h2>Cite as</h2>
 <p>{inline_md(re.search(r"(?m)^\*\*Citation\.\*\* (.+)$", next(t for i, *_, t in secs if i == "part-7")).group(1))}</p>
 <h2>This edition</h2>
-<p>{e(re.search(r"(?m)^\*\*Version\.\*\* (v0\.1, 2026-11-24, public draft for adoption\. It supersedes the edition sealed on 2026-11-16\.)", next(t for i, *_, t in secs if i == "part-7")).group(1))} That edition's source has the SHA-256 <span class="hash">{V0_SHA}</span>, and it is archived at <a href="{V0_ARCHIVE}">{V0_ARCHIVE.replace("https://", "")}</a>.</p>"""
+<p>{e(re.search(r"(?m)^\*\*Version\.\*\* (v0\.1, 2026-11-24, public draft for adoption\. It supersedes the edition sealed on 2026-11-16\.)", next(t for i, *_, t in secs if i == "part-7")).group(1))} That edition's source has the SHA-256 <span class="hash">{V0_SHA}</span>, and it is archived at <a href="{V0_ARCHIVE}">{V0_ARCHIVE.replace("https://", "")}</a>.</p>
+</section>"""
     if "Attach Part 4 to every request for proposal; keep Part 5 where the buyer's counsel directs." not in home:
         die("home action line")
     (out / "index.html").write_text(page(title=f"{fm['title_display']} ({fm['short_name']}) {V}",
-                                         desc=f"{fm['subtitle']}. {fm['scope_line']}", path="/", body=home, current="/", fm=fm))
+                                         desc=f"{fm['subtitle']}. {fm['scope_line']}", path="/", body=home, home=True, fm=fm))
 
     sfiles = [("tdls-ai-vendor-declaration.schema.json", "The vendor declaration schema (JSON Schema 2020-12), version 0.3.0"),
               ("example-declaration.json", "An example declaration"),
@@ -355,7 +427,7 @@ def main():
               ("crosswalk-0.3.0.json", "The crosswalk of Annex A, machine-readable"),
               ("LICENSE", "The MIT License of the schema, the example, the validator and the crosswalk file")]
     rows = "".join(f'<tr><td data-label="File"><a href="/{SCHEMA_DIR}/{n}">{n}</a></td><td data-label="What it is">{e(d)}</td><td data-label="SHA-256" class="hash">{sha((out / SCHEMA_DIR / n).read_bytes())}</td></tr>' for n, d in sfiles)
-    schema_pg = f"""<p class="kicker">{e(fm["short_name"])} {V} · Annex A</p>
+    schema_pg = f"""<p class="kicker">{kick(fm["short_name"] + " " + V)} · Annex A</p>
 <h1>The vendor declaration schema, 0.3.0</h1>
 <p>The schema answers at the address in its <code>$id</code>, byte for byte as published at the venue:</p>
 <p class="hash"><a href="/{SCHEMA_DIR}/tdls-ai-vendor-declaration.schema.json">{SCHEMA_ID}</a></p>
@@ -377,7 +449,7 @@ def main():
               ("TDLS-AI-v0.1.md.tsr", "The RFC 3161 time-stamp token over the SHA-256 of the source text")]
     vrows = "".join(f'<tr><td data-label="File"><a href="/{n}">{n}</a></td><td data-label="What it is">{e(d)}</td><td data-label="SHA-256" class="hash">{sha((out / n).read_bytes())}</td></tr>' for n, d in vfiles)
     dl = "".join(f"<pre><code>curl -O {SITE}/{n}</code></pre>" for n, _ in vfiles)
-    verify = f"""<p class="kicker">{e(fm["short_name"])} {V} · The seal</p>
+    verify = f"""<p class="kicker">{kick(fm["short_name"] + " " + V)} · The seal</p>
 <h1>Verify the seal</h1>
 <p>The two tokens were issued by DigiCert's time-stamp authority, signing certificate DigiCert SHA256 RSA4096 Timestamp Responder 2026 1, policy 2.16.840.1.114412.7.1, on 2026-11-24, at 19:19:59 UTC for the PDF and at 19:21:04 UTC for the source text.</p>
 <div class="tbl files"><table><thead><tr><th>File</th><th>What it is</th><th>SHA-256 of the file served here</th></tr></thead><tbody>{vrows}</tbody></table></div>
@@ -451,12 +523,16 @@ Sitemap: {SITE}/sitemap.xml
     # 7. no third party: every src and href on every page is on this site, the venue, or a named source address
     for f in out.rglob("*.html"):
         t = f.read_text()
-        if "<script" in t: die(f"{f}: a script")
+        n_script = t.count("<script")
+        if f == out / "index.html":
+            if n_script != 1 or t.count(HERO_SCRIPT) != 1: die(f"{f}: the home page carries a script other than {HERO_SCRIPT}")
+        elif n_script: die(f"{f}: a script")
         for tag in re.findall(r"<(?:img|link|iframe|source|video|audio|embed|object)\b[^>]*>", t):
             for u in re.findall(r'(?:src|href)="([^"]+)"', tag):
                 if u.startswith("/") or u.startswith(SITE + "/"): continue
                 die(f"{f}: a resource from another host: {u}")
-    if re.search(r"url\((?!fonts/|band\.svg|mark\.svg)", (out / "assets" / "site.css").read_text()): die("site.css loads from elsewhere")
+    if re.search(r"url\((?!fonts/|mark\.svg)", (out / "assets" / "site.css").read_text()): die("site.css loads from elsewhere")
+    if re.search(r"https?://", (out / "assets" / "hero.js").read_text()): die("hero.js names another host")
     print(f"built {sum(1 for _ in out.rglob('*') if _.is_file())} files into {out}; source SHA-256 {h}; {len(secs)} sections; checks passed")
 
 if __name__ == "__main__":
