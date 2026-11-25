@@ -1,5 +1,6 @@
 /* datalicensingstandard.org: the record site of The Data Licensing Standard for AI (TDLS-AI) v0.1.
-   The look is the cover's: white paper, ink #1b2420, green #1f5a3a, muted #5b6368, black #000 for the band;
+   The colours are the sealed edition's, element for element: white paper, black #000000, ink #1b2420, green #1f5a3a,
+   muted #5b6368, light #c9cfd2, the code ground #f1efe8, the failure mark #b3261e; no other colour is used;
    EB Garamond for the name and headings, Inter for text, IBM Plex Mono for labels and hashes.
    Fonts are self-hosted under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt). */
 
@@ -12,7 +13,7 @@
 @font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
 
 :root{
-  --paper:#ffffff; --ink:#1b2420; --deep:#111614; --green:#1f5a3a; --muted:#5b6368; --rule:#d5dad7; --tint:#f3f5f4; --code:#eef1ef;
+  --paper:#ffffff; --ink:#1b2420; --green:#1f5a3a; --muted:#5b6368; --rule:#c9cfd2; --black:#000000; --code:#f1efe8; --red:#b3261e;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"EB Garamond",Georgia,serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -42,10 +43,10 @@ nav.top a.pdf{color:var(--green)}
 main{max-width:760px;margin:0 auto;padding:28px 16px 48px}
 main.wide{max-width:1000px}
 main.home{max-width:1240px;padding:0 32px 64px}
-.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin:0 0 10px}
+.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
 .kicker .v{text-transform:none}
 
-h1,h2,h3,h4{font-family:var(--serif);font-weight:500;color:var(--deep);line-height:1.15;letter-spacing:-0.005em}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;color:var(--ink);line-height:1.15;letter-spacing:-0.005em}
 h1{font-size:clamp(32px,5.4vw,46px);margin:0 0 18px;text-wrap:balance}
 h2{font-size:clamp(26px,3.4vw,32px);margin:44px 0 12px}
 h3{font-size:23px;margin:32px 0 10px}
@@ -54,7 +55,7 @@ p,ul,ol,dl{margin:0 0 14px}
 ul,ol{padding-left:1.4em}
 li{margin:4px 0}
 strong{font-weight:600}
-code{font:400 .86em/1.4 var(--mono);background:var(--code);padding:.08em .3em;overflow-wrap:anywhere}
+code{font:400 .86em/1.4 var(--mono);overflow-wrap:anywhere}
 pre{font:400 13.5px/1.55 var(--mono);background:var(--code);padding:14px 16px;overflow-x:auto;margin:0 0 16px}
 pre code{background:none;padding:0;font-size:inherit;overflow-wrap:normal}
 hr{border:0;border-top:1px solid var(--rule);margin:28px 0}
@@ -62,12 +63,22 @@ hr{border:0;border-top:1px solid var(--rule);margin:28px 0}
 /* the sealed block: the section's text, as sealed */
 .sealed{border-top:2px solid var(--ink);padding-top:6px}
 .sealed > h1:first-child{margin-top:16px}
+.sealed[data-section^="part-"] > h1,.sealed[data-section^="annex-"] > h1{color:var(--green)}
 
 /* guidance blocks (::: guidance in the source) */
-.guidance{background:var(--tint);border-top:2px solid var(--green);padding:16px 18px 6px;margin:26px 0}
-.guidance .gt{display:block;font:600 15px/1.3 var(--sans);color:var(--green)}
+.guidance{border-top:2px solid var(--green);padding:16px 0 6px;margin:26px 0}
+.guidance .gt{display:block;font:600 15px/1.3 var(--sans);color:var(--black)}
 .guidance .gl{display:block;font:400 11.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2px 0 12px}
-.guidance dt{font:600 15px/1.4 var(--sans);margin-top:12px}
+.guidance dt{font:600 15px/1.4 var(--sans);margin-top:12px;color:var(--muted)}
+.guidance dd.purpose{color:var(--black)}
+.guidance dd > p{color:var(--green)}
+.guidance dd li::marker{color:var(--green)}
+.guidance dd.fails li::marker{color:var(--red)}
+.guidance .t-m{color:var(--green)}
+.guidance .t-k{color:var(--black)}
+.guidance .t-a{color:var(--muted)}
+.guidance dd.examples li::marker{color:var(--ink)}
+#next-assessment strong{color:var(--black)}
 .guidance dd{margin:4px 0 8px 0}
 .guidance ol{list-style-type:decimal-leading-zero}
 dl dt{font-weight:600}
@@ -77,8 +88,9 @@ dl dd{margin-left:0}
 .tbl{overflow-x:auto;margin:0 0 18px;border-top:2px solid var(--ink)}
 table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.55}
 th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{border-bottom-color:var(--ink)}
 th{font:500 11.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-tr:target td{background:var(--tint)}
+tr:target td{background:var(--code)}
 col{width:auto!important}
 @media (max-width:640px){
   .tbl table, .tbl thead, .tbl tbody, .tbl tr, .tbl td{display:block;width:100%}
@@ -130,15 +142,17 @@ col{width:auto!important}
 .stage .pad{position:absolute;left:-10%;top:-18%;width:120%;height:124%;pointer-events:none}
 .stage [data-matrix]{opacity:0;transition:opacity .5s ease}
 .stage .wide{position:absolute;left:calc(50% - 50vw);width:100vw;top:-40%;height:190%;pointer-events:none;z-index:3}
-.plate h1{margin:28px 0 0;text-align:center;font:500 clamp(40px,6.4vw,86px)/1.05 var(--serif);letter-spacing:-0.01em}
+.plate h1{margin:28px 0 0;text-align:center;font:500 clamp(40px,6.4vw,86px)/1.05 var(--serif);letter-spacing:-0.01em;color:var(--black)}
 .plate .sub{margin:16px 0 0;text-align:center;font:italic 400 clamp(21px,2.6vw,30px)/1.3 var(--serif);color:var(--green)}
-.plate .scope{margin:12px auto 0;max-width:760px;text-align:center;font-size:18px;line-height:1.55}
+.plate .scope{margin:12px auto 0;max-width:760px;text-align:center;font-size:18px;line-height:1.55;color:var(--black)}
 .plate .meta{margin:14px 0 0;text-align:center;font:400 12.5px/1.5 var(--mono);letter-spacing:.08em;color:var(--muted)}
 .tiers{margin:48px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:28px 48px}
 .tiers div{border-top:2px solid var(--ink);padding-top:16px}
 .tiers b{display:block;font:500 44px/1 var(--serif)}
 .tiers span{display:block;margin:10px 0 8px;font:500 12px/1.4 var(--mono);letter-spacing:.18em;text-transform:uppercase}
 .tiers p{margin:0;font-size:16px;line-height:1.5}
+.tiers div:nth-child(1){border-top-color:var(--black)}
+.tiers div:nth-child(1) b,.tiers div:nth-child(1) span{color:var(--black)}
 .tiers div:nth-child(2){border-top-color:var(--green)}
 .tiers div:nth-child(2) b,.tiers div:nth-child(2) span{color:var(--green)}
 .plate .note{margin:18px 0 0;text-align:center}
@@ -152,24 +166,24 @@ col{width:auto!important}
 /* home: the black band, as on the cover */
 .band{background:#000;color:#fff;padding:clamp(28px,4vw,52px) clamp(18px,5vw,72px) 34px}
 .band .action{margin:0;font:600 clamp(17px,1.6vw,21px)/1.45 var(--sans)}
-.band .lab{margin:22px 0 12px;font:400 12.5px/1.5 var(--mono);letter-spacing:.16em;color:#b9c0bd}
+.band .lab{margin:22px 0 12px;font:400 12.5px/1.5 var(--mono);letter-spacing:.16em;color:var(--rule)}
 .band .code{overflow-x:auto;border-left:1px solid var(--muted);padding:4px 0 4px 22px}
-.band pre{margin:0;padding:0;background:none;font:400 14px/1.6 var(--mono);color:#eef1ef;white-space:pre}
-.band .val{margin:14px 0 0;font:400 13px/1.5 var(--mono);color:#b9c0bd;overflow-wrap:anywhere}
-.band .val a{color:#b9c0bd}
+.band pre{margin:0;padding:0;background:none;font:400 14px/1.6 var(--mono);color:#fff;white-space:pre}
+.band .val{margin:14px 0 0;font:400 13px/1.5 var(--mono);color:var(--rule);overflow-wrap:anywhere}
+.band .val a{color:var(--rule)}
 .band .val a:hover{color:#fff}
 .band .code:focus-visible{outline:2px solid #fff;outline-offset:4px}
-.band hr{border-top-color:#3a403d;margin:28px 0}
+.band hr{border-top-color:var(--muted);margin:28px 0}
 .author{display:flex;flex-wrap:wrap;align-items:center;gap:24px 36px}
 .author .mk{width:132px;height:132px;background:#fff;flex:none}
 .author .who{flex:1 1 320px}
 .author .name{margin:0;font:500 32px/1.15 var(--serif)}
-.author .cred{margin:10px 0 0;font-size:16px;line-height:1.5;color:#dfe4e1}
+.author .cred{margin:10px 0 0;font-size:16px;line-height:1.5;color:var(--rule)}
 .author .cap{flex:1 1 300px}
-.author .cap p{margin:0;font-size:15px;line-height:1.5;color:#c6ccc9}
+.author .cap p{margin:0;font-size:15px;line-height:1.5;color:var(--rule)}
 .author .cap .ser{margin-top:12px;font:400 13px/1.4 var(--mono);letter-spacing:.16em}
-.band .foot{margin:30px 0 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font:400 12.5px/1.5 var(--mono);letter-spacing:.14em;color:#b9c0bd}
-.band .foot a{color:#b9c0bd}
+.band .foot{margin:30px 0 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font:400 12.5px/1.5 var(--mono);letter-spacing:.14em;color:var(--rule)}
+.band .foot a{color:var(--rule)}
 .band .foot a:hover{color:#fff}
 .band a:focus-visible{outline-color:#fff}
 
@@ -180,12 +194,12 @@ col{width:auto!important}
 .home .toc li:last-child{border-bottom:1px solid var(--rule)}
 .home section.more h2 a{color:inherit;text-decoration:none}
 .home section.more h2 a:hover{color:var(--green);text-decoration:underline}
-.qs td:first-child{font:500 15px/1.5 var(--mono);color:var(--green);width:56px}
+.qs td:first-child{font:500 15px/1.5 var(--mono);width:56px}
 .qs td:nth-child(3){width:110px}
-.qs td:nth-child(4){width:170px;color:var(--muted)}
+.qs td:nth-child(4){width:170px}
 
 footer.site{border-top:1px solid var(--ink);margin-top:20px}
-footer.site .in{max-width:1240px;margin:0 auto;padding:32px 32px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:12px 56px;font-size:14px;line-height:1.6;color:#4a5256}
+footer.site .in{max-width:1240px;margin:0 auto;padding:32px 32px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:12px 56px;font-size:14px;line-height:1.6;color:var(--muted)}
 footer.site p{margin:0 0 10px}
 footer.site strong{color:var(--ink)}
 
@@ -200,9 +214,14 @@ footer.site strong{color:var(--ink)}
 
 /* the colophon, as printed */
 .colo{border-top:1px solid var(--ink);margin:30px 0 0;padding-top:14px}
-.colo .num{margin:0;font:500 13px/1.4 var(--mono);letter-spacing:.12em;color:var(--green)}
-.colo h2{margin:4px 0 14px;font:500 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
-.colo .name{font:500 26px/1.2 var(--serif);margin:0 0 8px}
+.colo:first-of-type{border-top-color:var(--black)}
+main:has(> .colo) > h1{color:var(--black)}
+.colo > p:not(.num):not(.name),.colo .kv dd{color:var(--ink)}
+#this-edition > p:not(.num){color:var(--muted)}
+#this-edition .kv dd:nth-of-type(1),#this-edition .kv dd:nth-of-type(3),#this-edition .kv dd.hash,#cite-as > p:not(.num){color:var(--black)}
+.colo .num{margin:0;font:500 13px/1.4 var(--mono);letter-spacing:.12em;color:var(--muted)}
+.colo h2{margin:4px 0 14px;font:500 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--black)}
+.colo .name{font:500 26px/1.2 var(--serif);margin:0 0 8px;color:var(--black)}
 .kv{display:grid;grid-template-columns:minmax(0,10em) minmax(0,1fr);gap:6px 18px;margin:0 0 14px}
 .kv dt{font:500 11px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .kv dd{margin:0;overflow-wrap:anywhere}

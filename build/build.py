@@ -117,6 +117,18 @@ def link_refs(fragment, self_id):
         out.append(LINKABLE.sub(rep, tok))
     return "".join(out)
 
+TIER_CLASS = {"M": "t-m", "met": "t-m", "D": "t-k", "none": "t-k", "not met": "t-k", "N/A": "t-k", "assertion": "t-a"}
+
+def dress_guidance(fragment):
+    """Classes for the guidance colours the PDF uses: the purpose, the examples' tier words, the failure list. Words unchanged."""
+    fragment = fragment.replace("<dt>Purpose</dt>\n<dd>", '<dt>Purpose</dt>\n<dd class="purpose">')
+    fragment = fragment.replace("<dt>Where a check fails</dt>\n<dd>", '<dt>Where a check fails</dt>\n<dd class="fails">')
+    fragment = fragment.replace("<dt>Examples, illustrative</dt>\n<dd>", '<dt>Examples, illustrative</dt>\n<dd class="examples">')
+    def tier(m):
+        if m.group(1) not in TIER_CLASS: die(f"unknown tier word in guidance: {m.group(1)}")
+        return f'<li><strong class="{TIER_CLASS[m.group(1)]}">{m.group(1)}</strong> ·'
+    return re.sub(r"<li><strong>([^<]{1,12})</strong> ·", tier, fragment)
+
 def dress_tables(fragment, sid):
     """Give each cell its column label (for the phone layout), wrap each table, and give Part 4's rows q<n> ids."""
     def one(m):
@@ -310,7 +322,7 @@ ONE_AUTHOR_HTML = ""      # set in main(): Part 0's sentence on whose work this 
 
 # ------------------------------------------------------------------ build
 def main():
-    global CONFLICT_HTML, ONE_AUTHOR_HTML, ONE_AUTHOR, SITE_NAME, HERO_SCRIPT, CSS_LINK
+    global CONFLICT_HTML, ONE_AUTHOR_HTML, ONE_AUTHOR, SITE_NAME, HERO_SCRIPT, CSS_LINK, OG
     ap = argparse.ArgumentParser()
     ap.add_argument("--venue", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
@@ -357,7 +369,11 @@ def main():
         names[n] = f"{stem}.{sha(b)[:10]}.{ext}"
         (out / "assets" / names[n]).write_bytes(b)
     shutil.copytree(here / "assets" / "device", out / "assets" / "device")
-    for n in ("og.png", "apple-touch-icon.png"): shutil.copy(here / "assets" / n, out / "assets" / n)
+    shutil.copy(here / "assets" / "apple-touch-icon.png", out / "assets" / "apple-touch-icon.png")
+    # the preview card under a content-hashed name, so a network that cached the old card fetches the new one
+    og = (here / "assets" / "og.png").read_bytes(); og_name = f"og.{sha(og)[:10]}.png"
+    (out / "assets" / og_name).write_bytes(og); OG = f"{SITE}/assets/{og_name}"
+    (out / "assets" / "og.png").write_bytes(og)                # the old address serves the new card too
     sri = lambda b: "sha384-" + __import__("base64").b64encode(hashlib.sha384(b).digest()).decode()
     CSS_LINK = f'<link rel="stylesheet" href="/assets/{names["site.css"]}" integrity="{sri((out / "assets" / names["site.css"]).read_bytes())}">'
     HERO_SCRIPT = f'<script src="/assets/{names["hero.js"]}" integrity="{sri((out / "assets" / names["hero.js"]).read_bytes())}" defer></script>'
@@ -380,6 +396,7 @@ def main():
         frag = heading_ids(frag, sid)
         frag = dress_tables(frag, sid)
         frag = link_refs(frag, sid)
+        frag = dress_guidance(frag)
         if sid == "part-4": part4_frag = frag
         prev = secs[k - 1] if k else None
         nxt = secs[k + 1] if k + 1 < len(secs) else None
@@ -630,7 +647,7 @@ def main():
 {sec_h(*colophon[2])}
 <p>{e(seal_txt).replace("published beside this document", '<a href="/verify/">published beside this document</a>')}</p></section>
 {sec_h(*colophon[3])}
-<p>{e(next_txt)}</p></section>
+<p>{e(next_txt).replace("by 2027-02-14", "<strong>by 2027-02-14</strong>")}</p></section>
 {sec_h(*colophon[4])}
 <p>{e(cite_txt)}</p></section>"""
     got = words(re.sub(r"<[^>]+>", " ", colo[colo.index('<section class="colo"'):]).lower())

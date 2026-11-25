@@ -12,7 +12,7 @@ const css = font('EB Garamond', 500, 'normal') + font('EB Garamond', 400, 'itali
 const og = `<html><head><style>${css}
 .c{width:1200px;height:630px;box-sizing:border-box;background:#fff;border:2px solid #1b2420;display:grid;grid-template-columns:520px 1fr;align-items:center;padding:48px 56px;gap:40px;font-family:"EB Garamond"}
 img{width:520px;height:auto}.s{font:500 20px/1.4 "IBM Plex Mono";letter-spacing:.16em;color:#1f5a3a;margin:0 0 18px}
-h1{font:500 64px/1.04 "EB Garamond";color:#111614;margin:0}.sub{font:italic 400 30px/1.25 "EB Garamond";color:#1f5a3a;margin:18px 0 0}
+h1{font:500 64px/1.04 "EB Garamond";color:#000;margin:0}.sub{font:italic 400 30px/1.25 "EB Garamond";color:#1f5a3a;margin:18px 0 0}
 .u{font:500 18px/1.4 "IBM Plex Mono";letter-spacing:.12em;color:#5b6368;margin:26px 0 0}</style></head><body><div class="c">
 <img src="file://${A}/device/plate.webp"><div><p class="s">TDLS-AI v0.1</p><h1>The Data Licensing Standard for AI</h1>
 <p class="sub">Requirements, evidence and scoring for AI training data vendors</p><p class="u">datalicensingstandard.org</p></div></div></body></html>`;
