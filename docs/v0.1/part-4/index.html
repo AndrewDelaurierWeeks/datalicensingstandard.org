@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 4 · The vendor questionnaire · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 Part 4: The vendor questionnaire. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/part-4/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="Part 4 · The vendor questionnaire · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 Part 4: The vendor questionnaire. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/part-4/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/" aria-current="page">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main" class="wide">
+<p class="kicker">TDLS-AI v0.1 Part 4</p>
+<div class="sealed" data-section="part-4" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="the-vendor-questionnaire">4. The vendor questionnaire</h1>
+<p>Send to the vendor with the request for proposal or before contract. Questions 1 to 14 keep the numbers they had in the edition of 2026-11-16; questions 15 to 25 are new, and <a href="/v0.1/part-4/#q14">question 14</a> covers every answer. An answer that <a href="/v0.1/annex-a/">Annex A</a> has no field for is given in the response to this questionnaire and counts as stated in the declaration when the person named in <a href="/v0.1/part-4/#q14">question 14</a> signs the response; where a delivery follows, the signed response is listed in its hash manifest. Each answer is attributable to a named person. "Not measured", "unknown" and "not applicable, because..." are admissible answers; an answer that asserts a result without the evidence the requirement names is recorded as an assertion.</p>
+<div class="tbl"><table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>No.</th>
+<th>Question</th>
+<th>Req.</th>
+<th>Answer format</th>
+</tr>
+</thead>
+<tbody>
+<tr id="q1" class="odd">
+<td data-label="No.">1</td>
+<td data-label="Question">List each component of the delivery with its source, collection method, custodians since collection, the authority under which it was collected, and, for any component collected from a third party, the agreement or terms under which it was collected.</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a></td>
+<td data-label="Answer format">Table per component</td>
+</tr>
+<tr id="q2" class="even">
+<td data-label="No.">2</td>
+<td data-label="Question">Provide the hash manifest for the delivery (algorithm named) and the time-stamp token over the manifest hash.</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a></td>
+<td data-label="Answer format">Files; manifest hash</td>
+</tr>
+<tr id="q3" class="odd">
+<td data-label="No.">3</td>
+<td data-label="Question">For each component, state the right under which it may be licensed for training and the terms that travel with it.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a></td>
+<td data-label="Answer format">Table per component</td>
+</tr>
+<tr id="q4" class="even">
+<td data-label="No.">4</td>
+<td data-label="Question">Describe the exclusion mechanism for individuals and rights holders, its service level, and the aggregate count of requests received and honored in the last 12 months.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a></td>
+<td data-label="Answer format">Text; counts</td>
+</tr>
+<tr id="q5" class="odd">
+<td data-label="No.">5</td>
+<td data-label="Question">Is any part of the delivery described as de-identified, anonymized, redacted or scrubbed? If yes: attacker assumed; method; sample (size, how drawn, by whom, when relative to the buyer's questions); date; person who ran it; residual.</td>
+<td data-label="Req."><a href="/v0.1/r3/">R3</a></td>
+<td data-label="Answer format">Declaration fields (<a href="/v0.1/annex-a/">Annex A</a>)</td>
+</tr>
+<tr id="q6" class="even">
+<td data-label="No.">6</td>
+<td data-label="Question">Does any attestation, audit or verification accompany the delivery? If yes: attester's identity; its relationships with every party; the fee arrangement and when it was fixed; prior engagements.</td>
+<td data-label="Req."><a href="/v0.1/r4/">R4</a>, <a href="/v0.1/r10/">R10</a></td>
+<td data-label="Answer format">Text; documents</td>
+</tr>
+<tr id="q7" class="odd">
+<td data-label="No.">7</td>
+<td data-label="Question">List the elements of the evidence package delivered (manifest, token, declaration, measurement records, certification; for sensor records and RL environments, the elements <a href="/v0.1/r5/">R5</a> adds).</td>
+<td data-label="Req."><a href="/v0.1/r5/">R5</a></td>
+<td data-label="Answer format">Checklist</td>
+</tr>
+<tr id="q8" class="even">
+<td data-label="No.">8</td>
+<td data-label="Question">Does any component contain or derive from health information? If yes: which 164.514(b) method; the documentation named in <a href="/v0.1/r6/">R6</a>.</td>
+<td data-label="Req."><a href="/v0.1/r6/">R6</a></td>
+<td data-label="Answer format">Documents</td>
+</tr>
+<tr id="q9" class="odd">
+<td data-label="No.">9</td>
+<td data-label="Question">Is this a one-time delivery or a feed, refresh or renewing license? If the latter: the re-measurement interval, the per-delivery declaration practice, and the change log between deliveries.</td>
+<td data-label="Req."><a href="/v0.1/r7/">R7</a></td>
+<td data-label="Answer format">Text; change log</td>
+</tr>
+<tr id="q10" class="even">
+<td data-label="No.">10</td>
+<td data-label="Question">If intended for evaluation: distribution history of each component; overlap checks performed and their method; separation procedure from training supplies.</td>
+<td data-label="Req."><a href="/v0.1/r8/">R8</a></td>
+<td data-label="Answer format">Text; records</td>
+</tr>
+<tr id="q11" class="odd">
+<td data-label="No.">11</td>
+<td data-label="Question">How does a deletion or exclusion request received after delivery reach the buyer, within what time, in what form? Does a mechanism exist for individuals or rights holders to submit such requests to you? Provide the aggregate count propagated in the last 12 months. Is the log bound to this delivery's manifest hash, yes or no?</td>
+<td data-label="Req."><a href="/v0.1/r9/">R9</a></td>
+<td data-label="Answer format">Text; count; yes or no</td>
+</tr>
+<tr id="q12" class="even">
+<td data-label="No.">12</td>
+<td data-label="Question">Disclose every ownership, control, fee, revenue-share, commission or prior-engagement relationship among vendor, broker or marketplace, de-identification provider and attester.</td>
+<td data-label="Req."><a href="/v0.1/r10/">R10</a></td>
+<td data-label="Answer format">Signed statement</td>
+</tr>
+<tr id="q13" class="odd">
+<td data-label="No.">13</td>
+<td data-label="Question">Does any component contain or derive from payment card account data, nonpublic personal information held by a financial institution, or consumer report information? If yes, per class: the statements, the 3.5.1 approach, the attestation of compliance, the 6802 basis and agreement, the 1681b circumstance and certification named in <a href="/v0.1/r11/">R11</a>. If no: the search performed to say so.</td>
+<td data-label="Req."><a href="/v0.1/r11/">R11</a></td>
+<td data-label="Answer format">Documents; search record</td>
+</tr>
+<tr id="q14" class="even">
+<td data-label="No.">14</td>
+<td data-label="Question">Name the person accountable for these answers, their role, and the date.</td>
+<td data-label="Req.">all</td>
+<td data-label="Answer format">Name; role; date</td>
+</tr>
+<tr id="q15" class="odd">
+<td data-label="No.">15</td>
+<td data-label="Question">Does the delivery contain synthetic or model-generated data? If yes, per component: the generator (name, version or build, provider, and whether it is another party's model, your own model or a program); the generation method in outline; the seed data and its provenance; the component's share of the delivery, with the unit named.</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a></td>
+<td data-label="Answer format">Table per component</td>
+</tr>
+<tr id="q16" class="even">
+<td data-label="No.">16</td>
+<td data-label="Question">For each synthetic component: the agreement or license under which each generator was used, with any clause that limits the use of outputs to train models, or a statement that the generator is your own; the rights in the seed data; whether and how an exclusion request against the seed data changes the synthetic component.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a></td>
+<td data-label="Answer format">Text; documents</td>
+</tr>
+<tr id="q17" class="odd">
+<td data-label="No.">17</td>
+<td data-label="Question">Did the seed data hold personal data? If yes: whether generated records match seed records, under what match rule, on what sample, with what count and what residual. Was any benchmark item used as seed data or placed in a prompt, and from which benchmark?</td>
+<td data-label="Req."><a href="/v0.1/r3/">R3</a>, <a href="/v0.1/r8/">R8</a></td>
+<td data-label="Answer format">Declaration fields (<a href="/v0.1/annex-a/">Annex A</a>)</td>
+</tr>
+<tr id="q18" class="even">
+<td data-label="No.">18</td>
+<td data-label="Question">Was any part of the delivery produced to order by a contracted workforce? If yes: the contributor agreement template; the counts of contributors and of signed agreements; the consent basis for any contributor's own personal data in the work; any staffing firm or contributor marketplace between you and the contributors.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r10/">R10</a></td>
+<td data-label="Answer format">Template; counts; text</td>
+</tr>
+<tr id="q19" class="odd">
+<td data-label="No.">19</td>
+<td data-label="Question">Does the delivery contain sensor records? If yes: complete the sensor-record block in <a href="/v0.1/annex-a/">Annex A</a>, each required field declared, each measured field declared or marked "not-measured", and each conditional field declared or marked "not-present" or "not-done".</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a></td>
+<td data-label="Answer format">Declaration fields (<a href="/v0.1/annex-a/">Annex A</a>)</td>
+</tr>
+<tr id="q20" class="even">
+<td data-label="No.">20</td>
+<td data-label="Question">For sensor records: the consent basis of operators, camera wearers and others recorded, and the withdrawal procedure; the permission for capture in private spaces; whether the records carry face-geometry scans or voiceprints and, if so, whose, by kind of person and count, and under what written notice and release; what was removed in de-identification, by what method, on what sample of frames, with what residual; any physiological signals recorded.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r3/">R3</a>, <a href="/v0.1/r6/">R6</a></td>
+<td data-label="Answer format">Declaration fields (<a href="/v0.1/annex-a/">Annex A</a>)</td>
+</tr>
+<tr id="q21" class="odd">
+<td data-label="No.">21</td>
+<td data-label="Question">Does the delivery contain an RL environment? If yes: who wrote the tasks and the graders or verifiers, by kind; where any data inside came from; the build digest; the task count, with the task list or its SHA-256; the grader version; whether it is delivered to the buyer or run for the buyer, and by whom.</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a>, <a href="/v0.1/r5/">R5</a></td>
+<td data-label="Answer format">Declaration fields (<a href="/v0.1/annex-a/">Annex A</a>)</td>
+</tr>
+<tr id="q22" class="even">
+<td data-label="No.">22</td>
+<td data-label="Question">For an RL environment: the license of the environment code, of each data component inside and of any third-party software or copied interface inside that carries its own license, and the terms that travel; whether it contains personal data and, if so, what and whose, by kind of person.</td>
+<td data-label="Req."><a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r3/">R3</a></td>
+<td data-label="Answer format">Table per component</td>
+</tr>
+<tr id="q23" class="odd">
+<td data-label="No.">23</td>
+<td data-label="Question">For an RL environment: which tasks overlap public benchmarks; how held-out tasks are kept apart; whether any task or grader file in this build, or a version of one changed only in wording, values or format, has reached any other party, and in what form; the exclusivity terms offered to this buyer, and for how long.</td>
+<td data-label="Req."><a href="/v0.1/r8/">R8</a></td>
+<td data-label="Answer format">Text; records</td>
+</tr>
+<tr id="q24" class="even">
+<td data-label="No.">24</td>
+<td data-label="Question">Does the buyer's agent run on, or send traces or outputs to, systems the buyer does not control (yours, a marketplace's, a host's)? If yes, for each party that receives them: who holds them; for how long; each use other than running and scoring the buyer's runs; who else can access them; how they are deleted on request; and the same for the agent code, prompts, credentials and model access the buyer sends in.</td>
+<td data-label="Req."><a href="/v0.1/r12/">R12</a></td>
+<td data-label="Answer format">Text; record</td>
+</tr>
+<tr id="q25" class="odd">
+<td data-label="No.">25</td>
+<td data-label="Question">Attach the records the evidence lines and the measured tiers name: the license or consent language (<a href="/v0.1/r2/">R2</a>), the exclusion log (<a href="/v0.1/r2/">R2</a>), the measurement record (<a href="/v0.1/r3/">R3</a>), the propagation log (<a href="/v0.1/r9/">R9</a>), and, for sensor records, the record of the measured fields with its sample of episodes and the calibration files (<a href="/v0.1/r1/">R1</a>).</td>
+<td data-label="Req."><a href="/v0.1/r1/">R1</a>, <a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r3/">R3</a>, <a href="/v0.1/r9/">R9</a></td>
+<td data-label="Answer format">Files</td>
+</tr>
+</tbody>
+</table></div>
+<p>From The Data Licensing Standard for AI (TDLS-AI) v0.1 (Weeks, 2026), CC BY 4.0. The thresholds, and the judgment on any dataset, are the buyer's; the document contains no legal advice.</p>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 Part 4</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/part-4/">https://datalicensingstandard.org/v0.1/part-4/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/part-4.md">/v0.1/part-4.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/r12/">Previous: R12 · Hosted environments</a><a class="next" href="/v0.1/part-5/">Next: Part 5 · The scoring sheet</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

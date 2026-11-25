@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R7 · Term, renewal and re-measurement · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 R7: Term, renewal and re-measurement. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/r7/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="R7 · Term, renewal and re-measurement · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 R7: Term, renewal and re-measurement. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/r7/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 R7</p>
+<div class="sealed" data-section="r7" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="r7-term-renewal-and-re-measurement">R7 · Term, renewal and re-measurement</h1>
+<p><strong>Requirement.</strong> A declaration and its measurements describe the delivery they accompany. For a feed, a refresh or a license that renews, each delivery carries its own declaration, and the vendor states the interval at which de-identification and rights are re-measured. Each build of an RL environment that adds, removes or changes a task or a grader carries its own declaration. Its change log gives the counts of tasks added, removed and changed and names each grader that changed by file hash; it need not say how a grader works. For an environment that is updated continuously, the vendor states the interval at which it issues a declaration, and each declaration names the latest build by digest and lists in its change log the digests of the builds issued since the declaration before it. For sensor records, each recalibration or hardware change starts a new declaration, and the change log names it.</p>
+<p><strong>Evidence.</strong> The re-measurement interval in the declaration; a declaration per delivery; the change log between deliveries.</p>
+<p><strong>Rule basis.</strong> The structure of 164.514(b)(1), which ties the determination to the information and the anticipated recipient at the time it is made; a determination does not describe data it never covered.</p>
+<p><strong>Tiers.</strong> D: the interval stated. M: a declaration per delivery with the change log. A: the interval and the per-delivery declarations attested.</p>
+<div class="guidance">
+<p><span class="gt">Guidance for R7</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
+<dl>
+<dt>Purpose</dt>
+<dd>
+A measurement describes the data it was made on. When the data changes, the declaration changes with it; R7 keeps each delivery tied to a declaration of its own.
+</dd>
+<dt>What the buyer checks</dt>
+<dd>
+<ol type="1">
+<li><strong>Interval stated.</strong> The re-measurement interval is stated in the declaration.</li>
+<li><strong>A declaration per delivery.</strong> Each delivery of a feed or renewal carries its own declaration and its own manifest hash.</li>
+<li><strong>Change log complete.</strong> The change log counts what was added, removed and changed since the last declaration, and names each changed grader by file hash.</li>
+<li><strong>Next date.</strong> The next declaration's due date follows from the interval, or from <code>expires_at</code> where given.</li>
+</ol>
+<p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
+</dd>
+<dt>Good practice</dt>
+<dd>
+<ul>
+<li>Set the interval by how fast the data changes, and state the reason.</li>
+<li>For sensor records, start a new declaration at each recalibration or hardware change.</li>
+<li>For an environment that is updated continuously, list in each declaration the digests of the builds issued since the last one.</li>
+</ul>
+</dd>
+<dt>Examples, illustrative</dt>
+<dd>
+<ul>
+<li><strong>M</strong> · <strong>A declaration for each delivery.</strong> A monthly feed with six declarations in six months, each with its manifest hash and a change log.</li>
+<li><strong>D</strong> · <strong>An interval stated.</strong> Quarterly re-measurement stated; no declaration yet for the monthly deliveries after the first.</li>
+</ul>
+</dd>
+<dt>Where a check fails</dt>
+<dd>
+<ul>
+<li>One declaration reused across deliveries; check 02 finds it.</li>
+<li>A grader changed with no file hash in the change log; check 03 finds it.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 R7</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/r7/">https://datalicensingstandard.org/v0.1/r7/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/r7.md">/v0.1/r7.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/r6/">Previous: R6 · Health data</a><a class="next" href="/v0.1/r8/">Next: R8 · Evaluation data and contamination</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

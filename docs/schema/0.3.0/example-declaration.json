@@ -1,0 +1,116 @@
+{
+  "schema_version": "0.3.0",
+  "declaration_id": "EXAMPLE-2026-11-24-001 (illustrative; every hash in this example is a placeholder)",
+  "delivery": {
+    "manifest_hash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+    "hash_algorithm": "sha-256",
+    "timestamp_token_hash": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+    "timestamp_authority": "Example TSA (RFC 3161)"
+  },
+  "accountable_person": {
+    "name": "Example Person",
+    "role": "Head of Data Licensing",
+    "organization": "Example Vendor Ltd"
+  },
+  "declared_at": "2026-11-24T12:00:00Z",
+  "components": [
+    {
+      "component_id": "work-orders-2019-2025",
+      "description": "Completed work orders with linked invoices, 12,400 records",
+      "source": "Example Vendor Ltd field-service system",
+      "collection_method": "Export from the production database, filtered to closed jobs",
+      "custodians": [
+        "Example Vendor Ltd"
+      ],
+      "collection_authority": "Vendor's own business records; customer terms of service section 9 (data use)",
+      "rights_basis": {
+        "basis": "ownership",
+        "terms_traveling": "Training and evaluation use only; no resale; 24-month term",
+        "exclusion_mechanism": "Customers may request exclusion by email; honored within 30 days",
+        "exclusion_requests_last_12_months": {
+          "received": 3,
+          "honored": 3
+        }
+      },
+      "contains_health_information": false
+    }
+  ],
+  "de_identification": {
+    "claimed": true,
+    "tier": "measured",
+    "attacker_assumed": "T1-public-plus-one-release",
+    "method": "Named-entity removal of customer names and addresses; free-text fields passed through a redaction model; manual review of a sample",
+    "measured_on": {
+      "sample_size": 500,
+      "population_size": 12400,
+      "drawn_by": "buyer",
+      "drawn_when": "after-buyer-questions",
+      "measured_at": "2026-10-20",
+      "measured_by": {
+        "name": "Example Reviewer",
+        "role": "Data Protection Lead",
+        "organization": "Example Vendor Ltd"
+      }
+    },
+    "residual": "3 of 500 sampled records re-identified by name and address lookup; free-text notes field was not checked beyond the model's output",
+    "measurement_record_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+  },
+  "attestation": {
+    "offered": false
+  },
+  "evidence_package": {
+    "hash_manifest": true,
+    "timestamp_token": true,
+    "declaration": true,
+    "measurement_records": true,
+    "certification_and_notice_material": false
+  },
+  "health_data": {
+    "present": false
+  },
+  "financial_data": {
+    "classes": [],
+    "search_performed": "Pattern search of every text field for 13 to 19 digit runs passing a Luhn check (0 hits in 12,400 records); field-name search for track, cvv, cvc, pin (0 fields); source review: the field-service system holds no payment data, invoices carry totals only"
+  },
+  "term": {
+    "kind": "renewing-license",
+    "re_measurement_interval_days": 180,
+    "declaration_per_delivery": true
+  },
+  "evaluation_use": {
+    "intended_for_evaluation": false
+  },
+  "deletion_propagation": {
+    "procedure": "Exclusion requests received after delivery are forwarded to the buyer's named contact by email within 10 business days, with the component id and record ids",
+    "propagation_time_days": 14,
+    "intake_mechanism_exists": true,
+    "requests_propagated_last_12_months": 0,
+    "log_bound_to_manifest": false
+  },
+  "relationship_disclosure": {
+    "complete": true,
+    "statement": "No ownership or control links with any broker, marketplace, de-identification provider or attester; no referral fees, revenue shares or commissions paid or received in this transaction; no prior engagements with any attester.",
+    "signed_by": {
+      "name": "Example Person",
+      "role": "Head of Data Licensing",
+      "organization": "Example Vendor Ltd"
+    }
+  },
+  "synthetic_data": {
+    "present": false
+  },
+  "human_data": {
+    "made_to_order": false
+  },
+  "sensor_records": {
+    "present": false
+  },
+  "rl_environment": {
+    "present": false
+  },
+  "signature": {
+    "kind": "signed-pdf",
+    "artifact_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+    "signed_at": "2026-11-24T12:05:00Z"
+  }
+}

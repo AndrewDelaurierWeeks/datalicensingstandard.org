@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R8 · Evaluation data and contamination · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/r8/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="R8 · Evaluation data and contamination · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 R8: Evaluation data and contamination. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/r8/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 R8</p>
+<div class="sealed" data-section="r8" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="r8-evaluation-data-and-contamination">R8 · Evaluation data and contamination</h1>
+<p><strong>Requirement.</strong> Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form; whether it overlaps with public benchmarks the vendor checked; and how the vendor prevents the component from entering training sets it supplies.</p>
+<p><strong>Synthetic data.</strong> Whatever the intended use, the vendor states whether any benchmark item was used as seed data or placed in a prompt, and names the benchmark. Whether another party's generator learned benchmark items before the vendor used it is stated as unknown unless the vendor tested for it.</p>
+<p><strong>Sensor records.</strong> Where sensor records are intended for evaluation, the vendor states how held-out episodes, environments and robots are kept apart, and what overlap with public datasets it checked.</p>
+<p><strong>RL environments.</strong> The vendor states which tasks overlap public benchmarks and how held-out tasks are kept apart. The distribution statement also covers an RL environment sold or licensed for training. As of the date of the declaration, the vendor states whether any task or grader file in this build, or a version of one changed only in wording, values or format, has been sold, licensed or delivered to any other party, and in what form (the same build, a variant, or single tasks); the files of this build are identified by hash. The vendor also states the exclusivity terms it offers this buyer from that date: exclusive use (of what, and for how long), a first-buyer window (its length), or none (non-exclusive). The names of other parties and the terms of their contracts are not required.</p>
+<p><strong>Evidence.</strong> The distribution statement; the overlap check and its method; the vendor's separation procedure; for an RL environment sold or licensed for training, the exclusivity terms offered to this buyer.</p>
+<p><strong>Rule basis.</strong> None in law; this is the evaluation lead's requirement, and the document records it because a benchmark with an unstated distribution history measures nothing reliable. For an RL environment sold or licensed for training, the statement records the exclusivity terms the vendor declared.</p>
+<p><strong>Tiers.</strong> D: the statements. M: the overlap check attached. A: the distribution history and overlap check attested. For an RL environment sold or licensed for training, M: the signed offer or contract clause that states the exclusivity terms, attached, including terms of none. The statement of prior distribution is the vendor's own statement at D and at M, and R8 reaches A only when it is attested.</p>
+<div class="guidance">
+<p><span class="gt">Guidance for R8</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
+<dl>
+<dt>Purpose</dt>
+<dd>
+An evaluation set measures a model only if the model has not seen it. R8 asks where the data has been, what it overlaps, and how the vendor keeps it out of the training sets it supplies.
+</dd>
+<dt>What the buyer checks</dt>
+<dd>
+<ol type="1">
+<li><strong>Distribution history.</strong> The vendor states whether each component was published, sold or delivered elsewhere, and in what form.</li>
+<li><strong>Overlap method named.</strong> The overlap check names the benchmarks checked and the matching method.</li>
+<li><strong>Separation stated.</strong> The vendor states how the component is kept out of the training sets it supplies.</li>
+<li><strong>Exclusivity in writing.</strong> For an RL environment sold for training, the exclusivity terms appear in the signed offer or contract.</li>
+</ol>
+<p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
+</dd>
+<dt>Good practice</dt>
+<dd>
+<ul>
+<li>Check overlap by a stated method (exact match, n-grams, or a distance with its cutoff) and report the count.</li>
+<li>Keep held-out tasks in a store that the training pipeline cannot read, and say so.</li>
+<li>For synthetic data, name any benchmark used as seed data or placed in a prompt.</li>
+</ul>
+</dd>
+<dt>Examples, illustrative</dt>
+<dd>
+<ul>
+<li><strong>M</strong> · <strong>An overlap check attached.</strong> A 13-gram overlap check against nine named public benchmarks: 0 matches in 50,000 items, with the method and script attached.</li>
+<li><strong>M</strong> · <strong>Exclusivity signed.</strong> For an environment sold for training, a contract clause granting exclusive use of the task set for 12 months, attached.</li>
+<li><strong>D</strong> · <strong>History stated.</strong> Distribution stated as “never sold”; no overlap check attached.</li>
+</ul>
+</dd>
+<dt>Where a check fails</dt>
+<dd>
+<ul>
+<li>An overlap check that names no benchmark; check 02 finds it.</li>
+<li>Exclusivity promised only in an email; check 04 finds it.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 R8</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/r8/">https://datalicensingstandard.org/v0.1/r8/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/r8.md">/v0.1/r8.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/r7/">Previous: R7 · Term, renewal and re-measurement</a><a class="next" href="/v0.1/r9/">Next: R9 · Deletion and downstream propagation</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

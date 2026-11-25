@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 1 · Purpose and scope · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 Part 1: Purpose and scope. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/part-1/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="Part 1 · Purpose and scope · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 Part 1: Purpose and scope. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/part-1/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 Part 1</p>
+<div class="sealed" data-section="part-1" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="purpose-and-scope">1. Purpose and scope</h1>
+<p><strong>Purpose.</strong> To give a buyer of training data or RL environments a fixed set of questions, a fixed evidence package and a scoring method that make the diligence on a vendor repeatable across vendors and checkable by someone who did not take part in the purchase.</p>
+<p><strong>Scope.</strong> Any acquisition of data or of an RL environment for training, fine-tuning, evaluation or environment construction from a party outside the buyer.</p>
+<p><strong>The parties.</strong> A data owner selling its own records; a broker or marketplace, including a marketplace or hub of RL environments; a de-identification or redaction provider delivering a processed corpus; a collector of recorded footage or calls; a collector of robot, teleoperation or wearable sensor records; a seller of human data made to order (demonstrations, preference labels, annotations and written reasoning produced by a contracted workforce); a generator of synthetic data; a seller of tasks and traces; an environment builder or host. <a href="/v0.1/annex-c/">Annex C</a> defines the word this document uses for whichever of them supplies the delivery and signs the declaration, the vendor.</p>
+<p><strong>The forms.</strong> Text, images, documents, structured records, audio and video; synthetic and model-generated data; sensor records, which are time-series records from sensors on a robot, a person or a fixed rig (camera video in color and depth, lidar, inertial, force and torque, tactile, joint positions, velocities and torques, the actions or commands sent, and the audio and location recorded with them), including teleoperation and demonstration episodes and egocentric video; derived artifacts such as reinforcement-learning tasks; and RL environments, each made of the environment software, its task set, its graders or verifiers and the data inside, whether delivered to the buyer or run for the buyer by the vendor or another party, and whether bought directly or through a marketplace.</p>
+<p><strong>Out of scope.</strong> The buyer's own internal data; the buyer's model training practices; any statement about a particular vendor, buyer or dataset. The document says what a buyer should ask, what evidence should arrive, and how to score what arrived, and leaves the judgment about any given dataset to the buyer. The requirements are a part of a buyer's diligence and leave the rest to the buyer and its counsel. This edition sets no requirement specific to the following: data licensed for use without a delivered copy, other than the data inside an RL environment that the vendor or another party runs for the buyer; any measurement of whether an environment's graders score correctly; any rule of law this document does not quote or cite, in the jurisdictions it names and in every other; unlawful content; and children's data. A delivery that raises any of them is still subject to Requirements 1 to 12, and the questions they raise are for the buyer and its counsel.</p>
+<p><strong>Why the questions are fixed.</strong> A vendor answers the same questions for every buyer, so the answers can be compared; a buyer asks the same questions of every vendor, so a missing answer is visible as a missing answer rather than as a difference in style.</p>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 Part 1</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/part-1/">https://datalicensingstandard.org/v0.1/part-1/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/part-1.md">/v0.1/part-1.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/part-0/">Previous: Part 0 · How to use this document</a><a class="next" href="/v0.1/part-2/">Next: Part 2 · The record this rests on</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

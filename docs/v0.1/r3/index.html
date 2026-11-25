@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R3 · De-identification, stated as a measurement · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 R3: De-identification, stated as a measurement. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/r3/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="R3 · De-identification, stated as a measurement · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 R3: De-identification, stated as a measurement. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/r3/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 R3</p>
+<div class="sealed" data-section="r3" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="r3-de-identification-stated-as-a-measurement">R3 · De-identification, stated as a measurement</h1>
+<p><strong>Requirement.</strong> Where the delivery is described as de-identified, anonymized, redacted or scrubbed, the vendor states the claim as a measurement: the attacker the de-identification assumes (what outside information and what access the attacker is taken to have), the method, the sample it was measured on and how the sample was chosen, the date, the person who ran it, and what was left over (the residual: records or fields that the method does not cover or did not clear). A claim of complete anonymization, or of a zero residual, is scored as an assertion at every tier; a determination of very small risk under 164.514(b)(1) states a residual and is scored on its documentation.</p>
+<p><strong>Synthetic data.</strong> Where the seed data held personal data, the vendor states, on a sample: the match rule (exact match on all fields, or a stated measure of closeness with its cutoff), the size of the sample and how it was drawn, the count of generated records that match a seed record under the rule, and what the test did not cover. A count of zero in a stated sample under a stated rule is a measured result for that sample and is scored as a measured result. The part of the delivery outside the sample, and any match rule not tested, are the residual. Where the vendor relies on a formal privacy bound that the generator was built to meet, it states the bound and its parameters beside the count.</p>
+<p><strong>Sensor records.</strong> Where people, places or location were recorded, the vendor completes the de-identification fields of the sensor-record block: what was removed (faces, number plates, screens and documents in view, voices, location traces), the method, the sample of frames, and the residual. Where nothing was removed, the vendor marks the fields "not-done", and the residual is everything recorded.</p>
+<p><strong>RL environments.</strong> This requirement applies where the environment contains personal data, such as records placed in it or recorded interactions, whether or not the vendor describes it as de-identified.</p>
+<p>Where one of these paragraphs applies and the vendor claims no de-identification, the vendor says that nothing was removed and states what personal data remains and whose, by kind of person (names of individuals are not required); that statement is D. M and A are reached on a measurement the paragraph asks for (the match count for synthetic data) or on a removal or de-identification that is claimed.</p>
+<p><strong>Evidence.</strong> The declaration fields in <a href="/v0.1/annex-a/">Annex A</a> (attacker assumed, method, sample, residual); the measurement record; for health data, the expert-determination documentation or the safe-harbor identifier list and the actual-knowledge statement.</p>
+<p><strong>Rule basis.</strong> 45 CFR 164.514(b)(1) (in summary; quoted in B.2): a person with appropriate knowledge and experience applies generally accepted principles and methods, determines that the risk is very small that the information could be used, alone or in combination with other reasonably available information, by an anticipated recipient to identify an individual, and documents the methods and results. The document uses this structure for all data: a named person, a stated method, a stated recipient or attacker, and documented results. Recital 26 of Regulation (EU) 2016/679 (quoted in B.11) judges identifiability by "all the means reasonably likely to be used", by the controller or by another person; the attacker assumed records which means the vendor considered, and whether those are all the means the Recital has in view is for counsel.</p>
+<p><strong>Sampling language for the evaluation lead.</strong> A measurement on a sample the vendor chose after seeing the buyer's questions is weaker than a measurement on a sample drawn by a procedure the vendor could not predict. The declaration records who drew the sample and when relative to the buyer's questions.</p>
+<p><strong>Tiers.</strong> D: the declaration fields stated (attacker assumed, method, sample, date, person, residual), with "not measured" and "unknown" permitted. M: the measurement record attached, or the measurement verified by the buyer. A: the measurement reproduced or verified by an independent party on a sample that party drew.</p>
+<div class="guidance">
+<p><span class="gt">Guidance for R3</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
+<dl>
+<dt>Purpose</dt>
+<dd>
+Stated as a measurement, a de-identification claim names one attacker, one method, one sample and one residual. A buyer can then compare the claims of several vendors on the same terms, and a later reader can test each part.
+</dd>
+<dt>What the buyer checks</dt>
+<dd>
+<ol type="1">
+<li><strong>Attacker named.</strong> The attacker is stated on the T0 to T5 scale of <a href="/v0.1/annex-a/">Annex A</a>; an answer of none-stated is recorded in the Notes column.</li>
+<li><strong>Sample timing recorded.</strong> The declaration records who drew the sample, how, and when relative to the buyer's questions.</li>
+<li><strong>Residual stated.</strong> The residual is stated as R3 defines it for the form, or as not measured, and is other than zero or complete anonymization.</li>
+<li><strong>Record attached.</strong> The measurement record is attached, or the buyer has reproduced the measurement.</li>
+</ol>
+<p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
+</dd>
+<dt>Good practice</dt>
+<dd>
+<ul>
+<li>Fix the sampling procedure before the buyer's questions arrive, and record who drew the sample and when.</li>
+<li>State the attacker in the declaration. Which attacker fits the buyer's use is the buyer's judgment; <a href="/v0.1/annex-a/">Annex A</a> gives T4 and T5 for attackers with access to a trained model.</li>
+<li>Report the residual as a count and as a share of the sample, and name the fields the method does not cover.</li>
+<li>Attach the measurement record to the declaration, so that the buyer can verify M without a second request.</li>
+</ul>
+</dd>
+<dt>Examples, illustrative</dt>
+<dd>
+<ul>
+<li><strong>M</strong> · <strong>A measurement with its record.</strong> Attacker T1; method: direct identifiers removed and dates generalized to the month; sample: 2,000 records drawn by a seeded random procedure fixed before the questionnaire arrived; residual: 14 records (0.7 percent) whose free-text fields the method does not cover; the measurement record attached.</li>
+<li><strong>D</strong> · <strong>Fields stated.</strong> Attacker, method, sample, date and person stated; the residual given as “not measured”.</li>
+<li><strong>assertion</strong> · <strong>A claim with no measurement.</strong> “Fully anonymized; zero re-identification risk.” An assertion is recorded, and R3 is capped at 0 until the vendor withdraws the claim or replaces it with a declared answer.</li>
+</ul>
+</dd>
+<dt>Where a check fails</dt>
+<dd>
+<ul>
+<li>A residual of zero, or “fully anonymized”, is scored as an assertion; check 03 finds it.</li>
+<li>A declaration that does not say who drew the sample or when; check 02 finds it.</li>
+<li>An attacker given as none-stated cannot be compared with another vendor's; check 01 records it.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 R3</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/r3/">https://datalicensingstandard.org/v0.1/r3/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/r3.md">/v0.1/r3.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/r2/">Previous: R2 · Rights and consent basis</a><a class="next" href="/v0.1/r4/">Next: R4 · Independence of any attestation offered</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

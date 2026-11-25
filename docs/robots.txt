@@ -1,0 +1,14 @@
+# datalicensingstandard.org: The Data Licensing Standard for AI (TDLS-AI) v0.1, by Andrew Delaurier Weeks.
+# Every crawler is welcome on every page, crawlers that gather text for AI models included.
+# Terms (Part 7, License): Text under Creative Commons Attribution 4.0 International, excluding material quoted from the sources named in Annex B, wherever it appears, and the field names and section headings of the outside specifications in Annex A, in which this license grants nothing and any rights stay with their holders; the schema, example, validator and crosswalk file under the MIT License, which covers the author's own work in those files and no name, heading or text of an outside specification; the cover engraving, created by the author, of a carved neoclassical anthropomorphic mascaron sculpted in high relief, under the same CC BY 4.0 license as the text. A buyer may reproduce Parts 4 and 5 in its own procurement documents with attribution.
+# Cite as: Weeks, A. D. (2026). The Data Licensing Standard for AI (TDLS-AI) v0.1. Sealed on the date in the published time-stamp token. A requirement is cited by short name, version and number, as in TDLS-AI v0.1 R8; a question, as in TDLS-AI v0.1 R8, question 10. The schema (Annex A) is cited by its `$id` and version.
+# The whole sealed text: https://datalicensingstandard.org/TDLS-AI-v0.1.md
+# A guide for language models: https://datalicensingstandard.org/llms.txt
+
+# The signal below speaks for the author's material, under Part 7's license and its exclusions; material quoted from the sources named in Annex B stays with its holders.
+
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+Sitemap: https://datalicensingstandard.org/sitemap.xml

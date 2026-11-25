@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R12 · Hosted environments · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 R12: Hosted environments. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/r12/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="R12 · Hosted environments · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 R12: Hosted environments. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/r12/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 R12</p>
+<div class="sealed" data-section="r12" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="r12-hosted-environments">R12 · Hosted environments</h1>
+<p><strong>Requirement.</strong> Where the buyer's agent runs on systems the buyer does not control, or its traces or other outputs are sent to such systems, the vendor names each party that receives them (the vendor, a marketplace, a host) and states for each: who holds them, for how long, each purpose they are used for other than running and scoring the buyer's runs (repair of tasks and graders, aggregate statistics, training of any model, sale or transfer), who else can access them, and how they are deleted on request. The statement also covers what the buyer sends in to run its agent: agent code, prompts, credentials and model access.</p>
+<p><strong>Evidence.</strong> The statement; the retention period; the list of parties with access; the deletion procedure; the record of what was kept and deleted.</p>
+<p><strong>Rule basis.</strong> No rule is quoted; this is the buyer's requirement for what its own agent produced. <a href="/v0.1/part-1/">Part 1</a> leaves the buyer's model training practices out of scope, and this requirement asks only how the parties that receive the buyer's traces, outputs and inputs handle them.</p>
+<p><strong>Tiers.</strong> D: the statement. M: before the first run, the retention and deletion settings in force for the buyer's runs, exported from the system of each party that will hold the traces; after the first run, the record of what was kept and deleted for the buyer's own runs. No other customer's records are shown. A: the statement and the record attested by an independent party.</p>
+<div class="guidance">
+<p><span class="gt">Guidance for R12</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
+<dl>
+<dt>Purpose</dt>
+<dd>
+When the buyer's agent runs on systems the buyer does not control, its traces, outputs and inputs leave the buyer's hands. R12 asks who holds them, for how long, for what use, and how they are deleted.
+</dd>
+<dt>What the buyer checks</dt>
+<dd>
+<ol type="1">
+<li><strong>Every holder named.</strong> Each party that receives traces or outputs is named: the vendor, a marketplace, a host.</li>
+<li><strong>Uses listed.</strong> Every use beyond running and scoring the buyer's runs is listed, training of any model included.</li>
+<li><strong>Settings exported.</strong> Before the first run, the retention and deletion settings for the buyer's runs come from each holder's system.</li>
+<li><strong>Deletion recorded.</strong> After the runs, the record shows what was kept and what was deleted, for the buyer's runs only.</li>
+</ol>
+<p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
+</dd>
+<dt>Good practice</dt>
+<dd>
+<ul>
+<li>Cover what the buyer sends in: agent code, prompts, credentials and model access.</li>
+<li>State retention in days, for each party.</li>
+<li>Show the buyer its own records only, with no other customer's records.</li>
+</ul>
+</dd>
+<dt>Examples, illustrative</dt>
+<dd>
+<ul>
+<li><strong>M</strong> · <strong>Settings and a record.</strong> Settings exported from the host's console before the first run: traces kept 30 days, no training use; after the runs, a deletion record for 412 runs.</li>
+<li><strong>D</strong> · <strong>A statement.</strong> Traces kept 90 days and used for aggregate statistics; no export attached.</li>
+<li><strong>assertion</strong> · <strong>A claim with no statement.</strong> “We never keep your data.” No parties, uses or retention stated; an assertion is recorded.</li>
+</ul>
+</dd>
+<dt>Where a check fails</dt>
+<dd>
+<ul>
+<li>A marketplace that receives traces and is not named; check 01 finds it.</li>
+<li>Settings described in prose with no export; check 03 finds it.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 R12</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/r12/">https://datalicensingstandard.org/v0.1/r12/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/r12.md">/v0.1/r12.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/r11/">Previous: R11 · Financial and payment data</a><a class="next" href="/v0.1/part-4/">Next: Part 4 · The vendor questionnaire</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

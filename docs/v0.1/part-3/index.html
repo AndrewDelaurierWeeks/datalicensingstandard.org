@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 3 · Requirements · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 Part 3: Requirements. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/part-3/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="Part 3 · Requirements · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 Part 3: Requirements. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/part-3/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 Part 3</p>
+<div class="sealed" data-section="part-3" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="requirements">3. Requirements</h1>
+<p>Each requirement states what the buyer requires, the evidence that satisfies it, the rule it rests on, and the tiers at which a vendor can meet it. The tiers are the heart of the method:</p>
+<ul>
+<li><strong>Declared (D):</strong> the vendor states the answer in writing, in the declaration (<a href="/v0.1/annex-a/">Annex A</a>), and the statement is attributable to a named person at the vendor.</li>
+<li><strong>Measured (M):</strong> the answer is backed by a measurement, made by the vendor or verified by the buyer: method, sample, date, who ran it, and what was left over.</li>
+<li><strong>Independently attested (A):</strong> a party independent of the vendor, of any de-identification or redaction provider, and of any broker or marketplace in the transaction, under a fee fixed before the result was known, attests the measurement and signs it.</li>
+</ul>
+<p>"Not measured" and "unknown" are admissible answers at tier D. A vendor that discloses what it did not do has met the declared tier for that requirement; a vendor that asserts what it did not measure has met no tier. The scoring sheet rewards disclosure and penalizes assertion.</p>
+<p>Requirements 1 to 11 keep the numbers they had in the edition of 2026-11-16; Requirement 12 is new. Where a requirement asks something more of one form of delivery (synthetic data, human data made to order, sensor records, an RL environment), a paragraph headed with that form, or a sentence that names it, says so, and a delivery without that form skips it. Where one delivery is several forms at once (an environment whose records a model wrote, or whose tasks a contracted workforce wrote), each paragraph applies to the part it names, and a share is stated for data components only.</p>
+<p>Each requirement ends with guidance: its purpose, what the buyer checks, good practice, illustrative examples, and where a check fails. Guidance explains the requirement. It adds to no requirement, changes no tier and changes no score. <a href="/v0.1/part-0/">Part 0</a>'s conflict disclosure applies to the guidance as to the rest of this document.</p>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 Part 3</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/part-3/">https://datalicensingstandard.org/v0.1/part-3/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/part-3.md">/v0.1/part-3.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/part-2/">Previous: Part 2 · The record this rests on</a><a class="next" href="/v0.1/r1/">Next: R1 · Provenance and chain of custody</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

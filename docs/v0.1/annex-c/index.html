@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annex C · Glossary · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 Annex C: Glossary. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/annex-c/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="Annex C · Glossary · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 Annex C: Glossary. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/annex-c/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 Annex C</p>
+<div class="sealed" data-section="annex-c" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="annex-c-glossary">Annex C · Glossary</h1>
+<p><strong>Assertion.</strong> A claim of a result without the evidence the requirement names. Scored at zero.</p>
+<p><strong>Attacker assumed.</strong> The outside information and access a de-identification measurement takes the adversary to have, on the T0 to T5 scale in <a href="/v0.1/annex-a/">Annex A</a>.</p>
+<p><strong>Attestation.</strong> A signed statement by a named person at an independent party that a measurement was made as described and produced the stated result. The word is used in this sense throughout. It does not refer to an attest engagement under any accountancy statute or AICPA standard; a PCI DSS attestation of compliance is named as such where it is meant.</p>
+<p><strong>Declaration.</strong> The vendor's own signed statement of the answers to <a href="/v0.1/part-4/">Part 4</a>, in the <a href="/v0.1/annex-a/">Annex A</a> format.</p>
+<p><strong>Delivery.</strong> What the vendor supplies under one declaration: the files delivered, or, for an environment run for the buyer, the build the buyer's agent runs against, named by its build digest. For such an environment the hash manifest lists the build digest and the files the buyer receives.</p>
+<p><strong>Evidence package.</strong> The manifest, token, declaration, measurement records and the qualified person's certification that accompany a delivery, with what <a href="/v0.1/r5/">R5</a> adds for sensor records and for an RL environment (<a href="/v0.1/r5/">R5</a>).</p>
+<p><strong>Hash manifest.</strong> A list of every delivered file with its cryptographic hash, and the hash of the list itself. For an RL environment delivered as a container, the manifest lists the image digest in place of the files inside the image (<a href="/v0.1/r1/">R1</a>).</p>
+<p><strong>Human data made to order.</strong> Demonstrations, preference labels, annotations and written reasoning produced by a contracted workforce for a buyer's or a vendor's order.</p>
+<p><strong>Independent.</strong> Meeting the standard in <a href="/v0.1/r4/">R4</a>: independent of the vendor, of any de-identification or redaction provider in the transaction, and of any broker or marketplace that sells or lists the data, under a fee fixed before the result is known.</p>
+<p><strong>Measurement.</strong> A method applied to a stated sample on a stated date by a named person, with a stated residual.</p>
+<p><strong>Residual.</strong> What a measurement found left over: records, fields or cases the method does not cover or did not clear.</p>
+<p><strong>RL environment.</strong> Software in which an AI agent acts and is scored, bought for reinforcement learning (RL) or for evaluation: the system the agent works in (simulated, sandboxed or live), a task set, the graders, verifiers or reward functions that score each attempt (code, a model or a person), and the data inside. It reaches the buyer as software delivered to the buyer, as a service that the vendor or another party runs, or as both, and is bought directly or through a marketplace.</p>
+<p><strong>Seed data.</strong> The records a generator was fitted to, conditioned on or prompted with to produce a synthetic component, including examples placed in a prompt. The data on which another party trained a generator before the vendor used it is outside the term. Records placed inside an RL environment are called the data inside.</p>
+<p><strong>Sensor records.</strong> Time-series records from sensors on a robot, a person or a fixed rig, with the actions or commands sent and the audio and location recorded with them.</p>
+<p><strong>Synthetic data.</strong> Records whose content a generative model or a generating program produced, including records produced from seed data. Model-generated data has the same meaning. A real record that a model only transcribed, translated, labeled or reformatted is outside the term; the vendor names that model under <a href="/v0.1/r1/">R1</a> as part of the collection method.</p>
+<p><strong>Tier.</strong> The level at which a requirement is met: none, declared, measured, independently attested; or not applicable.</p>
+<p><strong>Time-stamp token.</strong> A third-party authority's statement under RFC 3161 that a given hash existed before the time stated, on trust in that authority.</p>
+<p><strong>Vendor.</strong> The party that supplies the delivery to the buyer and signs the declaration, whatever its kind in <a href="/v0.1/part-1/">Part 1</a>: an owner, a collector, a de-identification or redaction provider delivering a processed corpus, a generator, a builder, a host, or a broker or marketplace selling in its own name. Where the delivery passed through more than one seller, <a href="/v0.1/r4/">R4</a> and <a href="/v0.1/r10/">R10</a> read each of them as a party to the transaction. The cover's scope line names brokers and marketplaces beside vendors because <a href="/v0.1/r4/">R4</a> and <a href="/v0.1/r10/">R10</a> treat a broker or marketplace that stands between the vendor and the buyer as a separate party to the transaction; a broker or marketplace is the vendor only where it is the party that signs.</p>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 Annex C</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/annex-c/">https://datalicensingstandard.org/v0.1/annex-c/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/annex-c.md">/v0.1/annex-c.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/annex-b/">Previous: Annex B · The rules, quoted</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# Keep every file as stored, so the sealed files keep their hashed bytes.
+* -text

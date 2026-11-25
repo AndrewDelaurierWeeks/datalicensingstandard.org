@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R1 · Provenance and chain of custody · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 R1: Provenance and chain of custody. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/r1/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="R1 · Provenance and chain of custody · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 R1: Provenance and chain of custody. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/r1/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main">
+<p class="kicker">TDLS-AI v0.1 R1</p>
+<div class="sealed" data-section="r1" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="r1-provenance-and-chain-of-custody">R1 · Provenance and chain of custody</h1>
+<p><strong>Requirement.</strong> The vendor states where each component of the delivery came from, how it was collected, who held it between collection and delivery, and under what authority. The delivery is identified by a hash manifest: a cryptographic hash of every file delivered and of the manifest itself, with the hash algorithm named.</p>
+<p><strong>Synthetic and model-generated data.</strong> For each synthetic component, the vendor states the generator (its name, its version or build, its provider, and whether it is another party's model, the vendor's own model or a program that is no model), the generation method in outline, the seed data with its own provenance under this requirement, and the component's share of the delivery in a named unit (records, tokens, files, bytes or hours). Where the buyer supplied the seed data, the vendor says so, and the provenance of that data is the buyer's to state.</p>
+<p><strong>Sensor records.</strong> The vendor completes the sensor-record block in <a href="/v0.1/annex-a/">Annex A</a>: the embodiment, each sensor, calibration, time synchronization, action representation, control rate, collection method, episodes and tasks, success labels, environments, data quality, format, and a hash manifest over every episode file. Each value is declared in the unit the block fixes. This document sets no tolerance: the vendor declares the measured value, or marks the field "not-measured", and the buyer sets the threshold, as <a href="/v0.1/part-5/">Part 5</a> leaves every threshold to the buyer.</p>
+<p><strong>RL environments.</strong> The vendor states the provenance of each part of the environment: who wrote the tasks and who wrote the graders or verifiers, by kind (the vendor's staff, a contracted workforce, a model, another party), and where any data inside came from. Names of individuals are not required. The hash manifest covers the build: every file delivered, or the image digest of a container, with the task set and the grader files covered by it. For an environment run for the buyer, the manifest identifies the build the buyer's agent runs against.</p>
+<p><strong>Evidence.</strong> The hash manifest (SHA-256 or stronger); a provenance statement per source; for any component collected from a third party, the agreement or terms under which it was collected; a third-party time-stamp token (RFC 3161) over the manifest hash, which evidences, on trust in the authority that issued it, that the manifest existed in that form before the time stated. For synthetic data, the generator statement. For sensor records, the completed block. For an RL environment, the build digest, the task count, the task list or its SHA-256, and the grader version. The list itself is delivered where the tasks are delivered to the buyer; a held-out or hosted task set is named by its count and its hash.</p>
+<p><strong>Rule basis.</strong> FRE 902(14) (in summary; quoted in B.1): data copied from a device, medium or file is self-authenticating if authenticated by a process of digital identification, when a qualified person provides the certification Rule 902(11) or (12) describes and the notice requirement is met. The manifest is the process, and the certification the qualified person's certification, that the rule names; whether they satisfy it is for counsel and the court. For synthetic data, no rule is quoted for the generator, the seed data or the share. California Civil Code section 3111 (quoted in part in B.10) is the occasion: it has the developer of a generative artificial intelligence system or service post documentation that includes, at paragraph (a)(12), whether the system or service "used or continuously uses synthetic data generation in its development". Whether a buyer owes that documentation, and whether a delivery is synthetic data generation as the section uses the phrase, are questions for counsel; the vendor's answer is a fact counsel can use. For a statement made source by source, paragraph 58(c) of Opinion 28/2024 of the European Data Protection Board (quoted in part in B.11) is the model: its words concern measures stated for each source of training datasets, and this document borrows the per-source form.</p>
+<p><strong>Tiers.</strong> D: the statement and the manifest. M: the manifest verified by the buyer against the delivery, and the time-stamp token verified. A: the manifest, token and provenance statement attested by an independent party. For an environment run for the buyer, M: the time-stamp token verified; the environment reports its build digest at the start of each run, and the buyer records that the digest reported equals the digest declared. The digest reported is the environment's own report.</p>
+<p><strong>Tiers for the sensor-record block.</strong> D: every required field declared, each measured field declared or marked "not-measured" (label agreement is left out where it was not measured), and each conditional field declared or marked "not-present" or "not-done". M: the measured fields (synchronization offset, dropped frames, gaps, episodes discarded, and label agreement where it was measured) backed by the vendor's measurement on a stated sample of episodes, or recomputed by the buyer from the timestamps delivered; the calibration files, where cameras were used, delivered and checked on a sample. A: the measured fields and the consent and de-identification records attested by an independent party on a sample it drew.</p>
+<div class="guidance">
+<p><span class="gt">Guidance for R1</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
+<dl>
+<dt>Purpose</dt>
+<dd>
+Provenance says where each part of the delivery came from and who held it. The hash manifest fixes what was delivered, so that every later question about the data is asked of the same files.
+</dd>
+<dt>What the buyer checks</dt>
+<dd>
+<ol type="1">
+<li><strong>Manifest matches.</strong> Recompute, with the algorithm the manifest names, the hash of every file listed and of the manifest; every value matches.</li>
+<li><strong>Token verifies.</strong> The time-stamp token verifies against the authority's certificate, and the hash it carries equals the manifest hash.</li>
+<li><strong>Sources named.</strong> Each component names its source, collection method, custodians and authority.</li>
+<li><strong>Third-party terms present.</strong> For each component collected from a third party, the agreement or terms are attached or cited by title and date.</li>
+</ol>
+<p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
+</dd>
+<dt>Good practice</dt>
+<dd>
+<ul>
+<li>Make the manifest from the files as delivered, at the moment of delivery, and time-stamp it the same day.</li>
+<li>State custody as a chain: each holder, the dates held, and how the data moved between them.</li>
+<li>For a synthetic component, name the generator by version or build, so that a later reader can identify it.</li>
+<li>For an RL environment run for the buyer, have the environment report its build digest at the start of every run.</li>
+</ul>
+</dd>
+<dt>Examples, illustrative</dt>
+<dd>
+<ul>
+<li><strong>M</strong> · <strong>A manifest and its token.</strong> A manifest of 4,812 files with SHA-256 values and an RFC 3161 token dated the day of delivery; the buyer recomputed every hash and verified the token.</li>
+<li><strong>D</strong> · <strong>A table and a manifest.</strong> A provenance table per component and a manifest; the buyer has not yet recomputed the hashes.</li>
+<li><strong>assertion</strong> · <strong>A claim with no table.</strong> “All data ethically sourced from public sources.” No component table and no manifest; an assertion is recorded.</li>
+</ul>
+</dd>
+<dt>Where a check fails</dt>
+<dd>
+<ul>
+<li>A hash that differs from the delivered file shows the file differs from the one the manifest lists; check 01 finds it.</li>
+<li>A token over a hash other than the manifest's covers some other file; check 02 finds it.</li>
+<li>A source given as a category, such as “web data”, with no collection method or authority; check 03 finds it.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 R1</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/r1/">https://datalicensingstandard.org/v0.1/r1/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/r1.md">/v0.1/r1.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/part-3/">Previous: Part 3 · Requirements</a><a class="next" href="/v0.1/r2/">Next: R2 · Rights and consent basis</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

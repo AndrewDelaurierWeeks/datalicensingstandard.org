@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annex A · The vendor declaration, machine-readable · TDLS-AI v0.1</title>
+<meta name="description" content="TDLS-AI v0.1 Annex A: The vendor declaration, machine-readable. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<link rel="canonical" href="https://datalicensingstandard.org/v0.1/annex-a/">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="alternate" type="text/markdown" href="/TDLS-AI-v0.1.md" title="The sealed source text">
+<meta property="og:title" content="Annex A · The vendor declaration, machine-readable · TDLS-AI v0.1">
+<meta property="og:description" content="TDLS-AI v0.1 Annex A: The vendor declaration, machine-readable. The Data Licensing Standard for AI, version 0.1, sealed 2026-11-24.">
+<meta property="og:url" content="https://datalicensingstandard.org/v0.1/annex-a/">
+<meta property="og:type" content="website">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the text</a>
+<div class="band" aria-hidden="true"><i></i></div>
+<header class="site">
+<a class="brand" href="/"><span class="mk" aria-hidden="true"></span><span><b>The Data Licensing Standard for AI</b><small>TDLS-AI v0.1</small></span></a>
+<nav class="top" aria-label="Site"><a href="/">Home</a><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/TDLS-AI-v0.1.pdf">PDF</a></nav>
+</header>
+<main id="main" class="wide">
+<p class="kicker">TDLS-AI v0.1 Annex A</p>
+<div class="sealed" data-section="annex-a" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
+<h1 id="annex-a-the-vendor-declaration-machine-readable">Annex A · The vendor declaration, machine-readable</h1>
+<p>The declaration is a JSON document validated against <code>tdls-ai-vendor-declaration.schema.json</code> (JSON Schema 2020-12), schema version 0.3.0. It carries the answers to <a href="/v0.1/part-4/">Part 4</a> in fixed fields where a field exists, so that a procurement system can request it, a vendor can attach it to an offer, and a reviewer can validate it with one command. An answer with no field is given in the questionnaire response. The schema is free, permissively licensed and versioned by its <code>$id</code>; a published version is not changed, and a breaking change is a new version with a new <code>$id</code>, so a declaration that validated once validates against that version again; depending on it is a choice. Schema 0.3.0 is such a new version, published with this edition; a declaration written for schema 0.2.0 still validates against schema 0.2.0, which is archived, unchanged, at the address in <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The field names are the vocabulary of <a href="/v0.1/part-3/">Part 3</a>: <code>attacker_assumed</code>, <code>measured_on</code>, <code>residual</code>, <code>tier</code>, <code>health_data</code>, <code>financial_data</code>. The <code>financial_data</code> block carries <a href="/v0.1/r11/">R11</a>: the classes present, and per class the sensitive-authentication-data statement, the 3.5.1 approach, the compliance evidence hash, the 6802 basis and agreement hash, or the 1681b circumstance and certification hash; <code>classes</code> empty requires <code>search_performed</code>. The attacker is stated on a fixed scale, this document's convention, so that two vendors' claims can be compared: <code>T0-public-only</code> (an attacker with public information only), <code>T1-public-plus-one-release</code> (public information plus one prior release from the same source), <code>T2-insider-without-keys</code> (access to the vendor's systems but not to any secret material used in de-identification), <code>T3-insider-with-other-releases</code> (an insider holding other releases), <code>T4-model-access-black-box</code> (query access to a model trained on the data), <code>T5-model-access-grey-box</code> (access to the model's weights or internals), or <code>none-stated</code>.</p>
+<p><strong>New in schema 0.3.0.</strong> <code>synthetic_data</code> (<a href="/v0.1/r1/">R1</a>, <a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r3/">R3</a>, <a href="/v0.1/r8/">R8</a>) carries the share that is synthetic and its unit, each generator (kind, name, version, provider, terms reference), the seed data reference, and the answers on reproduction of seed records and on benchmark items. <code>human_data</code> (<a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r10/">R10</a>) carries the agreement template reference, the counts of contributors and of signed agreements, and the intermediaries. <code>sensor_records</code> (<a href="/v0.1/r1/">R1</a> to <a href="/v0.1/r3/">R3</a>) carries the block below. <code>rl_environment</code> (<a href="/v0.1/r1/">R1</a>, <a href="/v0.1/r2/">R2</a>, <a href="/v0.1/r3/">R3</a>, <a href="/v0.1/r5/">R5</a>, <a href="/v0.1/r8/">R8</a>, <a href="/v0.1/r12/">R12</a>) carries the provenance of the parts, the license of the code, whether personal data is inside, the build digest, the task count and the optional hash of the task list, the grader version, the form of delivery, the distribution and exclusivity answers and, where the environment is run for the buyer or the buyer's traces leave the buyer's systems, their handling. <code>delivery_form</code> takes one of two values; an environment that reaches the buyer in both forms is marked <code>hosted</code>, and the questionnaire response says which part is delivered. Each of these blocks is stated once in a declaration. A purchase with more than one RL environment, embodiment, hardware configuration or recording format is more than one delivery, and each delivery carries its own declaration. Where synthetic components differ in generator, method or seed data, <code>generation_method</code> and <code>seed_data_reference</code> name each component by its <code>component_id</code>. Four optional fields are added to the blocks schema 0.2.0 had: <code>expires_at</code> on the declaration (the date a new declaration is due under <a href="/v0.1/r7/">R7</a>), <code>receipt_id</code> and <code>log_bound_to_manifest</code> in <code>deletion_propagation</code> (<a href="/v0.1/r9/">R9</a>), the second recording the last answer to <a href="/v0.1/part-4/#q11">question 11</a>, and <code>certificate_id</code> in <code>attestation</code> (<a href="/v0.1/r4/">R4</a>). Each identifier is a free string, so the identifier of any issuer fits; <code>certificate_id</code> is the attester's own reference for its attestation and implies no certification by an accreditation or licensing body. The time-stamp token hash in <code>delivery</code> is required where <code>evidence_package</code> lists a token and refused where it lists none.</p>
+<p><strong>The sensor-record block.</strong> Required (R) for every delivery with sensor records; conditional (C) where the stream or practice exists. A conditional field marked <code>not-present</code> means the stream does not exist in the delivery. Where the stream exists and the practice was not carried out (a camera never calibrated, people recorded and nothing removed, a home entered with no permission recorded), the field is marked <code>not-done</code>. A measured field the vendor did not measure is marked <code>not-measured</code> (the maximum offset, the gap count, the count of episodes discarded, and dropped frames, a text field); label agreement is left out where it was not measured. The units are fixed so that declarations compare: rates in hertz, offsets in milliseconds, total duration in hours, gap lengths in seconds, image size as a pixel count, agreement in percent, dates in ISO 8601 (written YYYY-MM-DD). The action representation states its own units; where they are other than meters, radians and newtons, it names them. The last column names the buyer's team that uses the field.</p>
+<div class="tbl"><table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>R or C</th>
+<th>Unit or form</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-label="Field">Embodiment: robot make and model, end effector, degrees of freedom; or the capture device for human capture</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text; integer</td>
+<td data-label="Used by">robot learning</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Each sensor: type, make and model, mounting, resolution, sampling rate</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text; pixels for cameras; Hz</td>
+<td data-label="Used by">perception, world models</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Camera calibration: intrinsics and extrinsics, date calibrated, file reference</td>
+<td data-label="R or C">C (cameras)</td>
+<td data-label="Unit or form">matrices; ISO 8601</td>
+<td data-label="Used by">perception, world models</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Time synchronization: method and clock source; maximum offset between streams, measured</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text; ms or <code>not-measured</code></td>
+<td data-label="Used by">perception, robot learning</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Action representation: joint or end-effector space, frame of reference, absolute, delta or velocity, units</td>
+<td data-label="R or C">C (actions recorded)</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">robot learning</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Control rate</td>
+<td data-label="R or C">C (actions recorded)</td>
+<td data-label="Unit or form">Hz</td>
+<td data-label="Used by">robot learning</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Collection method: teleoperation and its device, scripted motion, an autonomous policy (which), or human demonstration</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">robot learning, evaluation</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Episodes, total hours, tasks with their language instructions</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">integer; hours; text</td>
+<td data-label="Used by">robot learning</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Success labels: method, who assigned them, and agreement between labelers where two labeled</td>
+<td data-label="R or C">C (labels present)</td>
+<td data-label="Unit or form">text; percent</td>
+<td data-label="Used by">robot learning, evaluation</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Environments by kind (home, workplace, warehouse, laboratory, outdoor) and count</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text; integer</td>
+<td data-label="Used by">robot learning, evaluation</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Data quality: dropped frames per stream, gaps longer than a stated length, episodes failed, filtered or discarded and the rule used</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">count; rate; seconds</td>
+<td data-label="Used by">all</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Format and its version</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">engineering</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Hash manifest over every episode file</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">SHA-256</td>
+<td data-label="Used by">counsel, engineering</td>
+</tr>
+<tr class="even">
+<td data-label="Field">Consent basis: operators, camera wearers, others recorded; withdrawal procedure</td>
+<td data-label="R or C">R</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">counsel</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Private spaces: occupant or owner permission</td>
+<td data-label="R or C">C (homes, workplaces)</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">counsel</td>
+</tr>
+<tr class="even">
+<td data-label="Field">De-identification: what was removed (faces, number plates, screens and documents in view, voices, location traces), method, sample of frames, residual</td>
+<td data-label="R or C">C (people, places or location recorded)</td>
+<td data-label="Unit or form">text; count; percent</td>
+<td data-label="Used by">counsel, privacy</td>
+</tr>
+<tr class="odd">
+<td data-label="Field">Physiological signals and their classification as health information</td>
+<td data-label="R or C">C (wearables)</td>
+<td data-label="Unit or form">text</td>
+<td data-label="Used by">counsel</td>
+</tr>
+</tbody>
+</table></div>
+<p>Validate with: <code>python3 validate.py tdls-ai-vendor-declaration.schema.json example-declaration.json</code>. A declaration that validates has the right fields; validation scores nothing.</p>
+<p><strong>Crosswalk from outside specifications.</strong> A buyer or vendor that already keeps a record in one of the forms below can see where each of its fields lands in this annex. The mapping runs one way, from the outside field into Annex A: completing the outside form does not complete a declaration. Each outside field is classed as carried (its value can be written into the Annex A field as it stands), stricter (the Annex A field asks for more on the part it covers) or not carried (Annex A has no field for it). A class may cover part of an outside field. The classes are the author's reading on the date opened. No publisher named below reviewed or endorsed this mapping, and the classes compare fields only: a declaration completes no outside form, and nothing in the mapping says that a declaration meets the specification, the template or the statute the outside form belongs to. Only field names, section headings and paragraph numbers are given, and this document claims no right in them; no other text of a specification is reproduced in this annex.</p>
+<p>The specifications, each as opened on 2026-11-24:</p>
+<ol type="1">
+<li>OASIS Open, Data Provenance Metadata Version 1.0, Committee Specification Draft 01, 07 May 2026, opened in the committee's repository at the tag that carries that date: 24 elements in Source, Provenance and Use. The element names below are those of the property tables in its section 5; its JSON encoding in section 7 names some of them differently, and the converter reads the JSON names. A release candidate for a second draft, tagged in that repository on 4 November 2026 under the date 11 November 2026, was present when the repository was opened; it is not mapped. The mapping and the validator's conversion follow the first draft and no later one.</li>
+<li>MLCommons Association, Croissant Format Specification, Version 1.1, published 2026-01-29 (copyright MLCommons Association and contributors, licensed under CC BY-ND 4.0; its property names are listed below to identify them, and no other part of it is reproduced), opened at docs.mlcommons.org.</li>
+<li>European Commission, Template for the Public Summary of Training Content for general-purpose AI models, C(2025) 5235 final, 24 July 2025 (Article 53(1)(d) of Regulation (EU) 2024/1689), opened at the Commission's library page; the section headings were read from a copy of the Commission's document.</li>
+<li>California Civil Code section 3111 (Assembly Bill 2013), paragraphs (a)(1) to (a)(12), opened at california.public.law, a republication.</li>
+<li>National Institute of Standards and Technology, NIST AI 300-1, initial public draft (the file NIST.AI.300-1.ipd in NIST's publications library, as listed on 2026-11-24): named only; this edition does not map it.</li>
+</ol>
+<p><strong>OASIS Data Provenance Metadata 1.0, CSD01 (section 5: Source 5.2, Provenance 5.3, Use 5.4)</strong></p>
+<div class="tbl"><table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outside field</th>
+<th>Annex A field</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-label="Outside field">Source: <code>title</code></td>
+<td data-label="Annex A field"><code>components[].description</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Source: <code>id</code></td>
+<td data-label="Annex A field"><code>components[].component_id</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Source: <code>location</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Source: <code>issuer</code></td>
+<td data-label="Annex A field"><code>components[].source</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Source: <code>description</code></td>
+<td data-label="Annex A field"><code>components[].description</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Provenance: <code>source</code></td>
+<td data-label="Annex A field"><code>components[].source</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Provenance: <code>origin</code></td>
+<td data-label="Annex A field"><code>components[].custodians</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Provenance: <code>origin-geography</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Provenance: <code>date</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Provenance: <code>previous-date</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Provenance: <code>generation-period</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Provenance: <code>generation-method</code></td>
+<td data-label="Annex A field"><code>components[].collection_method</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Provenance: <code>format</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Provenance: <code>sub-provenance</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Use: <code>classification</code></td>
+<td data-label="Annex A field"><code>health_data.present</code>; <code>financial_data.classes</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Use: <code>consent</code></td>
+<td data-label="Annex A field"><code>components[].rights_basis.basis_detail</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Use: <code>data-risk-reducing</code></td>
+<td data-label="Annex A field"><code>de_identification.method</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Use: <code>processing</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Use: <code>storage</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Use: <code>license</code></td>
+<td data-label="Annex A field"><code>components[].rights_basis.terms_traveling</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Use: <code>intended-purpose</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Use: <code>copyright</code></td>
+<td data-label="Annex A field"><code>components[].rights_basis.basis_detail</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">Use: <code>patent</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">Use: <code>trademark</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>MLCommons Croissant 1.1 (properties, by name)</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr class="header">
+<th>Outside field</th>
+<th>Annex A field</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-label="Outside field"><code>name</code></td>
+<td data-label="Annex A field"><code>components[].component_id</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>description</code></td>
+<td data-label="Annex A field"><code>components[].description</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>license</code></td>
+<td data-label="Annex A field"><code>components[].rights_basis.terms_traveling</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>url</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>creator</code></td>
+<td data-label="Annex A field"><code>components[].source</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>datePublished</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>dct:conformsTo</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>keywords</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>publisher</code></td>
+<td data-label="Annex A field"><code>accountable_person.organization</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>version</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>dateCreated</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>dateModified</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>sameAs</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>sdLicense</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>inLanguage</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>distribution</code></td>
+<td data-label="Annex A field"><code>delivery.manifest_hash</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>isLiveDataset</code></td>
+<td data-label="Annex A field"><code>term.kind</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>citeAs</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>sdVersion</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>sha256</code></td>
+<td data-label="Annex A field"><code>delivery.manifest_hash</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>recordSet</code></td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>prov:wasDerivedFrom</code></td>
+<td data-label="Annex A field"><code>components[].source</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>prov:wasGeneratedBy</code></td>
+<td data-label="Annex A field"><code>components[].collection_method</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field"><code>prov:wasAttributedTo</code></td>
+<td data-label="Annex A field"><code>components[].custodians</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field"><code>usageInfo</code></td>
+<td data-label="Annex A field"><code>components[].rights_basis.terms_traveling</code></td>
+<td data-label="Class">carried</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>European Commission template, C(2025) 5235 final (by section)</strong></p>
+<div class="tbl"><table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outside field</th>
+<th>Annex A field</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-label="Outside field">1.1 Provider identification</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">1.2 Model identification</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">1.3 Modalities, overall training data size and other characteristics</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">2.1 Publicly available datasets</td>
+<td data-label="Annex A field"><code>components[].source</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">2.2.1 Datasets commercially licensed by rightsholders or their representatives</td>
+<td data-label="Annex A field"><code>components[].rights_basis</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">2.2.2 Private datasets obtained from other third parties</td>
+<td data-label="Annex A field"><code>components[].collection_authority</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">2.3 Data crawled and scraped from online sources</td>
+<td data-label="Annex A field"><code>components[].collection_method</code>; <code>components[].collection_authority</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">2.4 User data</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">2.5 Synthetic data</td>
+<td data-label="Annex A field"><code>synthetic_data.generators</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">2.6 Other sources of data</td>
+<td data-label="Annex A field"><code>components[]</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">3.1 Respect of reservation of rights from text and data mining exception or limitation</td>
+<td data-label="Annex A field"><code>components[].rights_basis.exclusion_mechanism</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">3.2 Removal of illegal content</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">3.3 Other information (optional)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>California Civil Code section 3111(a) (by paragraph)</strong></p>
+<div class="tbl"><table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outside field</th>
+<th>Annex A field</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-label="Outside field">(a)(1)</td>
+<td data-label="Annex A field"><code>components[].source</code>; <code>components[].custodians</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(2)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">(a)(3)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(4)</td>
+<td data-label="Annex A field"><code>components[].description</code></td>
+<td data-label="Class">carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">(a)(5)</td>
+<td data-label="Annex A field"><code>components[].rights_basis.basis</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(6)</td>
+<td data-label="Annex A field"><code>components[].rights_basis.basis</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">(a)(7)</td>
+<td data-label="Annex A field"><code>de_identification</code>; <code>health_data</code>; <code>financial_data</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(8)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">(a)(9)</td>
+<td data-label="Annex A field"><code>de_identification.method</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(10)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="odd">
+<td data-label="Outside field">(a)(11)</td>
+<td data-label="Annex A field">none</td>
+<td data-label="Class">not carried</td>
+</tr>
+<tr class="even">
+<td data-label="Outside field">(a)(12)</td>
+<td data-label="Annex A field"><code>synthetic_data.present</code></td>
+<td data-label="Class">stricter</td>
+</tr>
+</tbody>
+</table></div>
+<p>Row (a)(12) maps a statement about the developer's system to a statement about one delivery. The vendor's answer is an input to the developer's statement and does not make it.</p>
+<p><strong>Fields of Annex A that none of the four carries.</strong> Among them: <code>schema_version</code>, <code>declaration_id</code>, <code>declared_at</code> and <code>expires_at</code>; the time-stamp token hash in <code>delivery</code>; the measurement fields of <code>de_identification</code> (<code>attacker_assumed</code>, <code>measured_on</code>, <code>residual</code>, <code>tier</code>, <code>measurement_record_hash</code>); the whole of <code>attestation</code>, with the attester, the fee form and <code>certificate_id</code>; <code>evidence_package</code>; <code>evaluation_use</code>; <code>deletion_propagation</code>, with <code>receipt_id</code>; <code>relationship_disclosure</code>; <code>signature</code>; and the blocks <code>human_data</code>, <code>sensor_records</code> and <code>rl_environment</code>. The blocks <code>health_data</code>, <code>financial_data</code>, <code>term</code> and <code>synthetic_data</code> are reached by one outside field or two, as the tables show, and carry more than those fields ask.</p>
+<p><strong>Conversion.</strong> The same mapping is published as <code>crosswalk-0.3.0.json</code> beside the schema, and the validator converts an OASIS record into a partial declaration with <code>python3 validate.py convert record.json</code>. The conversion moves text only: it prints each field it wrote, with its class, writes the Use elements <code>consent</code> and <code>copyright</code> into <code>rights_basis.basis_detail</code>, and leaves the rest, among them the Use element <code>classification</code> (health and financial data) and the Provenance element <code>sub-provenance</code>, for the vendor to complete. A declaration produced by conversion is partial and unsigned and meets no tier. A requirement is at D once a named person at the vendor has completed its fields and signed the declaration (<a href="/v0.1/part-3/">Part 3</a>'s definition of D), and at M or A only on the evidence those tiers require.</p>
+<p>The schema, the example, the validator and the crosswalk file are published beside this document.</p>
+</div>
+<dl class="record">
+<dt>Cite as</dt><dd>TDLS-AI v0.1 Annex A</dd>
+<dt>Address</dt><dd><a href="https://datalicensingstandard.org/v0.1/annex-a/">https://datalicensingstandard.org/v0.1/annex-a/</a></dd>
+<dt>Links</dt><dd>The links on requirement, Part, Annex and question numbers are added by this site; the words of the sealed text are unchanged.</dd>
+<dt>This section as sealed</dt><dd><a href="/v0.1/annex-a.md">/v0.1/annex-a.md</a>, its bytes in the sealed source <a href="/TDLS-AI-v0.1.md">TDLS-AI-v0.1.md</a>, SHA-256 <span class="hash">e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1</span></dd>
+</dl>
+<nav class="pn" aria-label="Sections"><a class="prev" href="/v0.1/part-7/">Previous: Part 7 · Versioning, seal and citation</a><a class="next" href="/v0.1/annex-b/">Next: Annex B · The rules, quoted</a></nav>
+</main>
+<footer class="site"><div class="in">
+<p>Written and published by the author in a personal capacity. No employer or client of the author took part in it, reviewed it, or is bound by it, and no employer of the author has any role in the practice described in Part 6. Reading it forms no engagement and no professional relationship. It is a procurement standard; it contains no legal advice and is no audit, certification or assurance of any result.</p>
+<p><strong>Conflict disclosure.</strong> The author expects to perform attestation work of the kind Requirement 4 describes through a practice of his own, described in Part 6, and states its rules there; he is also building other businesses in this market, whose work Part 6, rule 3 bars the practice from attesting. Requirement 4 is met by any independent party, including existing audit and assurance firms; no attester receives preference under this document, and the author's own practice is subject to Part 5 like any other. Those other businesses may supply evidence of kinds this document names, among them logs and receipts of the form R9's M line names. Evidence is scored on the tier line it meets, whoever supplied it, and no source of evidence receives preference under this document.</p>
+<p>Text: Creative Commons Attribution 4.0 International. Schema, example, validator and crosswalk: MIT License. Full terms: <a href="/v0.1/part-7/">Part 7</a>.</p>
+<p>The sealed files are the authority for this text: <a href="/verify/">verify them</a>. Venue: <a href="https://github.com/AndrewDelaurierWeeks/data-licensing-standard">github.com/AndrewDelaurierWeeks/data-licensing-standard</a>, commit <span class="hash">b1fc951</span>.</p>
+</div></footer>
+</body>
+</html>

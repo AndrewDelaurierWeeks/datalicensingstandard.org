@@ -1,0 +1,1868 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datalicensingstandard.org/schema/0.3.0/tdls-ai-vendor-declaration.schema.json",
+  "title": "TDLS-AI Vendor Declaration (The Data Licensing Standard for AI, v0.1)",
+  "description": "The vendor's signed declaration accompanying a delivery of training data or of an RL environment, carrying the answers to Part 4 of The Data Licensing Standard for AI (TDLS-AI) v0.1 in fixed fields. Schema version 0.3.0. Published under the MIT License (see LICENSE). A published version is not changed; a breaking change is a new version with a new $id.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "declaration_id",
+    "delivery",
+    "accountable_person",
+    "declared_at",
+    "components",
+    "de_identification",
+    "attestation",
+    "evidence_package",
+    "health_data",
+    "financial_data",
+    "term",
+    "evaluation_use",
+    "deletion_propagation",
+    "relationship_disclosure",
+    "synthetic_data",
+    "human_data",
+    "sensor_records",
+    "rl_environment",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.3.0"
+    },
+    "declaration_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "The vendor's identifier for this declaration, unique per delivery."
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_hash", "hash_algorithm"],
+      "properties": {
+        "manifest_hash": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{64}|[0-9a-f]{96}|[0-9a-f]{128})$",
+          "description": "Hash of the hash manifest that lists every delivered file (R1)."
+        },
+        "hash_algorithm": {
+          "enum": ["sha-256", "sha-384", "sha-512", "sha3-256", "blake3"]
+        },
+        "timestamp_token_hash": {
+          "$ref": "#/$defs/hex256",
+          "description": "Hash of the RFC 3161 time-stamp token issued over manifest_hash (R1)."
+        },
+        "timestamp_authority": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "The time-stamp authority that issued the token."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "hash_algorithm": {
+                "enum": ["sha-256", "sha3-256", "blake3"]
+              }
+            },
+            "required": ["hash_algorithm"]
+          },
+          "then": {
+            "properties": {
+              "manifest_hash": {
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "hash_algorithm": {
+                "enum": ["sha-384"]
+              }
+            },
+            "required": ["hash_algorithm"]
+          },
+          "then": {
+            "properties": {
+              "manifest_hash": {
+                "pattern": "^[0-9a-f]{96}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "hash_algorithm": {
+                "enum": ["sha-512"]
+              }
+            },
+            "required": ["hash_algorithm"]
+          },
+          "then": {
+            "properties": {
+              "manifest_hash": {
+                "pattern": "^[0-9a-f]{128}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "accountable_person": {
+      "$ref": "#/$defs/person",
+      "description": "The named person accountable for the answers (Part 4, question 14)."
+    },
+    "declared_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional. The date by which the vendor issues a new declaration for a feed, a refresh or a renewing license (R7). It sets no end to the vendor's statement about the delivery this declaration accompanies."
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "component_id",
+          "source",
+          "collection_method",
+          "custodians",
+          "collection_authority",
+          "rights_basis"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Where the component came from (R1)."
+          },
+          "collection_method": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "custodians": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "description": "Every party that held the component between collection and delivery, in order."
+          },
+          "collection_authority": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "The authority or terms under which the component was collected."
+          },
+          "rights_basis": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["basis", "terms_traveling", "exclusion_mechanism"],
+            "properties": {
+              "basis": {
+                "enum": ["ownership", "license", "consent", "public-domain", "statutory", "unknown"]
+              },
+              "basis_detail": {
+                "type": "string",
+                "maxLength": 2000
+              },
+              "terms_traveling": {
+                "type": "string",
+                "maxLength": 2000,
+                "description": "Field-of-use limits, attribution, sublicensing, term (R2)."
+              },
+              "exclusion_mechanism": {
+                "type": "string",
+                "maxLength": 2000,
+                "description": "How an individual or rights holder can exclude their material, and its service level (R2)."
+              },
+              "exclusion_requests_last_12_months": {
+                "$ref": "#/$defs/count_pair"
+              }
+            }
+          },
+          "contains_health_information": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "de_identification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimed", "tier"],
+      "properties": {
+        "claimed": {
+          "type": "boolean",
+          "description": "Whether any part of the delivery is described as de-identified, anonymized, redacted or scrubbed (R3)."
+        },
+        "tier": {
+          "$ref": "#/$defs/tier",
+          "description": "The R3 tier. \"not-applicable\" only where nothing is described as de-identified and no paragraph of R3 on synthetic data, sensor records or RL environments applies."
+        },
+        "attacker_assumed": {
+          "$ref": "#/$defs/attacker"
+        },
+        "method": {
+          "type": "string",
+          "maxLength": 4000,
+          "description": "The de-identification method; 'not measured' is admissible at the declared tier."
+        },
+        "measured_on": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sample_size", "population_size", "drawn_by", "drawn_when", "measured_at", "measured_by"],
+          "properties": {
+            "sample_size": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "population_size": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "drawn_by": {
+              "enum": ["vendor", "buyer", "independent-party", "procedure-unpredictable-to-vendor", "unknown"]
+            },
+            "drawn_when": {
+              "enum": ["before-buyer-questions", "after-buyer-questions", "unknown"]
+            },
+            "measured_at": {
+              "type": "string",
+              "format": "date"
+            },
+            "measured_by": {
+              "$ref": "#/$defs/person"
+            }
+          }
+        },
+        "residual": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "What the method does not cover or did not clear, stated plainly; 'unknown' is admissible; 'none' is not (R3). The schema refuses a small set of spellings of an empty residual (none, nil, zero, 0, n/a); it is a spelling test and no measurement, and a buyer reads the field."
+        },
+        "measurement_record_hash": {
+          "$ref": "#/$defs/hex256"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "claimed": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": ["attacker_assumed", "method", "residual"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tier": {
+                "enum": ["measured", "independently-attested"]
+              }
+            }
+          },
+          "then": {
+            "required": ["measured_on", "measurement_record_hash"]
+          }
+        },
+        {
+          "properties": {
+            "residual": {
+              "not": {
+                "pattern": "^\\s*([Nn][Oo][Nn][Ee]|[Nn][Ii][Ll]|[Zz][Ee][Rr][Oo]|0|[Nn]/[Aa])\\s*\\.?\\s*$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["offered"],
+      "properties": {
+        "offered": {
+          "type": "boolean",
+          "description": "Whether any attestation, audit or verification accompanies the delivery (R4)."
+        },
+        "attester": {
+          "type": "string",
+          "maxLength": 512,
+          "description": "The attester's name. The schema cannot test independence; R4 is scored by the buyer."
+        },
+        "attester_relationships": {
+          "type": "string",
+          "maxLength": 4000,
+          "description": "The attester's relationships with every party to the transaction."
+        },
+        "fee_fixed_before_result": {
+          "type": "boolean"
+        },
+        "fee_depends_on_finding_sale_or_price": {
+          "type": "boolean"
+        },
+        "prior_engagements": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "attestation_hash": {
+          "$ref": "#/$defs/hex256"
+        },
+        "certificate_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional. The attester's own reference for its attestation (R4). A free string: the identifier of any issuer fits. It implies no certification by an accreditation or licensing body."
+        }
+      },
+      "if": {
+        "properties": {
+          "offered": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "attester",
+          "attester_relationships",
+          "fee_fixed_before_result",
+          "fee_depends_on_finding_sale_or_price",
+          "prior_engagements"
+        ]
+      }
+    },
+    "evidence_package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash_manifest",
+        "timestamp_token",
+        "declaration",
+        "measurement_records",
+        "certification_and_notice_material"
+      ],
+      "properties": {
+        "hash_manifest": {
+          "type": "boolean"
+        },
+        "timestamp_token": {
+          "type": "boolean"
+        },
+        "declaration": {
+          "type": "boolean"
+        },
+        "measurement_records": {
+          "type": "boolean"
+        },
+        "certification_and_notice_material": {
+          "type": "boolean",
+          "description": "The certification by a qualified person in the form FRE 902(11) or (12) describes (R5). The name is kept from schema 0.2.0; no notice material is asked."
+        }
+      }
+    },
+    "health_data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present"],
+      "properties": {
+        "present": {
+          "type": "boolean"
+        },
+        "method": {
+          "enum": ["expert-determination", "safe-harbor", "none"]
+        },
+        "documentation_hash": {
+          "$ref": "#/$defs/hex256"
+        },
+        "determination_person": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "role", "organization", "qualifications"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "role": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "organization": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "qualifications": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "present": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": ["method", "documentation_hash"],
+            "properties": {
+              "method": {
+                "enum": ["expert-determination", "safe-harbor"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "expert-determination"
+              }
+            },
+            "required": ["method"]
+          },
+          "then": {
+            "required": ["determination_person"]
+          }
+        }
+      ]
+    },
+    "financial_data": {
+      "description": "R11. Which of the three financial-data classes the delivery contains or derives from, and the evidence per class. 'none' requires the search that supports it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classes"],
+      "properties": {
+        "classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["account-data", "financial-institution-npi", "consumer-report"]
+          }
+        },
+        "search_performed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "How the absence of each class was established (pattern search for PAN with a Luhn check, field-name search for track data and verification codes, source review)."
+        },
+        "account_data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sad_present", "pan_present", "pci_evidence_hash"],
+          "properties": {
+            "sad_present": {
+              "type": "boolean",
+              "description": "Sensitive authentication data present in any form, including encrypted or hashed. PCI DSS 3.3.1 forbids its storage after authorization."
+            },
+            "pan_present": {
+              "type": "boolean"
+            },
+            "pan_unreadable_approach": {
+              "enum": ["one-way-hash", "truncation", "index-token", "strong-cryptography"],
+              "description": "PCI DSS 3.5.1 approach."
+            },
+            "correlatable_forms_present": {
+              "type": "boolean",
+              "description": "Whether hashed and truncated forms, or different truncation formats, of the same PAN are present without the controls 3.5.1 names."
+            },
+            "pci_evidence_type": {
+              "enum": ["attestation-of-compliance", "report-on-compliance"]
+            },
+            "pci_evidence_hash": {
+              "$ref": "#/$defs/hex256"
+            },
+            "environment_owner": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "The entity whose environment the data left (the vendor or its processor)."
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "pan_present": {
+                    "const": true
+                  }
+                }
+              },
+              "then": {
+                "required": ["pan_unreadable_approach", "correlatable_forms_present", "pci_evidence_type"]
+              }
+            }
+          ]
+        },
+        "financial_institution_npi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "agreement_hash"],
+          "properties": {
+            "basis": {
+              "enum": ["6802-notice-and-opt-out", "6802-b2-service-provider", "6802-e-exception"]
+            },
+            "exception_cited": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "The 6802(e) paragraph relied on, where basis is 6802-e-exception."
+            },
+            "institution": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "agreement_hash": {
+              "$ref": "#/$defs/hex256"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "basis": {
+                    "const": "6802-e-exception"
+                  }
+                },
+                "required": ["basis"]
+              },
+              "then": {
+                "required": ["exception_cited"]
+              }
+            }
+          ]
+        },
+        "consumer_report": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["circumstance", "certification_hash", "use_statement"],
+          "properties": {
+            "circumstance": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "The 15 U.S.C. 1681b(a) paragraph under which the report was obtained."
+            },
+            "certification_hash": {
+              "$ref": "#/$defs/hex256"
+            },
+            "use_statement": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "How use in the delivery is within the stated circumstance."
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classes": {
+                "contains": {
+                  "const": "account-data"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["account_data"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classes": {
+                "contains": {
+                  "const": "financial-institution-npi"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["financial_institution_npi"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classes": {
+                "contains": {
+                  "const": "consumer-report"
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["consumer_report"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classes": {
+                "maxItems": 0
+              }
+            }
+          },
+          "then": {
+            "required": ["search_performed"]
+          }
+        }
+      ]
+    },
+    "term": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["one-time", "feed", "refresh", "renewing-license"]
+        },
+        "re_measurement_interval_days": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The interval in days at which de-identification and rights are re-measured or, for an RL environment that is updated continuously, at which a declaration is issued (R7)."
+        },
+        "declaration_per_delivery": {
+          "type": "boolean"
+        },
+        "change_log_hash": {
+          "$ref": "#/$defs/hex256"
+        }
+      },
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": ["feed", "refresh", "renewing-license"]
+          }
+        }
+      },
+      "then": {
+        "required": ["re_measurement_interval_days", "declaration_per_delivery"]
+      }
+    },
+    "evaluation_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intended_for_evaluation"],
+      "properties": {
+        "intended_for_evaluation": {
+          "type": "boolean"
+        },
+        "distribution_history": {
+          "type": "string",
+          "maxLength": 4000,
+          "description": "Whether any component has been published, sold or delivered elsewhere, and in what form (R8)."
+        },
+        "overlap_check": {
+          "type": "string",
+          "maxLength": 4000,
+          "description": "Overlap checks against public benchmarks and their method; 'not checked' is admissible."
+        },
+        "separation_procedure": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "if": {
+        "properties": {
+          "intended_for_evaluation": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": ["distribution_history", "overlap_check", "separation_procedure"]
+      }
+    },
+    "deletion_propagation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["procedure", "intake_mechanism_exists"],
+      "properties": {
+        "procedure": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "How a deletion or exclusion request received after delivery reaches the buyer, within what time, in what form (R9)."
+        },
+        "propagation_time_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "intake_mechanism_exists": {
+          "type": "boolean"
+        },
+        "requests_propagated_last_12_months": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional. The identifier of a suppression log or receipt for this delivery (R9). A free string: the identifier of any issuer fits."
+        },
+        "log_bound_to_manifest": {
+          "type": "boolean",
+          "description": "Whether the propagation log is bound to this delivery's manifest hash (question 11)."
+        }
+      }
+    },
+    "relationship_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "statement", "signed_by"],
+      "properties": {
+        "complete": {
+          "type": "boolean",
+          "description": "The vendor affirms the disclosure covers every ownership, control, fee, revenue-share, commission and prior-engagement relationship among the parties (R10)."
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "signed_by": {
+          "$ref": "#/$defs/person"
+        }
+      }
+    },
+    "synthetic_data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present"],
+      "properties": {
+        "present": {
+          "type": "boolean",
+          "description": "Whether any component is synthetic or model-generated."
+        },
+        "share_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "The share of the delivery that is synthetic, in percent of the unit named (R1)."
+        },
+        "share_unit": {
+          "enum": ["records", "tokens", "files", "bytes", "hours"],
+          "description": "The unit the share is counted in (R1)."
+        },
+        "component_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Optional. The component_id of each synthetic component."
+        },
+        "generators": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "model", "version", "provider", "terms_reference"],
+            "properties": {
+              "kind": {
+                "enum": ["outside-model", "own-model", "program"],
+                "description": "A model another party provides, the vendor's own model, or a generating program that is no model."
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The generator's name."
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Its version or build."
+              },
+              "provider": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Its provider; the vendor itself for its own generator."
+              },
+              "terms_reference": {
+                "type": "string",
+                "minLength": 1,
+                "description": "For another party's generator: the agreement or license under which it was used on the dates of generation, and any clause limiting the use of outputs to train models. For the vendor's own generator or a program: \"own generator; no outside terms\", with the license of any model it was built on (R2)."
+              }
+            },
+            "description": "One generator."
+          }
+        },
+        "generation_method": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The generation method in outline (R1)."
+        },
+        "seed_data_reference": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The seed data: the component_id of a component in this declaration, or a description with its own provenance (R1) and the rights in it (R2)."
+        },
+        "seed_held_personal_data": {
+          "enum": ["yes", "no", "unknown"],
+          "description": "Whether the seed data held personal data (R3)."
+        },
+        "reproduction_of_seed_records": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The match rule, the sample, the count of generated records that match a seed record, and what the test did not cover; or \"not measured\" (R3).",
+          "not": {
+            "pattern": "^\\s*([Nn][Oo][Nn][Ee]|[Nn][Ii][Ll]|[Zz][Ee][Rr][Oo]|0|[Nn]/[Aa])\\s*\\.?\\s*$"
+          }
+        },
+        "generated_from_benchmark_items": {
+          "enum": ["yes", "no", "unknown"],
+          "description": "Whether any benchmark item was used as seed data or placed in a prompt (R8)."
+        },
+        "benchmarks_used": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The benchmarks named, where the answer is yes (R8)."
+        }
+      },
+      "description": "Synthetic and model-generated data (R1, R2, R3, R8).",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "present": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "share_percent",
+              "share_unit",
+              "generators",
+              "generation_method",
+              "seed_data_reference",
+              "seed_held_personal_data",
+              "generated_from_benchmark_items"
+            ],
+            "properties": {
+              "share_percent": {
+                "exclusiveMinimum": 0
+              }
+            }
+          },
+          "else": {
+            "maxProperties": 1
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "generated_from_benchmark_items": {
+                "const": "yes"
+              }
+            },
+            "required": ["generated_from_benchmark_items"]
+          },
+          "then": {
+            "required": ["benchmarks_used"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "seed_held_personal_data": {
+                "enum": ["yes", "unknown"]
+              }
+            },
+            "required": ["seed_held_personal_data"]
+          },
+          "then": {
+            "required": ["reproduction_of_seed_records"]
+          }
+        }
+      ]
+    },
+    "human_data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["made_to_order"],
+      "properties": {
+        "made_to_order": {
+          "type": "boolean",
+          "description": "Whether any part of the delivery was produced to order by a contracted workforce."
+        },
+        "agreement_template_reference": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where the contributor agreement template is found: assignment or license of the work, consent to use in training, limits (R2)."
+        },
+        "contributors": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The count of contributors in the delivery."
+        },
+        "signed_agreements": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The count of signed agreements."
+        },
+        "contributor_personal_data_consent_basis": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The consent basis where the work carries a contributor's own personal data (a voice, a face, a name), or \"none carried\" (R2)."
+        },
+        "intermediaries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Staffing firms and contributor marketplaces between the vendor and the contributors (R10). Empty when there is none."
+        }
+      },
+      "description": "Human data made to order (R2, R10).",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "made_to_order": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "agreement_template_reference",
+              "contributors",
+              "signed_agreements",
+              "contributor_personal_data_consent_basis",
+              "intermediaries"
+            ]
+          },
+          "else": {
+            "maxProperties": 1
+          }
+        }
+      ]
+    },
+    "sensor_records": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present"],
+      "properties": {
+        "present": {
+          "type": "boolean",
+          "description": "Whether the delivery contains sensor records."
+        },
+        "embodiment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["description"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Robot make and model and end effector; or the capture device for human capture."
+            },
+            "degrees_of_freedom": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Degrees of freedom, for a robot."
+            }
+          },
+          "description": "Embodiment (required)."
+        },
+        "sensors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "make_model", "mounting", "resolution", "sampling_rate_hz"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The sensor's type: color camera, depth camera, lidar, inertial, force and torque, tactile, joint encoder, microphone, location, or another named type."
+              },
+              "make_model": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Make and model."
+              },
+              "mounting": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Where and how it is mounted."
+              },
+              "resolution": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Resolution: a pixel count for cameras; the native resolution in the sensor's own unit otherwise."
+              },
+              "sampling_rate_hz": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Sampling rate in hertz."
+              }
+            },
+            "description": "One sensor."
+          },
+          "description": "Each sensor (required)."
+        },
+        "camera_calibration": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["intrinsics_reference", "extrinsics_reference", "calibrated_at", "file_reference"],
+              "properties": {
+                "intrinsics_reference": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Where the intrinsic matrices are found."
+                },
+                "extrinsics_reference": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Where the extrinsic matrices are found."
+                },
+                "calibrated_at": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date calibrated, written YYYY-MM-DD."
+                },
+                "file_reference": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The calibration file in the package (R5)."
+                }
+              },
+              "description": "Camera calibration (conditional: cameras)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        },
+        "time_synchronization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "clock_source", "max_offset_ms"],
+          "properties": {
+            "method": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The synchronization method."
+            },
+            "clock_source": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The clock source."
+            },
+            "max_offset_ms": {
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "The maximum offset between streams, measured, in milliseconds, or \"not-measured\"."
+                },
+                {
+                  "const": "not-measured",
+                  "description": "The vendor did not measure it."
+                }
+              ]
+            }
+          },
+          "description": "Time synchronization (required)."
+        },
+        "action_representation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["space", "frame_of_reference", "mode", "units"],
+              "properties": {
+                "space": {
+                  "enum": ["joint", "end-effector", "other"],
+                  "description": "Joint or end-effector space."
+                },
+                "frame_of_reference": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The frame of reference."
+                },
+                "mode": {
+                  "enum": ["absolute", "delta", "velocity", "mixed"],
+                  "description": "Absolute values, delta changes or velocities; mixed is explained in units."
+                },
+                "units": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The units of each action variable."
+                }
+              },
+              "description": "Action representation (conditional: actions recorded)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        },
+        "control_rate_hz": {
+          "oneOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "description": "Control rate in hertz (conditional: actions recorded)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        },
+        "collection_method": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Teleoperation and its device, scripted motion, an autonomous policy (which), or human demonstration (required)."
+        },
+        "episodes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The count of episodes (required)."
+        },
+        "total_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total duration in hours (required)."
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "The tasks with their language instructions (required)."
+        },
+        "success_labels": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["method", "assigned_by"],
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "How success was labeled."
+                },
+                "assigned_by": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Who assigned the labels."
+                },
+                "labeler_agreement_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "description": "Agreement between labelers where two labeled, in percent."
+                }
+              },
+              "description": "Success labels (conditional: labels present)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        },
+        "environments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "count"],
+            "properties": {
+              "kind": {
+                "enum": ["home", "workplace", "warehouse", "laboratory", "outdoor", "other"]
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "How many environments of this kind."
+              }
+            },
+            "description": "One kind of environment."
+          },
+          "description": "Environments by kind and count (required)."
+        },
+        "data_quality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dropped_frames", "gap_threshold_seconds", "gaps", "episodes_discarded", "discard_rule"],
+          "properties": {
+            "dropped_frames": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Dropped frames per stream, as counts or rates, or \"not-measured\"."
+            },
+            "gap_threshold_seconds": {
+              "type": "number",
+              "minimum": 0,
+              "description": "The stated length, in seconds, above which a gap is counted."
+            },
+            "gaps": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "The count of gaps longer than the stated length, or \"not-measured\"."
+                },
+                {
+                  "const": "not-measured",
+                  "description": "The vendor did not measure it."
+                }
+              ]
+            },
+            "episodes_discarded": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Episodes failed, filtered or discarded, or \"not-measured\"."
+                },
+                {
+                  "const": "not-measured",
+                  "description": "The vendor did not measure it."
+                }
+              ]
+            },
+            "discard_rule": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The rule used to fail, filter or discard an episode."
+            }
+          },
+          "description": "Data quality (required)."
+        },
+        "format": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The format's name."
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Its version."
+            }
+          },
+          "description": "Format and its version (required)."
+        },
+        "episode_manifest_hash": {
+          "$ref": "#/$defs/hex256",
+          "description": "The SHA-256 of the hash manifest over every episode file (required)."
+        },
+        "consent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "withdrawal_procedure"],
+          "properties": {
+            "basis": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The consent basis of operators, camera wearers and others recorded (R2)."
+            },
+            "withdrawal_procedure": {
+              "type": "string",
+              "minLength": 1,
+              "description": "How a participant withdraws, and within what time the withdrawal reaches the buyer (R2, R9)."
+            }
+          },
+          "description": "Consent basis (required)."
+        },
+        "private_space_permission": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The occupant's or owner's permission for capture in a home, a workplace or another private space, or \"not-present\" where no home, workplace or other private space was entered, or \"not-done\" where one was entered with no permission recorded (conditional: homes, workplaces)."
+        },
+        "de_identification": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["removed", "method", "sample_frames", "residual"],
+              "properties": {
+                "removed": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "enum": [
+                      "faces",
+                      "number-plates",
+                      "screens-and-documents",
+                      "voices",
+                      "location-traces",
+                      "other"
+                    ]
+                  },
+                  "description": "What was removed."
+                },
+                "method": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The method."
+                },
+                "sample_frames": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "The sample of frames it was measured on."
+                },
+                "residual": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "What was left over, as a count or a percent of the sample, or \"not measured\" (R3).",
+                  "not": {
+                    "pattern": "^\\s*([Nn][Oo][Nn][Ee]|[Nn][Ii][Ll]|[Zz][Ee][Rr][Oo]|0|[Nn]/[Aa])\\s*\\.?\\s*$"
+                  }
+                }
+              },
+              "description": "De-identification (conditional: people, places or location recorded)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        },
+        "physiological_signals": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["signals", "health_information"],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The physiological signals recorded."
+                },
+                "health_information": {
+                  "enum": ["yes", "no", "unknown"],
+                  "description": "Whether they are classified as health information (R6)."
+                }
+              },
+              "description": "Physiological signals (conditional: wearables)."
+            },
+            {
+              "const": "not-present",
+              "description": "The stream does not exist in this delivery."
+            },
+            {
+              "const": "not-done",
+              "description": "The stream exists and the practice was not carried out."
+            }
+          ]
+        }
+      },
+      "description": "The sensor-record block (R1 to R3). Units: hertz, milliseconds, hours, seconds, pixels, percent, dates written YYYY-MM-DD; the action representation states its own units. A conditional field is declared or marked \"not-present\" or \"not-done\"; a measured field is declared or marked \"not-measured\".",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "present": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "embodiment",
+              "sensors",
+              "camera_calibration",
+              "time_synchronization",
+              "action_representation",
+              "control_rate_hz",
+              "collection_method",
+              "episodes",
+              "total_hours",
+              "tasks",
+              "success_labels",
+              "environments",
+              "data_quality",
+              "format",
+              "episode_manifest_hash",
+              "consent",
+              "private_space_permission",
+              "de_identification",
+              "physiological_signals"
+            ]
+          },
+          "else": {
+            "maxProperties": 1
+          }
+        }
+      ]
+    },
+    "rl_environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present"],
+      "properties": {
+        "present": {
+          "type": "boolean",
+          "description": "Whether the delivery contains an RL environment."
+        },
+        "tasks_written_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Who wrote the tasks, by kind: the vendor's staff, a contracted workforce, a model, another party (R1)."
+        },
+        "graders_written_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Who wrote the graders or verifiers, by kind (R1)."
+        },
+        "contains_personal_data": {
+          "enum": ["yes", "no", "unknown"],
+          "description": "Whether the environment contains personal data (question 22, R3)."
+        },
+        "data_inside_sources": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where any data inside came from, or \"no data inside\" (R1)."
+        },
+        "code_license": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The license of the environment code and of any third-party software or copied interface inside that carries its own license, and the terms that travel (R2)."
+        },
+        "build_digest": {
+          "type": "string",
+          "pattern": "^([a-z0-9]+:)?[0-9a-f]{64,128}$",
+          "description": "The digest of the build: the manifest hash of the files, or the image digest of a container, in lower-case hexadecimal with an optional algorithm prefix (R1, R5)."
+        },
+        "task_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The count of tasks (R1, R5)."
+        },
+        "task_list_hash": {
+          "$ref": "#/$defs/hex256",
+          "description": "Optional. SHA-256 of the task list, where the list itself is withheld (R1, R5)."
+        },
+        "grader_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The grader version (R5)."
+        },
+        "delivery_form": {
+          "enum": ["delivered", "hosted"],
+          "description": "Delivered to the buyer, or run for the buyer by the vendor or another party (hosted)."
+        },
+        "bought_through_marketplace": {
+          "type": "boolean",
+          "description": "Whether it was bought through a marketplace or hub (R10)."
+        },
+        "traces_leave_buyer_systems": {
+          "type": "boolean",
+          "description": "Whether the buyer's agent runs on, or its traces or outputs are sent to, systems the buyer does not control: the vendor's, a marketplace's or another party's (R12)."
+        },
+        "benchmark_overlap": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Which tasks overlap public benchmarks, and how that was checked, or \"not checked\", or \"not applicable, because the environment is sold for training only\" (R8)."
+        },
+        "held_out_separation": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How held-out tasks are kept apart, or \"not applicable, because the environment is sold for training only\" (R8)."
+        },
+        "sold_to_other_parties": {
+          "enum": ["yes", "no", "unknown"],
+          "description": "Whether any task or grader file in this build, or a version of one changed only in wording, values or format, has been sold, licensed or delivered to any other party as of the date of the declaration (R8)."
+        },
+        "distribution_statement": {
+          "type": "string",
+          "minLength": 1,
+          "description": "In what form any task or grader file reached another party: the same build, a variant, or single tasks (R8)."
+        },
+        "exclusivity_terms": {
+          "enum": ["exclusive", "non-exclusive", "first-buyer-window", "not-stated"],
+          "description": "The exclusivity terms offered to this buyer (R8)."
+        },
+        "first_buyer_window_days": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The length of a first-buyer window, in days (R8)."
+        },
+        "hosted_traces": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "held_by",
+            "retention_days",
+            "used_beyond_engagement",
+            "access_parties",
+            "deletion_procedure"
+          ],
+          "properties": {
+            "held_by": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Each party that holds the buyer's agent traces, other outputs and inputs: the vendor, a marketplace, a host."
+            },
+            "retention_days": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "enum": ["until-engagement-ends", "indefinite", "not-stated"]
+                }
+              ],
+              "description": "For how long: a count of days, or one of the named periods."
+            },
+            "used_beyond_engagement": {
+              "type": "boolean",
+              "description": "Whether they are used for any purpose other than running and scoring the buyer's runs. Repair of tasks and graders, aggregate statistics, training of any model, and sale or transfer count, and are named in uses_beyond_engagement."
+            },
+            "uses_beyond_engagement": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Those uses, where there are any."
+            },
+            "access_parties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": "Who else can access them."
+            },
+            "deletion_procedure": {
+              "type": "string",
+              "minLength": 1,
+              "description": "How they are deleted on request."
+            }
+          },
+          "description": "The handling of the buyer's traces, outputs and inputs by each party that receives them (R12).",
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "used_beyond_engagement": {
+                    "const": true
+                  }
+                },
+                "required": ["used_beyond_engagement"]
+              },
+              "then": {
+                "required": ["uses_beyond_engagement"]
+              }
+            }
+          ]
+        }
+      },
+      "description": "RL environments (R1, R2, R3, R5, R8, R12).",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "present": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "tasks_written_by",
+              "graders_written_by",
+              "contains_personal_data",
+              "data_inside_sources",
+              "code_license",
+              "build_digest",
+              "task_count",
+              "grader_version",
+              "delivery_form",
+              "bought_through_marketplace",
+              "traces_leave_buyer_systems",
+              "benchmark_overlap",
+              "held_out_separation",
+              "sold_to_other_parties",
+              "exclusivity_terms"
+            ]
+          },
+          "else": {
+            "maxProperties": 1
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "properties": {
+                  "delivery_form": {
+                    "const": "hosted"
+                  }
+                },
+                "required": ["delivery_form"]
+              },
+              {
+                "properties": {
+                  "traces_leave_buyer_systems": {
+                    "const": true
+                  }
+                },
+                "required": ["traces_leave_buyer_systems"]
+              }
+            ]
+          },
+          "then": {
+            "required": ["hosted_traces"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "sold_to_other_parties": {
+                "const": "yes"
+              }
+            },
+            "required": ["sold_to_other_parties"]
+          },
+          "then": {
+            "required": ["distribution_statement"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "exclusivity_terms": {
+                "const": "first-buyer-window"
+              }
+            },
+            "required": ["exclusivity_terms"]
+          },
+          "then": {
+            "required": ["first_buyer_window_days"]
+          }
+        }
+      ]
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "artifact_hash", "signed_at"],
+      "description": "The signature of the accountable person over this declaration with the signature object omitted (R5: the declaration is signed by a named person).",
+      "properties": {
+        "kind": {
+          "enum": ["detached-digital-signature", "signed-pdf", "wet-ink-scan", "e-signature-service"]
+        },
+        "artifact_hash": {
+          "$ref": "#/$defs/hex256",
+          "description": "SHA-256 of the signature artifact (the signature file, the signed PDF or the scan)."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hex256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "tier": {
+      "enum": ["declared", "measured", "independently-attested", "none", "not-applicable"]
+    },
+    "attacker": {
+      "enum": [
+        "T0-public-only",
+        "T1-public-plus-one-release",
+        "T2-insider-without-keys",
+        "T3-insider-with-other-releases",
+        "T4-model-access-black-box",
+        "T5-model-access-grey-box",
+        "none-stated"
+      ],
+      "description": "The attacker the de-identification assumes, on this document's fixed scale so claims can be compared across vendors. T2 means access to the vendor's systems but not to any secret material used in de-identification."
+    },
+    "person": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "organization"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "contact": {
+          "type": "string",
+          "maxLength": 256
+        }
+      }
+    },
+    "count_pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["received", "honored"],
+      "properties": {
+        "received": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "honored": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "de_identification": {
+            "properties": {
+              "tier": {
+                "const": "independently-attested"
+              }
+            },
+            "required": ["tier"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "attestation": {
+            "properties": {
+              "offered": {
+                "const": true
+              },
+              "fee_fixed_before_result": {
+                "const": true
+              },
+              "fee_depends_on_finding_sale_or_price": {
+                "const": false
+              }
+            },
+            "required": ["offered"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidence_package": {
+            "properties": {
+              "timestamp_token": {
+                "const": true
+              }
+            },
+            "required": ["timestamp_token"]
+          }
+        },
+        "required": ["evidence_package"]
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "required": ["timestamp_token_hash"]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "delivery": {
+            "not": {
+              "required": ["timestamp_token_hash"]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
