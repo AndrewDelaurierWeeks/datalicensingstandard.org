@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,15 +46,16 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R10</p>
 <div class="sealed" data-section="r10" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r10-disclosure-of-relationships">R10 · Disclosure of relationships</h1>
-<p><strong>Requirement.</strong> The vendor discloses every relationship among the parties to the transaction: ownership or control links between the vendor, any broker or marketplace, any de-identification or redaction provider, and any attester; referral fees, revenue shares or commissions among them; and prior engagements between the attester and any of them. For human data made to order, staffing firms and contributor marketplaces between the vendor and the contributors are disclosed as parties. A marketplace or hub of RL environments is a broker or marketplace under this requirement and under <a href="/v0.1/r4/">R4</a>.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> The vendor discloses every relationship among the parties to the transaction: ownership or control links between the vendor, any broker or marketplace, any de-identification or redaction provider, and any attester; referral fees, revenue shares or commissions among them; and prior engagements between the attester and any of them. For human data made to order, staffing firms and contributor marketplaces between the vendor and the contributors are disclosed as parties. A marketplace or hub of RL environments is a broker or marketplace under this requirement and under <a href="/v0.1/r4/">R4</a>.</p>
 <p><strong>Evidence.</strong> The disclosure statement, signed by a named person.</p>
 <p><strong>Rule basis.</strong> 17 CFR 210.2-01(b) and (c)(5) (<a href="/v0.1/annex-b/">Annex B</a>), and ISO/IEC 17021-1:2015 clauses 5.2.1 and 5.3.2, which require impartiality: a relationship that is not disclosed cannot be evaluated.</p>
 <p><strong>Tiers.</strong> One tier: the disclosure is either complete and signed, or the vendor has not met R10.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R10"><div class="guidance">
 <p><span class="gt">Guidance for R10</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -64,36 +65,37 @@ R10 asks for every tie among the parties to the sale, so that the buyer can weig
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Every party covered.</strong> The statement covers the vendor, each broker or marketplace, each de-identification or redaction provider and each attester.</li>
-<li><strong>Money named.</strong> Referral fees, revenue shares and commissions among them are named.</li>
-<li><strong>Intermediaries named.</strong> For human data made to order, staffing firms and contributor marketplaces are named as parties.</li>
-<li><strong>Signed.</strong> A named person signs the statement.</li>
+<li><span class="tx"><strong>Every party covered.</strong> The statement covers the vendor, each broker or marketplace, each de-identification or redaction provider and each attester.</span></li>
+<li><span class="tx"><strong>Money named.</strong> Referral fees, revenue shares and commissions among them are named.</span></li>
+<li><span class="tx"><strong>Intermediaries named.</strong> For human data made to order, staffing firms and contributor marketplaces are named as parties.</span></li>
+<li><span class="tx"><strong>Signed.</strong> A named person signs the statement.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Write “none” for each kind of relationship that does not exist, so that a blank is never read as none.</li>
-<li>Renew the statement with each declaration.</li>
+<li><span class="tx">Write “none” for each kind of relationship that does not exist, so that a blank is never read as none.</span></li>
+<li><span class="tx">Renew the statement with each declaration.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">met</strong> · <strong>A complete statement.</strong> A signed statement listing the marketplace's 10 percent commission and the attester's prior engagement with the vendor in 2025.</li>
-<li><strong class="t-k">not met</strong> · <strong>A commission left out.</strong> A statement that omits the marketplace's commission.</li>
+<li><span class="tier small" data-score="SCORE 3"><strong class="t-m">met</strong></span><span class="sep"> · </span><span class="txt"><strong>A complete statement.</strong> A signed statement listing the marketplace's 10 percent commission and the attester's prior engagement with the vendor in 2025.</span></li>
+<li><span class="tier small" data-score="SCORE 0"><strong class="t-k">not met</strong></span><span class="sep"> · </span><span class="txt"><strong>A commission left out.</strong> A statement that omits the marketplace's commission.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>A blank where commissions belong; check 02 finds it.</li>
-<li>An unsigned statement; check 04 finds it.</li>
+<li><span class="tx">A blank where commissions belong; check 02 finds it.</span></li>
+<li><span class="tx">An unsigned statement; check 04 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R10</dd>

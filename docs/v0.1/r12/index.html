@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,15 +46,16 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R12</p>
 <div class="sealed" data-section="r12" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r12-hosted-environments">R12 · Hosted environments</h1>
-<p><strong>Requirement.</strong> Where the buyer's agent runs on systems the buyer does not control, or its traces or other outputs are sent to such systems, the vendor names each party that receives them (the vendor, a marketplace, a host) and states for each: who holds them, for how long, each purpose they are used for other than running and scoring the buyer's runs (repair of tasks and graders, aggregate statistics, training of any model, sale or transfer), who else can access them, and how they are deleted on request. The statement also covers what the buyer sends in to run its agent: agent code, prompts, credentials and model access.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> Where the buyer's agent runs on systems the buyer does not control, or its traces or other outputs are sent to such systems, the vendor names each party that receives them (the vendor, a marketplace, a host) and states for each: who holds them, for how long, each purpose they are used for other than running and scoring the buyer's runs (repair of tasks and graders, aggregate statistics, training of any model, sale or transfer), who else can access them, and how they are deleted on request. The statement also covers what the buyer sends in to run its agent: agent code, prompts, credentials and model access.</p>
 <p><strong>Evidence.</strong> The statement; the retention period; the list of parties with access; the deletion procedure; the record of what was kept and deleted.</p>
 <p><strong>Rule basis.</strong> No rule is quoted; this is the buyer's requirement for what its own agent produced. <a href="/v0.1/part-1/">Part 1</a> leaves the buyer's model training practices out of scope, and this requirement asks only how the parties that receive the buyer's traces, outputs and inputs handle them.</p>
 <p><strong>Tiers.</strong> D: the statement. M: before the first run, the retention and deletion settings in force for the buyer's runs, exported from the system of each party that will hold the traces; after the first run, the record of what was kept and deleted for the buyer's own runs. No other customer's records are shown. A: the statement and the record attested by an independent party.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R12"><div class="guidance">
 <p><span class="gt">Guidance for R12</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -64,38 +65,39 @@ When the buyer's agent runs on systems the buyer does not control, its traces, o
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Every holder named.</strong> Each party that receives traces or outputs is named: the vendor, a marketplace, a host.</li>
-<li><strong>Uses listed.</strong> Every use beyond running and scoring the buyer's runs is listed, training of any model included.</li>
-<li><strong>Settings exported.</strong> Before the first run, the retention and deletion settings for the buyer's runs come from each holder's system.</li>
-<li><strong>Deletion recorded.</strong> After the runs, the record shows what was kept and what was deleted, for the buyer's runs only.</li>
+<li><span class="tx"><strong>Every holder named.</strong> Each party that receives traces or outputs is named: the vendor, a marketplace, a host.</span></li>
+<li><span class="tx"><strong>Uses listed.</strong> Every use beyond running and scoring the buyer's runs is listed, training of any model included.</span></li>
+<li><span class="tx"><strong>Settings exported.</strong> Before the first run, the retention and deletion settings for the buyer's runs come from each holder's system.</span></li>
+<li><span class="tx"><strong>Deletion recorded.</strong> After the runs, the record shows what was kept and what was deleted, for the buyer's runs only.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Cover what the buyer sends in: agent code, prompts, credentials and model access.</li>
-<li>State retention in days, for each party.</li>
-<li>Show the buyer its own records only, with no other customer's records.</li>
+<li><span class="tx">Cover what the buyer sends in: agent code, prompts, credentials and model access.</span></li>
+<li><span class="tx">State retention in days, for each party.</span></li>
+<li><span class="tx">Show the buyer its own records only, with no other customer's records.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">M</strong> · <strong>Settings and a record.</strong> Settings exported from the host's console before the first run: traces kept 30 days, no training use; after the runs, a deletion record for 412 runs.</li>
-<li><strong class="t-k">D</strong> · <strong>A statement.</strong> Traces kept 90 days and used for aggregate statistics; no export attached.</li>
-<li><strong class="t-a">assertion</strong> · <strong>A claim with no statement.</strong> “We never keep your data.” No parties, uses or retention stated; an assertion is recorded.</li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>Settings and a record.</strong> Settings exported from the host's console before the first run: traces kept 30 days, no training use; after the runs, a deletion record for 412 runs.</span></li>
+<li><span class="tier" data-score="SCORE 1"><strong class="t-k">D</strong></span><span class="sep"> · </span><span class="txt"><strong>A statement.</strong> Traces kept 90 days and used for aggregate statistics; no export attached.</span></li>
+<li><span class="tier small" data-score="SCORE 0"><strong class="t-a">assertion</strong></span><span class="sep"> · </span><span class="txt"><strong>A claim with no statement.</strong> “We never keep your data.” No parties, uses or retention stated; an assertion is recorded.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>A marketplace that receives traces and is not named; check 01 finds it.</li>
-<li>Settings described in prose with no export; check 03 finds it.</li>
+<li><span class="tx">A marketplace that receives traces and is not named; check 01 finds it.</span></li>
+<li><span class="tx">Settings described in prose with no export; check 03 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R12</dd>

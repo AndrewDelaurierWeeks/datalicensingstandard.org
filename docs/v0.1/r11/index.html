@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,15 +46,16 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R11</p>
 <div class="sealed" data-section="r11" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r11-financial-and-payment-data">R11 · Financial and payment data</h1>
-<p><strong>Requirement.</strong> Where any component contains or is derived from payment card account data, nonpublic personal information held by a financial institution, or consumer report information, the vendor states which of the three classes is present and, per class, delivers the following. For account data: a statement that no sensitive authentication data (full track data, card verification code, PINs or PIN blocks) is present in any form, including encrypted or hashed; the approach from PCI DSS 3.5.1 by which any primary account number present was rendered unreadable (one-way hash of the entire PAN, truncation, index token, or strong cryptography), and a statement that no two forms of the same PAN that could be correlated to reconstruct it are present in the delivery; and the attestation of compliance or report on compliance covering the environment the data left, whether the vendor's own or its processor's. For nonpublic personal information from a financial institution: the notice and opt-out basis under 15 U.S.C. 6802(a) and (b)(1), or the exception relied on under 6802(b)(2) or (e), and the institution's agreement that permits the disclosure and the onward use. For consumer report information: the circumstance in 15 U.S.C. 1681b(a) under which it was obtained, the user's certification, and the vendor's statement of how use in the delivery is within that circumstance. The buyer's counsel judges whether the stated basis covers the delivery; this document fixes the question and the evidence and leaves the answer to counsel. This requirement applies to data inside an RL environment as to any delivery. Where an environment or a synthetic component holds card numbers, account records or consumer report records that a person or a generator made up, the vendor says so, states how they were made (for card numbers, whether they are published test numbers or fall in ranges no issuer uses), and records the search hits they explain. The buyer judges whether a made-up value falls in a class.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> Where any component contains or is derived from payment card account data, nonpublic personal information held by a financial institution, or consumer report information, the vendor states which of the three classes is present and, per class, delivers the following. For account data: a statement that no sensitive authentication data (full track data, card verification code, PINs or PIN blocks) is present in any form, including encrypted or hashed; the approach from PCI DSS 3.5.1 by which any primary account number present was rendered unreadable (one-way hash of the entire PAN, truncation, index token, or strong cryptography), and a statement that no two forms of the same PAN that could be correlated to reconstruct it are present in the delivery; and the attestation of compliance or report on compliance covering the environment the data left, whether the vendor's own or its processor's. For nonpublic personal information from a financial institution: the notice and opt-out basis under 15 U.S.C. 6802(a) and (b)(1), or the exception relied on under 6802(b)(2) or (e), and the institution's agreement that permits the disclosure and the onward use. For consumer report information: the circumstance in 15 U.S.C. 1681b(a) under which it was obtained, the user's certification, and the vendor's statement of how use in the delivery is within that circumstance. The buyer's counsel judges whether the stated basis covers the delivery; this document fixes the question and the evidence and leaves the answer to counsel. This requirement applies to data inside an RL environment as to any delivery. Where an environment or a synthetic component holds card numbers, account records or consumer report records that a person or a generator made up, the vendor says so, states how they were made (for card numbers, whether they are published test numbers or fall in ranges no issuer uses), and records the search hits they explain. The buyer judges whether a made-up value falls in a class.</p>
 <p><strong>Evidence.</strong> The documents named above. A statement that data is "PCI compliant", "tokenized" or "anonymized" that arrives without the documents R11 names for its class is scored as an assertion. A delivery described as free of card data with no search for PAN patterns on a sample is scored as an assertion.</p>
 <p><strong>Rule basis.</strong> PCI DSS v4.0.1 (PCI Security Standards Council, June 2024): Table 2 (account data), the sentence on page 5 that a cardholder data environment exists wherever PAN is stored, processed or transmitted, requirements 3.2.1, 3.3.1, 3.4.1 and 3.5.1, and by number and title requirement 4 (transmission over open, public networks) and 12.8 (third-party service provider relationships); quoted in <a href="/v0.1/annex-b/#b7">Annex B.7</a>. 15 U.S.C. 6802(a) and (b)(1), <a href="/v0.1/annex-b/#b8">Annex B.8</a>. 15 U.S.C. 1681(b) and 1681b(a), <a href="/v0.1/annex-b/#b9">Annex B.9</a>. PCI DSS binds the entities in the payment ecosystem through the card brands and the acquirers; where the vendor is not such an entity, this document applies its definitions and its 3.5.1 approaches as the model, as <a href="/v0.1/r6/">R6</a> applies 164.514.</p>
 <p><strong>Tiers.</strong> D: the classes present named and the documents delivered. M: the absence of sensitive authentication data and the unreadability of PAN verified on a sample by the buyer (pattern search for PAN formats with a Luhn check, for track-data and verification-code field names, and for correlatable forms of the same PAN); the 6802 and 1681b bases checked against the agreements and certifications delivered. A: the verification attested by an independent party under <a href="/v0.1/r4/">R4</a>. For data inside an environment run for the buyer, M: the vendor runs the search on a sample the buyer names and gives the buyer the record, and the 6802 and 1681b bases are checked as the general line states.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R11"><div class="guidance">
 <p><span class="gt">Guidance for R11</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -64,38 +65,39 @@ Payment card account data, nonpublic personal information held by a financial in
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Class named.</strong> Each class present is named, or the search that supports an answer of none is recorded.</li>
-<li><strong>No sensitive authentication data.</strong> A pattern search on a sample finds no full track data, card verification codes, PINs or PIN blocks.</li>
-<li><strong>PAN unreadable.</strong> Any PAN found on the sample is rendered unreadable by the approach the vendor named under 3.5.1, and no two forms of the same PAN can be correlated to reconstruct it.</li>
-<li><strong>Basis documented.</strong> The 6802 basis and agreement, or the 1681b circumstance and certification, are delivered for their class.</li>
+<li><span class="tx"><strong>Class named.</strong> Each class present is named, or the search that supports an answer of none is recorded.</span></li>
+<li><span class="tx"><strong>No sensitive authentication data.</strong> A pattern search on a sample finds no full track data, card verification codes, PINs or PIN blocks.</span></li>
+<li><span class="tx"><strong>PAN unreadable.</strong> Any PAN found on the sample is rendered unreadable by the approach the vendor named under 3.5.1, and no two forms of the same PAN can be correlated to reconstruct it.</span></li>
+<li><span class="tx"><strong>Basis documented.</strong> The 6802 basis and agreement, or the 1681b circumstance and certification, are delivered for their class.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Search for PAN with a Luhn check, and report the sample size and the hits.</li>
-<li>For made-up card numbers, state whether they are published test numbers or fall in ranges no issuer uses.</li>
-<li>Deliver the attestation of compliance or report on compliance for the environment the data left.</li>
+<li><span class="tx">Search for PAN with a Luhn check, and report the sample size and the hits.</span></li>
+<li><span class="tx">For made-up card numbers, state whether they are published test numbers or fall in ranges no issuer uses.</span></li>
+<li><span class="tx">Deliver the attestation of compliance or report on compliance for the environment the data left.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">M</strong> · <strong>A search the buyer ran.</strong> Account data named; a Luhn search by the buyer over one million sampled fields found no valid PAN, no track-data or verification-code field and no correlatable forms of one PAN; the attestation of compliance delivered.</li>
-<li><strong class="t-k">N/A</strong> · <strong>No class present.</strong> None of the three classes is present, and the search that supports the answer is recorded.</li>
-<li><strong class="t-a">assertion</strong> · <strong>A label with no documents.</strong> “PCI compliant and tokenized.” No 3.5.1 approach and no attestation of compliance; an assertion is recorded.</li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>A search the buyer ran.</strong> Account data named; a Luhn search by the buyer over one million sampled fields found no valid PAN, no track-data or verification-code field and no correlatable forms of one PAN; the attestation of compliance delivered.</span></li>
+<li><span class="tier small" data-score=""><strong class="t-k">N/A</strong></span><span class="sep"> · </span><span class="txt"><strong>No class present.</strong> None of the three classes is present, and the search that supports the answer is recorded.</span></li>
+<li><span class="tier small" data-score="SCORE 0"><strong class="t-a">assertion</strong></span><span class="sep"> · </span><span class="txt"><strong>A label with no documents.</strong> “PCI compliant and tokenized.” No 3.5.1 approach and no attestation of compliance; an assertion is recorded.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>Hashed and truncated forms of the same PAN in one delivery that could be correlated to reconstruct it; check 03 finds it.</li>
-<li>An answer of no card data with no search behind it is scored as an assertion; check 01 finds it.</li>
+<li><span class="tx">Hashed and truncated forms of the same PAN in one delivery that could be correlated to reconstruct it; check 03 finds it.</span></li>
+<li><span class="tx">An answer of no card data with no search behind it is scored as an assertion; check 01 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R11</dd>

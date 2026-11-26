@@ -1,4 +1,4 @@
-Copyright 2017 The EB Garamond Project Authors (https://github.com/octaviopardo/EBGaramond12) (copyright line as read from the font files, @fontsource/eb-garamond 5.2.5)
+Copyright 2017 The EB Garamond Project Authors (https://github.com/octaviopardo/EBGaramond12) (copyright line as read from the font files, @fontsource/eb-garamond 5.2.5; the 400 and 600 normal files from 5.2.7)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

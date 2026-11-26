@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,18 +46,19 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R8</p>
 <div class="sealed" data-section="r8" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r8-evaluation-data-and-contamination">R8 · Evaluation data and contamination</h1>
-<p><strong>Requirement.</strong> Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form; whether it overlaps with public benchmarks the vendor checked; and how the vendor prevents the component from entering training sets it supplies.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> Where the delivery is intended for evaluation, benchmark construction or held-out testing, the vendor states whether any component has been published, sold or delivered to any other party, and in what form; whether it overlaps with public benchmarks the vendor checked; and how the vendor prevents the component from entering training sets it supplies.</p>
 <p><strong>Synthetic data.</strong> Whatever the intended use, the vendor states whether any benchmark item was used as seed data or placed in a prompt, and names the benchmark. Whether another party's generator learned benchmark items before the vendor used it is stated as unknown unless the vendor tested for it.</p>
 <p><strong>Sensor records.</strong> Where sensor records are intended for evaluation, the vendor states how held-out episodes, environments and robots are kept apart, and what overlap with public datasets it checked.</p>
 <p><strong>RL environments.</strong> The vendor states which tasks overlap public benchmarks and how held-out tasks are kept apart. The distribution statement also covers an RL environment sold or licensed for training. As of the date of the declaration, the vendor states whether any task or grader file in this build, or a version of one changed only in wording, values or format, has been sold, licensed or delivered to any other party, and in what form (the same build, a variant, or single tasks); the files of this build are identified by hash. The vendor also states the exclusivity terms it offers this buyer from that date: exclusive use (of what, and for how long), a first-buyer window (its length), or none (non-exclusive). The names of other parties and the terms of their contracts are not required.</p>
 <p><strong>Evidence.</strong> The distribution statement; the overlap check and its method; the vendor's separation procedure; for an RL environment sold or licensed for training, the exclusivity terms offered to this buyer.</p>
 <p><strong>Rule basis.</strong> None in law; this is the evaluation lead's requirement, and the document records it because a benchmark with an unstated distribution history measures nothing reliable. For an RL environment sold or licensed for training, the statement records the exclusivity terms the vendor declared.</p>
 <p><strong>Tiers.</strong> D: the statements. M: the overlap check attached. A: the distribution history and overlap check attested. For an RL environment sold or licensed for training, M: the signed offer or contract clause that states the exclusivity terms, attached, including terms of none. The statement of prior distribution is the vendor's own statement at D and at M, and R8 reaches A only when it is attested.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R8"><div class="guidance">
 <p><span class="gt">Guidance for R8</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -67,38 +68,39 @@ An evaluation set measures a model only if the model has not seen it. R8 asks wh
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Distribution history.</strong> The vendor states whether each component was published, sold or delivered elsewhere, and in what form.</li>
-<li><strong>Overlap method named.</strong> The overlap check names the benchmarks checked and the matching method.</li>
-<li><strong>Separation stated.</strong> The vendor states how the component is kept out of the training sets it supplies.</li>
-<li><strong>Exclusivity in writing.</strong> For an RL environment sold for training, the exclusivity terms appear in the signed offer or contract.</li>
+<li><span class="tx"><strong>Distribution history.</strong> The vendor states whether each component was published, sold or delivered elsewhere, and in what form.</span></li>
+<li><span class="tx"><strong>Overlap method named.</strong> The overlap check names the benchmarks checked and the matching method.</span></li>
+<li><span class="tx"><strong>Separation stated.</strong> The vendor states how the component is kept out of the training sets it supplies.</span></li>
+<li><span class="tx"><strong>Exclusivity in writing.</strong> For an RL environment sold for training, the exclusivity terms appear in the signed offer or contract.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Check overlap by a stated method (exact match, n-grams, or a distance with its cutoff) and report the count.</li>
-<li>Keep held-out tasks in a store that the training pipeline cannot read, and say so.</li>
-<li>For synthetic data, name any benchmark used as seed data or placed in a prompt.</li>
+<li><span class="tx">Check overlap by a stated method (exact match, n-grams, or a distance with its cutoff) and report the count.</span></li>
+<li><span class="tx">Keep held-out tasks in a store that the training pipeline cannot read, and say so.</span></li>
+<li><span class="tx">For synthetic data, name any benchmark used as seed data or placed in a prompt.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">M</strong> · <strong>An overlap check attached.</strong> A 13-gram overlap check against nine named public benchmarks: 0 matches in 50,000 items, with the method and script attached.</li>
-<li><strong class="t-m">M</strong> · <strong>Exclusivity signed.</strong> For an environment sold for training, a contract clause granting exclusive use of the task set for 12 months, attached.</li>
-<li><strong class="t-k">D</strong> · <strong>History stated.</strong> Distribution stated as “never sold”; no overlap check attached.</li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>An overlap check attached.</strong> A 13-gram overlap check against nine named public benchmarks: 0 matches in 50,000 items, with the method and script attached.</span></li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>Exclusivity signed.</strong> For an environment sold for training, a contract clause granting exclusive use of the task set for 12 months, attached.</span></li>
+<li><span class="tier" data-score="SCORE 1"><strong class="t-k">D</strong></span><span class="sep"> · </span><span class="txt"><strong>History stated.</strong> Distribution stated as “never sold”; no overlap check attached.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>An overlap check that names no benchmark; check 02 finds it.</li>
-<li>Exclusivity promised only in an email; check 04 finds it.</li>
+<li><span class="tx">An overlap check that names no benchmark; check 02 finds it.</span></li>
+<li><span class="tx">Exclusivity promised only in an email; check 04 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R8</dd>

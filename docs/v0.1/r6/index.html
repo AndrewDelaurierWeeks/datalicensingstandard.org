@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,15 +46,16 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R6</p>
 <div class="sealed" data-section="r6" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r6-health-data">R6 · Health data</h1>
-<p><strong>Requirement.</strong> Where any component contains or is derived from health information, the vendor states which of the two methods in 45 CFR 164.514(b) was applied, and delivers the corresponding documentation: for an expert determination, the documented methods and results and the identity and qualifications of the person who made it; for the safe-harbor method, the list of identifiers removed and the statement that the vendor has no actual knowledge that the remainder could identify an individual. For sensor records, this requirement applies wherever the records contain health information, including physiological signals a wearable records; the vendor states its classification and the buyer's counsel judges it. It applies to data inside an RL environment as to any delivery. Health records that a person or a generator made up, with no real individual behind them, are stated as made up, with the method that made them. This document treats a synthetic component generated from real health information as derived from it, and this requirement applies. Whether a made-up record is health information is for the buyer's counsel; where counsel finds none, R6 is not applicable and the vendor's statement is kept in the Notes column.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> Where any component contains or is derived from health information, the vendor states which of the two methods in 45 CFR 164.514(b) was applied, and delivers the corresponding documentation: for an expert determination, the documented methods and results and the identity and qualifications of the person who made it; for the safe-harbor method, the list of identifiers removed and the statement that the vendor has no actual knowledge that the remainder could identify an individual. For sensor records, this requirement applies wherever the records contain health information, including physiological signals a wearable records; the vendor states its classification and the buyer's counsel judges it. It applies to data inside an RL environment as to any delivery. Health records that a person or a generator made up, with no real individual behind them, are stated as made up, with the method that made them. This document treats a synthetic component generated from real health information as derived from it, and this requirement applies. Whether a made-up record is health information is for the buyer's counsel; where counsel finds none, R6 is not applicable and the vendor's statement is kept in the Notes column.</p>
 <p><strong>Evidence.</strong> The documentation named above. A statement that data is "HIPAA compliant" with neither document is scored as an assertion.</p>
 <p><strong>Rule basis.</strong> 45 CFR 164.514(a), (b)(1) and (b)(2), quoted in <a href="/v0.1/annex-b/">Annex B</a>. The rule binds covered entities and their business associates; where the vendor is neither, this document applies its two methods as the model.</p>
 <p><strong>Tiers.</strong> D: the method named and the documentation delivered. M: for an expert determination, its sample and results reproduced by the buyer; for safe harbor, identifier removal verified on a sample. A: the determination or the removal attested by an independent party. For data inside an environment run for the buyer, M: the vendor runs the check on a sample the buyer names and gives the buyer the record.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R6"><div class="guidance">
 <p><span class="gt">Guidance for R6</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -64,38 +65,39 @@
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Method named.</strong> Expert determination or safe harbor, one of them named.</li>
-<li><strong>Documents fit the method.</strong> For an expert determination, the methods, results and the expert's identity and qualifications; for safe harbor, the identifiers removed and the actual-knowledge statement.</li>
-<li><strong>Scope fits the delivery.</strong> The determination names this data and the recipient it assumed.</li>
-<li><strong>Removal holds on a sample.</strong> For safe harbor, a sample shows none of the listed identifiers.</li>
+<li><span class="tx"><strong>Method named.</strong> Expert determination or safe harbor, one of them named.</span></li>
+<li><span class="tx"><strong>Documents fit the method.</strong> For an expert determination, the methods, results and the expert's identity and qualifications; for safe harbor, the identifiers removed and the actual-knowledge statement.</span></li>
+<li><span class="tx"><strong>Scope fits the delivery.</strong> The determination names this data and the recipient it assumed.</span></li>
+<li><span class="tx"><strong>Removal holds on a sample.</strong> For safe harbor, a sample shows none of the listed identifiers.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Date the determination and name the recipient it assumed, since 164.514(b)(1) ties the determination to that recipient.</li>
-<li>For wearables, state whether each physiological signal is classified as health information, and why.</li>
-<li>Label made-up health records as made up, with the method that made them.</li>
+<li><span class="tx">Date the determination and name the recipient it assumed, since 164.514(b)(1) ties the determination to that recipient.</span></li>
+<li><span class="tx">For wearables, state whether each physiological signal is classified as health information, and why.</span></li>
+<li><span class="tx">Label made-up health records as made up, with the method that made them.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">M</strong> · <strong>A determination reproduced.</strong> An expert determination for this delivery with its methods, results and the expert's qualifications; the buyer reproduced its sample results.</li>
-<li><strong class="t-k">D</strong> · <strong>Safe harbor documented.</strong> Safe harbor named, the identifier list and the actual-knowledge statement delivered; not yet verified.</li>
-<li><strong class="t-a">assertion</strong> · <strong>A label with no documents.</strong> “HIPAA compliant.” Neither document is delivered; an assertion is recorded.</li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>A determination reproduced.</strong> An expert determination for this delivery with its methods, results and the expert's qualifications; the buyer reproduced its sample results.</span></li>
+<li><span class="tier" data-score="SCORE 1"><strong class="t-k">D</strong></span><span class="sep"> · </span><span class="txt"><strong>Safe harbor documented.</strong> Safe harbor named, the identifier list and the actual-knowledge statement delivered; not yet verified.</span></li>
+<li><span class="tier small" data-score="SCORE 0"><strong class="t-a">assertion</strong></span><span class="sep"> · </span><span class="txt"><strong>A label with no documents.</strong> “HIPAA compliant.” Neither document is delivered; an assertion is recorded.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>A determination made for another dataset or another recipient; check 03 finds it.</li>
-<li>An identifier on the rule's list found in the sample under safe harbor; check 04 finds it.</li>
+<li><span class="tx">A determination made for another dataset or another recipient; check 03 finds it.</span></li>
+<li><span class="tx">An identifier on the rule's list found in the sample under safe harbor; check 04 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R6</dd>

@@ -176,6 +176,40 @@ def dress_guidance(fragment):
         return f'<li><strong class="{TIER_CLASS[m.group(1)]}">{m.group(1)}</strong> ·'
     return re.sub(r"<li><strong>([^<]{1,12})</strong> ·", tier, fragment)
 
+SCORE_LABEL = {"M": "SCORE 2", "met": "SCORE 3", "D": "SCORE 1", "A": "SCORE 3", "none": "SCORE 0", "not met": "SCORE 0", "assertion": "SCORE 0", "N/A": ""}
+
+def requirement_layout(fragment, num):
+    """A requirement page as lettered on 2026-11-26 ("Requirement page V4, your combination"): the requirement on the left,
+    the guidance beside it in a column held in view, set as the PDF sets its guidance. Wrappers and classes only; the
+    words and their order are unchanged, and the sealed-block check below still compares them with the section."""
+    m = re.match(r'(\n?<h1 [^>]*>.*?</h1>\n)(.*?)(<div class="guidance">\n.*</div>\n)$', fragment, re.S)
+    if not m: die(f"R{num}: the heading, requirement and guidance are not where the page layout expects them")
+    head, req, gd = m.groups()
+    if re.sub(r"<p>.*?</p>\n", "", req, flags=re.S) != "": die(f"R{num}: the requirement holds something other than paragraphs")
+    if gd.count("<div") != 1: die(f"R{num}: the guidance is not shaped as expected")
+    labels = ["Purpose", "What the buyer checks", "Good practice", "Examples, illustrative", "Where a check fails"]
+    if re.findall(r"<dt>(.*?)</dt>", gd) != labels: die(f"R{num}: the guidance's labels are not the five expected, in order")
+    gd = gd.replace("<dt>Good practice</dt>\n<dd>", '<dt>Good practice</dt>\n<dd class="gp">')
+    def wrap_items(block):
+        if re.search(r"<li>(?:(?!</li>).)*?<(?:ul|ol|p)[ >]", block, re.S): die(f"R{num}: a nested list or a paragraph inside a guidance item")
+        return re.sub(r"<li>(.*?)</li>", r'<li><span class="tx">\1</span></li>', block, flags=re.S)
+    for pat in (r'(<dt>What the buyer checks</dt>\n<dd>\n<ol[^>]*>.*?</ol>)', r'(<dd class="gp">.*?</dd>)', r'(<dd class="fails">.*?</dd>)'):
+        gd, n_wrap = re.subn(pat, lambda x: wrap_items(x.group(1)), gd, count=1, flags=re.S)
+        if n_wrap != 1: die(f"R{num}: a guidance list is not where the page layout expects it")
+    def example(x):
+        word = x.group(2)
+        if word not in SCORE_LABEL: die(f"R{num}: unknown tier word in an example: {word}")
+        small = " small" if len(word) > 2 else ""
+        return (f'<li><span class="tier{small}" data-score="{SCORE_LABEL[word]}">{x.group(1)}</span>'
+                f'<span class="sep"> · </span><span class="txt">{x.group(3)}</span></li>')
+    ex = re.search(r'<dd class="examples">.*?</dd>', gd, re.S)
+    if not ex: die(f"R{num}: no examples in the guidance")
+    exb, n_ex = re.subn(r'<li>(<strong class="t-[a-z]">([^<]{1,12})</strong>) · (.*?)</li>', example, ex.group(0), flags=re.S)
+    if n_ex == 0 or n_ex != ex.group(0).count("<li>"): die(f"R{num}: an example without its tier word")
+    gd = gd[:ex.start()] + exb + gd[ex.end():]
+    return (f'{head}<div class="split"><div class="rqcol">{req}</div>\n'
+            f'<aside class="gd" aria-label="Guidance for R{num}">{gd}</aside></div>\n')
+
 def dress_tables(fragment, sid):
     """Give each cell its column label (for the phone layout), wrap each table, and give Part 4's rows q<n> ids."""
     def one(m):
@@ -306,10 +340,10 @@ FONTS_PRELOAD = ("inter-latin-400-normal", "ibm-plex-mono-latin-500-normal", "eb
 def jsonld(graph):
     return '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c") + "</script>"
 
-def page(*, title, desc, path, body, current=None, wide=False, home=False, fm, ld=None, md=None, robots="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"):
+def page(*, title, desc, path, body, current=None, wide=False, req=False, home=False, fm, ld=None, md=None, robots="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"):
     nav = "".join(f'<a href="{u}"{" class=\"pdf\"" if t == "PDF" else ""}{" aria-current=\"page\"" if u == current else ""}>{t}</a>' for u, t in NAV)
     canon = f"{SITE}{path}"
-    cls = ' class="home"' if home else (' class="wide"' if wide else "")
+    cls = ' class="home"' if home else (' class="wide"' if wide else (' class="rpage"' if req else ""))
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -451,6 +485,7 @@ def main():
         frag = dress_guidance(frag)
         if sid == "part-0": frag = anchor_disclosure(frag)
         if sid == "part-5": frag = instrument(frag)
+        if kind == "R": frag = requirement_layout(frag, num)
         if sid == "part-4": part4_frag = frag
         prev = secs[k - 1] if k else None
         nxt = secs[k + 1] if k + 1 < len(secs) else None
@@ -485,7 +520,7 @@ def main():
                           "hasDefinedTerm": [{"@type": "DefinedTerm", "name": n, "description": d, "inDefinedTermSet": {"@id": addr + "#glossary"}} for n, d in terms]})
         (out / V / sid / "index.html").write_text(page(title=title, desc=desc, path=f"/{V}/{sid}/", body=body,
                                                         current=f"/{V}/{sid}/" if sid in ("part-4", "part-5") else None,
-                                                        wide=sid in ("part-4", "part-5", "annex-a"), fm=fm, ld=graph, md=f"/{V}/{sid}.md"))
+                                                        wide=sid in ("part-4", "part-5", "annex-a"), req=kind == "R", fm=fm, ld=graph, md=f"/{V}/{sid}.md"))
         toc.append((sid, kind, num, t))
 
     # 4. the word check: every page's sealed block against its section

@@ -16,7 +16,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.8c55ca8f49.css" integrity="sha384-F7MLViMBC8Yr0wO34bllzcxM9cGR64/qjQ0Cq1xNW5o+ZvMNhZZMswexrnaMKtpO">
+<link rel="stylesheet" href="/assets/site.418a6a9824.css" integrity="sha384-Bv6sfNsGkkqG8m5gWdmJm3AazKNT07CAFwIl2dzUIZOX2WNRGVThEV4oCy2uuMuU">
 <link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/assets/icons/favicon-48.png" sizes="48x48" type="image/png">
@@ -46,15 +46,16 @@
 <a class="brand" href="/" aria-label="TDLS-AI v0.1, The Data Licensing Standard for AI, home"><span class="mk" aria-hidden="true"></span><span>TDLS-AI v0.1</span></a>
 <nav class="top" aria-label="Site"><a href="/v0.1/">Contents</a><a href="/v0.1/part-4/">Questions</a><a href="/v0.1/part-5/">Scoring</a><a href="/schema/">Schema</a><a href="/verify/">Verify</a><a href="/colophon/">Colophon</a><a href="/TDLS-AI-v0.1.pdf" class="pdf">PDF</a></nav>
 </header>
-<main id="main">
+<main id="main" class="rpage">
 <p class="kicker">TDLS-AI <span class="v">v0.1</span> R9</p>
 <div class="sealed" data-section="r9" data-source-sha256="e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1">
 <h1 id="r9-deletion-and-downstream-propagation">R9 · Deletion and downstream propagation</h1>
-<p><strong>Requirement.</strong> The vendor states how a deletion or exclusion request received after delivery reaches the buyer, within what time, and in what form, and whether it has a mechanism to receive such requests from the individuals or rights holders concerned. For data inside an RL environment, the vendor states how a request changes the build and how the buyer learns of the new build. For sensor records, the vendor states how a participant's withdrawal reaches the buyer and within what time.</p>
+<div class="split"><div class="rqcol"><p><strong>Requirement.</strong> The vendor states how a deletion or exclusion request received after delivery reaches the buyer, within what time, and in what form, and whether it has a mechanism to receive such requests from the individuals or rights holders concerned. For data inside an RL environment, the vendor states how a request changes the build and how the buyer learns of the new build. For sensor records, the vendor states how a participant's withdrawal reaches the buyer and within what time.</p>
 <p><strong>Evidence.</strong> The propagation procedure; the request-intake mechanism; an aggregate log of requests propagated, with the identifier of the delivery the log is bound to (the manifest hash of <a href="/v0.1/r1/">R1</a>).</p>
 <p><strong>Rule basis.</strong> The buyer's own obligations under the deletion regimes that apply to it, which vary by jurisdiction and are for counsel to map; the requirement here is that the vendor's procedure exists and is stated, so that counsel can map it. Article 19 of Regulation (EU) 2016/679 (quoted in B.11) is the model for the vendor's side of the procedure: it has a controller communicate an erasure to each recipient to whom the data were disclosed, with the exception the Article states.</p>
 <p><strong>Tiers.</strong> D: the procedure stated. M: the log produced from the vendor's system; a suppression log or receipt for each delivery, time-stamped under RFC 3161 and verifiable without the vendor or any party acting for it, is such a log. A: the procedure and log attested. The time stamp on a log evidences that the log's content existed in that form before the time stated, on trust in the authority that issued it; whether the content is accurate is a separate question, which the time stamp leaves open. Whoever issued a log or receipt, it is the vendor's evidence at M, and it reaches A only when an attester that meets <a href="/v0.1/r4/">R4</a> attests it.</p>
-<div class="guidance">
+</div>
+<aside class="gd" aria-label="Guidance for R9"><div class="guidance">
 <p><span class="gt">Guidance for R9</span> <span class="gl">Adds to no requirement · changes no tier or score</span></p>
 <dl>
 <dt>Purpose</dt>
@@ -64,43 +65,44 @@ A deletion request that reaches the vendor after delivery protects the person wh
 <dt>What the buyer checks</dt>
 <dd>
 <ol type="1">
-<li><strong>Bound to this delivery.</strong> Every log: the identifier in the log equals the manifest hash in <a href="/v0.1/r1/">R1</a>, and <a href="/v0.1/part-4/#q11">question 11</a> answers yes.</li>
-<li><strong>Time-stamped.</strong> Second form: the token verifies against the authority's certificate with a published tool, and the buyer records the token's time beside the period the log covers.</li>
-<li><strong>Checkable without the vendor.</strong> Second form: the check needs no account, portal or key of the vendor or of any party acting for it.</li>
-<li><strong>Counts reconcile.</strong> Every log: where it covers the 12 months <a href="/v0.1/part-4/#q11">question 11</a> asks about, its count of requests sent on equals the answer to <a href="/v0.1/part-4/#q11">question 11</a>; where it also counts requests received, refused and pending, those received equal the sum of the other three.</li>
+<li><span class="tx"><strong>Bound to this delivery.</strong> Every log: the identifier in the log equals the manifest hash in <a href="/v0.1/r1/">R1</a>, and <a href="/v0.1/part-4/#q11">question 11</a> answers yes.</span></li>
+<li><span class="tx"><strong>Time-stamped.</strong> Second form: the token verifies against the authority's certificate with a published tool, and the buyer records the token's time beside the period the log covers.</span></li>
+<li><span class="tx"><strong>Checkable without the vendor.</strong> Second form: the check needs no account, portal or key of the vendor or of any party acting for it.</span></li>
+<li><span class="tx"><strong>Counts reconcile.</strong> Every log: where it covers the 12 months <a href="/v0.1/part-4/#q11">question 11</a> asks about, its count of requests sent on equals the answer to <a href="/v0.1/part-4/#q11">question 11</a>; where it also counts requests received, refused and pending, those received equal the sum of the other three.</span></li>
 </ol>
 <p>A buyer may record each result in the Notes column of <a href="/v0.1/part-5/">Part 5</a>, as its counsel directs, and may set any check as a threshold of its own.</p>
 </dd>
 <dt>Good practice</dt>
-<dd>
+<dd class="gp">
 <ul>
-<li>Bind each entry of the log to the manifest hash of the delivery it concerns (<a href="/v0.1/r1/">R1</a>), so that one log cannot be presented for several deliveries.</li>
-<li>Time-stamp the log for each delivery under RFC 3161 and keep the token with it. On trust in the authority that issued it, the token shows that the log existed in that form before the time stated; the counts are the vendor's statement of what reached the buyer.</li>
-<li>Make the log checkable with published tools and the authority's certificate, with no account, portal or key held by the vendor or by any party acting for it.</li>
-<li>Reconcile the counts for the period the declaration covers: requests received, requests sent on to the buyer, requests refused, each with its reason, and requests pending.</li>
+<li><span class="tx">Bind each entry of the log to the manifest hash of the delivery it concerns (<a href="/v0.1/r1/">R1</a>), so that one log cannot be presented for several deliveries.</span></li>
+<li><span class="tx">Time-stamp the log for each delivery under RFC 3161 and keep the token with it. On trust in the authority that issued it, the token shows that the log existed in that form before the time stated; the counts are the vendor's statement of what reached the buyer.</span></li>
+<li><span class="tx">Make the log checkable with published tools and the authority's certificate, with no account, portal or key held by the vendor or by any party acting for it.</span></li>
+<li><span class="tx">Reconcile the counts for the period the declaration covers: requests received, requests sent on to the buyer, requests refused, each with its reason, and requests pending.</span></li>
 </ul>
 </dd>
 <dt>Examples, illustrative</dt>
 <dd class="examples">
 <ul>
-<li><strong class="t-m">M</strong> · <strong>A log from the vendor's system.</strong> An export from the vendor's ticketing system for the quarter: 31 deletion requests, each with the date received, the date the buyer was told and the manifest hash of the delivery affected. It carries no time stamp, so checks 02 and 03 do not apply to it.</li>
-<li><strong class="t-m">M</strong> · <strong>A receipt for each delivery.</strong> A receipt issued for the delivery, bound to its manifest hash and time-stamped under RFC 3161, giving the count of requests sent on for that delivery and the period covered; the buyer checks the token and the binding with published tools.</li>
-<li><strong class="t-k">D</strong> · <strong>A procedure with no log.</strong> Requests reach the buyer by email within ten business days. No log is attached.</li>
-<li><strong class="t-a">assertion</strong> · <strong>A claim with no procedure.</strong> “Deletion requests are honored across every downstream copy.” No procedure and no log; an assertion is recorded.</li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>A log from the vendor's system.</strong> An export from the vendor's ticketing system for the quarter: 31 deletion requests, each with the date received, the date the buyer was told and the manifest hash of the delivery affected. It carries no time stamp, so checks 02 and 03 do not apply to it.</span></li>
+<li><span class="tier" data-score="SCORE 2"><strong class="t-m">M</strong></span><span class="sep"> · </span><span class="txt"><strong>A receipt for each delivery.</strong> A receipt issued for the delivery, bound to its manifest hash and time-stamped under RFC 3161, giving the count of requests sent on for that delivery and the period covered; the buyer checks the token and the binding with published tools.</span></li>
+<li><span class="tier" data-score="SCORE 1"><strong class="t-k">D</strong></span><span class="sep"> · </span><span class="txt"><strong>A procedure with no log.</strong> Requests reach the buyer by email within ten business days. No log is attached.</span></li>
+<li><span class="tier small" data-score="SCORE 0"><strong class="t-a">assertion</strong></span><span class="sep"> · </span><span class="txt"><strong>A claim with no procedure.</strong> “Deletion requests are honored across every downstream copy.” No procedure and no log; an assertion is recorded.</span></li>
 </ul>
 </dd>
 <dt>Where a check fails</dt>
 <dd class="fails">
 <ul>
-<li>A log with no delivery identifier can be presented for any delivery; check 01 finds it.</li>
-<li>A token that does not verify against the authority's certificate; check 02 finds it.</li>
-<li>A token dated long after the period shows only that the log existed by the date of the token; check 02 records the gap.</li>
-<li>A log called verifiable without the vendor, whose check runs on a page of the vendor or of a party acting for it, depends on the party being checked; check 03 finds it.</li>
-<li>A log whose count of requests sent on differs from the answer to <a href="/v0.1/part-4/#q11">question 11</a> for the same 12 months, or whose requests received differ from the sum of those sent on, refused and pending; check 04 finds it.</li>
+<li><span class="tx">A log with no delivery identifier can be presented for any delivery; check 01 finds it.</span></li>
+<li><span class="tx">A token that does not verify against the authority's certificate; check 02 finds it.</span></li>
+<li><span class="tx">A token dated long after the period shows only that the log existed by the date of the token; check 02 records the gap.</span></li>
+<li><span class="tx">A log called verifiable without the vendor, whose check runs on a page of the vendor or of a party acting for it, depends on the party being checked; check 03 finds it.</span></li>
+<li><span class="tx">A log whose count of requests sent on differs from the answer to <a href="/v0.1/part-4/#q11">question 11</a> for the same 12 months, or whose requests received differ from the sum of those sent on, refused and pending; check 04 finds it.</span></li>
 </ul>
 </dd>
 </dl>
 </div>
+</aside></div>
 </div>
 <dl class="record">
 <dt>Cite as</dt><dd>TDLS-AI v0.1 R9</dd>
