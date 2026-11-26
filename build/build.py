@@ -9,7 +9,7 @@ Each Part, Requirement and Annex gets a page at https://datalicensingstandard.or
 is that section's text, and a Markdown copy at /v0.1/<id>.md that is the section's bytes. The build checks that
 the Markdown copies put together give back the sealed source byte for byte, and that the words of every page's
 sealed block equal the words of its section. Needs Python 3.9 or later and pandoc 3."""
-import argparse, hashlib, html, json, re, shutil, subprocess, sys
+import argparse, datetime, hashlib, html, json, re, shutil, subprocess, sys
 from pathlib import Path
 
 SITE = "https://datalicensingstandard.org"
@@ -848,6 +848,18 @@ Sitemap: {SITE}/sitemap.xml
     (out / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY)
     (out / "CNAME").write_text("datalicensingstandard.org\n")
     (out / ".nojekyll").write_text("")
+    # security.txt (RFC 9116), lettered 2026-11-26 ("security.txt: Publish"): where to report a security problem with the site.
+    # RFC 9116 asks for an Expires date less than a year ahead; renew this date and rebuild before it passes.
+    # The build stops once the date has passed or sits more than 365 days ahead, so a stale file is never published.
+    expires = "2027-11-25T00:00:00Z"
+    left = datetime.datetime.fromisoformat(expires.replace("Z", "+00:00")) - datetime.datetime.now(datetime.timezone.utc)
+    if not datetime.timedelta(0) < left <= datetime.timedelta(days=365): die(f"security.txt Expires {expires} has passed or is more than a year ahead; renew it")
+    (out / ".well-known").mkdir()
+    (out / ".well-known" / "security.txt").write_text(
+        "Contact: https://github.com/AndrewDelaurierWeeks/datalicensingstandard.org/security/advisories/new\n"
+        f"Expires: {expires}\n"
+        "Preferred-Languages: en\n"
+        f"Canonical: {SITE}/.well-known/security.txt\n")
 
     # 7. no third party: every src and href on every page is on this site, the venue, or a named source address
     for f in out.rglob("*.html"):
