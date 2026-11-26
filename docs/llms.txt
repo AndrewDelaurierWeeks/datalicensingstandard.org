@@ -19,6 +19,7 @@ License: Text under Creative Commons Attribution 4.0 International, excluding ma
 - [Contents](https://datalicensingstandard.org/v0.1/): a page for each Part, Requirement and Annex
 - [The whole text in one file](https://datalicensingstandard.org/llms-full.txt): the sealed source, byte for byte, SHA-256 e2a4c2f89cb919f0757333c8b96200dd389d23674a35e627c2e5e4cc4ae29ea1
 - [Colophon](https://datalicensingstandard.org/colophon/): this edition, about the author, the seal, the next assessment, and how to cite it
+- [The security elements, and what each one does](https://datalicensingstandard.org/security-elements/): page 4 of the PDF, word for word
 
 ## Requirements
 

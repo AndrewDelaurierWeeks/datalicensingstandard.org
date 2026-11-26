@@ -1,6 +1,6 @@
 /* datalicensingstandard.org: the record site of The Data Licensing Standard for AI (TDLS-AI) v0.1.
    The colours are the sealed edition's, element for element: white paper, black #000000, ink #1b2420, green #1f5a3a,
-   muted #5b6368, light #c9cfd2, the code ground #f1efe8, the failure mark #b3261e; no other colour is used;
+   muted #5b6368, light #c9cfd2, the code ground #f1efe8, the failure mark #b3261e, page 4's lead #333333; no other colour is used;
    EB Garamond for the name and headings, Inter for text, IBM Plex Mono for labels and hashes.
    Fonts are self-hosted under the SIL Open Font License 1.1 (assets/fonts/OFL-*.txt). */
 
@@ -13,7 +13,7 @@
 @font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
 
 :root{
-  --paper:#ffffff; --ink:#1b2420; --green:#1f5a3a; --muted:#5b6368; --rule:#c9cfd2; --black:#000000; --code:#f1efe8; --red:#b3261e;
+  --paper:#ffffff; --ink:#1b2420; --green:#1f5a3a; --muted:#5b6368; --rule:#c9cfd2; --black:#000000; --code:#f1efe8; --red:#b3261e; --lead:#333333;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"EB Garamond",Georgia,serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -228,3 +228,65 @@ main:has(> .colo) > h1{color:var(--black)}
 .band .name a{color:#fff;text-decoration:none}
 .band .name a:hover{text-decoration:underline}
 @media (max-width:480px){.kv{grid-template-columns:1fr}}
+
+/* Part 5 below the scoring table: the instrument (his letter of 2026-11-25) */
+main.wide:has(.p5i){max-width:1080px}
+.p5i{margin:48px 0 0}
+.p5i .blk{border-top:2px solid var(--black);padding:16px 0 38px}
+.p5i .blk-lab{font:500 12px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--black);margin:0 0 18px}
+.p5i .blk-lab strong{font-weight:500}
+.p5i .keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.3fr);border:1px solid var(--ink);margin:0 0 0}
+.p5i .keys > span{padding:18px 20px 16px;border-left:1px solid var(--rule);display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.p5i .keys > span:first-child{border-left:0}
+.p5i .keys b{font:500 46px/1 var(--serif);letter-spacing:-.01em}
+.p5i .keys i{font:500 17px/1 var(--mono);font-style:normal;color:var(--ink)}
+.p5i .keys .kn b{color:var(--muted)} .p5i .keys .kd b{color:var(--black)} .p5i .keys .km b{color:var(--green)} .p5i .keys .ka b{color:var(--ink)}
+.p5i .keys .kpr{align-items:flex-end;font:400 15px/1.4 var(--sans);color:var(--muted);background:var(--paper)}
+.p5i .met{border:1px solid var(--ink);border-top:0;padding:14px 20px;font-size:16px;margin:0 0 26px}
+.p5i .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0 0 30px}
+.p5i .cards.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.p5i .cards p{margin:0;border-top:1px solid var(--ink);padding-top:14px;font-size:15.5px;line-height:1.58}
+.p5i .na{border:1px solid var(--ink);margin:0 0 30px}
+.p5i .na .head{margin:0;padding:16px 20px;border-bottom:1px solid var(--ink);font:500 19px/1.4 var(--serif);color:var(--black)}
+.p5i .na .rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.p5i .na .rows > div{display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:14px;padding:12px 20px;border-bottom:1px solid var(--rule);font-size:15px;line-height:1.5}
+.p5i .na .rows > div:nth-child(odd){border-right:1px solid var(--rule)}
+.p5i .na .c{font:500 14px/1.6 var(--mono)} .p5i .na .c a{text-decoration:none}
+.p5i .th{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px;margin:0 0 18px;align-items:start}
+.p5i .panel{border:1px solid var(--ink);padding:20px 22px 10px}
+.p5i .panel .ph{margin:0 0 10px;font:500 21px/1.35 var(--serif);color:var(--black)}
+.p5i .panel .pr{padding:9px 0;border-top:1px solid var(--rule);font-size:15.5px;line-height:1.5}
+.p5i .panel.eval{border-color:var(--green)} .p5i .panel.eval .ph{color:var(--green)}
+.p5i .note{font-size:15px;color:var(--muted);margin:0}
+.p5i .for{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0 0 18px}
+.p5i .for p.f{margin:0;border-top:1px solid var(--ink);padding-top:14px;font:400 20px/1.4 var(--serif);color:var(--black)}
+.p5i .cite{font:400 12.5px/1.65 var(--mono);color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;margin:0}
+@media (max-width:940px){.p5i .keys b{font-size:36px}}
+@media (max-width:860px){.p5i .keys .kpr{grid-column:1/-1}.p5i .keys b{font-size:36px}.p5i .keys{grid-template-columns:repeat(2,minmax(0,1fr))}.p5i .keys > span{border-left:0;border-top:1px solid var(--rule)}.p5i .cards,.p5i .cards.two,.p5i .for,.p5i .th,.p5i .na .rows{grid-template-columns:1fr}.p5i .na .rows > div:nth-child(odd){border-right:0}}
+
+/* page 4 of the sealed PDF, the security elements: its AI ML EVAL border, cut from the page into the nine pieces of a
+   border image (build/tools/make-security.py), the inner rule 10 mm inside the outer one; then the four steps */
+.mpf{--k:4px;outline:2px solid var(--black);margin:7px;background:var(--paper);border:solid transparent;
+  border-width:calc(9.55*var(--k)) calc(9.43*var(--k));padding:calc(.45*var(--k)) calc(.57*var(--k));
+  border-image:url(security/microprint-frame.png) 114 113 round}
+.mpf > .mpi{background:var(--paper);border:1px solid var(--ink)}
+main.wide:has(.p4){max-width:1080px}
+.p4{padding:52px 56px 40px}
+.p4 .p4k{margin:0;text-align:center;font:500 13px/1.5 var(--mono);letter-spacing:.2em;color:var(--ink)}
+.p4 h1{margin:12px 0 14px;text-align:center;font:600 clamp(30px,4.4vw,46px)/1.1 var(--sans);letter-spacing:-.02em;color:var(--black)}
+.p4 .p4l{max-width:680px;margin:0 auto 44px;text-align:center;font-size:18px;line-height:1.55;color:var(--lead)}
+.p4 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:44px 52px}
+.p4 .qh{display:flex;align-items:center;gap:16px;margin:0 0 16px}
+.p4 .qh .ic{display:block;flex:none;max-width:none;height:auto}
+.p4 #magnify .ic{margin-bottom:-14px} .p4 #compare .ic{margin:-19px -8px 0}
+.p4 h2{margin:0;font:600 23px/1.2 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.p4 h2 span{display:block;font-weight:400}
+.p4 .figs{display:flex;gap:12px;align-items:flex-start;margin:0 0 18px}
+.p4 .figs img{display:block;min-width:0;width:0;height:auto;border:1px solid var(--rule)}
+.p4 .f-device{flex:1.734 1 0}.p4 .f-face{flex:1.231 1 0}.p4 .f-microprint{flex:2.714 1 0}.p4 .f-thread{flex:.162 1 0}.p4 .f-mark{flex:1 1 0}.p4 .f-band{flex:2 1 0}
+.p4 .panel{flex:1;container-type:inline-size;background:var(--black);padding:14px 18px 12px;min-height:116px}
+.p4 .panel p{margin:0 0 6px;font:400 12px/1.5 var(--mono);letter-spacing:.06em;color:var(--rule);overflow-wrap:anywhere}
+.p4 .panel .hx{font-size:min(14px,5cqi);letter-spacing:.02em;white-space:nowrap;color:var(--paper)}
+.p4 .q > p{font-size:15.5px;line-height:1.55;margin:0 0 12px}
+@media (max-width:820px){.p4{padding:28px 18px 18px}.p4 .grid{grid-template-columns:1fr}}
+@media (max-width:640px){.mpf{--k:2.4px;outline-width:1px}}
