@@ -341,3 +341,15 @@ main.rpage .gd .guidance dd.fails li::before{content:"\00D7";content:"\00D7" / "
 main.rpage .gd .tx{display:block}
 @media screen and (width > 1000px){main.rpage .gd .guidance{margin:0 0 30px}main.rpage .gd .guidance dl{grid-template-columns:1fr}main.rpage .gd .guidance dt,main.rpage .gd .guidance dd{grid-column:1}main.rpage .gd .guidance dd{border-top:0;padding-top:0}}
 @media (max-width:640px){main.rpage .gd .guidance dl{grid-template-columns:1fr}main.rpage .gd .guidance dt,main.rpage .gd .guidance dd{grid-column:1}main.rpage .gd .guidance dd{border-top:0;padding-top:0}}
+
+/* lettered 2026-11-26 */
+/* the home page's sideways shift: the device's edge to edge layer no longer widens the page on screens with fixed scrollbars */
+html{overflow-x:clip}
+/* links inside the sealed text in the ink of the words around them, as the PDF prints its references to other sections; the underline marks the link */
+.sealed a{color:currentColor;text-decoration-color:currentColor}
+.sealed .p5i .na .c a{text-decoration-line:underline}
+/* tier marks as the PDF prints them: "none" above SCORE 0 and ASSERTION; EXCLUDED under N/A (added by stylesheet, outside the sealed words, silent to screen readers) */
+main.rpage .gd .guidance dd.examples .tier[data-score=""]::after{content:"EXCLUDED";content:"EXCLUDED" / ""}
+main.rpage .gd .guidance dd.examples .tier:has(> strong.t-a)::before{content:"none";content:"none" / "";font:500 18px/1.2 var(--serif);color:var(--black);order:0}
+main.rpage .gd .guidance dd.examples .tier:has(> strong.t-a)::after{order:1}
+main.rpage .gd .guidance dd.examples .tier:has(> strong.t-a) > strong{order:2;font:400 10.5px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
